@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "489206157973",
+    "firebase_url": "https://sharecalendar2-433ea-default-rtdb.firebaseio.com",
+    "project_id": "sharecalendar2-433ea",
+    "storage_bucket": "sharecalendar2-433ea.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:489206157973:android:e52723f798b628b135019c",
+        "android_client_info": {
+          "package_name": "ort.techtown.share_calendar"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "489206157973-v169rifeiubka4kdo7l1hu9st1k1r0uf.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "ort.techtown.share_calendar",
+            "certificate_hash": "a22642b5b4d142e48d70103fb7e58b12a190169a"
+          }
+        },
+        {
+          "client_id": "489206157973-bso33p0q2sqbqg671a5ui5hbgqm5rfb8.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyA-GZrxg5qln8gsJyyzUEMIYms8L0LesAA"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "489206157973-bso33p0q2sqbqg671a5ui5hbgqm5rfb8.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
