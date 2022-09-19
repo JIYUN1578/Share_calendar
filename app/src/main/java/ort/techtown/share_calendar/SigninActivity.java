@@ -69,6 +69,7 @@ public class SigninActivity extends AppCompatActivity implements GoogleApiClient
         }
     }
 
+    //깃허브 확인
     private void resultLogin(GoogleSignInAccount account) {
         AuthCredential credential = GoogleAuthProvider.getCredential(account.getIdToken(), null);
         auth.signInWithCredential(credential)
