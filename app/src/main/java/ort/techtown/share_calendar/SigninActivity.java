@@ -6,10 +6,13 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
+import android.widget.Button;
 import android.widget.Toast;
 
 import com.google.android.gms.auth.api.Auth;
+import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.android.gms.auth.api.signin.GoogleSignInResult;
@@ -26,7 +29,9 @@ import com.google.firebase.auth.GoogleAuthProvider;
 public class SigninActivity extends AppCompatActivity implements GoogleApiClient.OnConnectionFailedListener {
 
     private SignInButton btn_googlesign;
+    Button btn_signout, btn_withdraw;
     private FirebaseAuth auth;
+    GoogleSignInAccount gsa;
     private GoogleApiClient googleApiClient;
     private static final int REQ_GOOGLE_SIGN = 100;
 
@@ -44,6 +49,18 @@ public class SigninActivity extends AppCompatActivity implements GoogleApiClient
                 .addApi(Auth.GOOGLE_SIGN_IN_API,googleSignInOptions)
                 .build();
 
+        // 기존에 로그인 했던 계정을 확인한다.
+        gsa = GoogleSignIn.getLastSignedInAccount(SigninActivity.this);
+
+        // 로그인 되있는 경우
+        if (gsa != null) {
+            // 로그인 성공입니다.
+            Toast.makeText(this, "이미 로그인 되어있음", Toast.LENGTH_SHORT).show();
+            Intent intent = new Intent(getApplicationContext(),MainActivity.class);
+            intent.putExtra("name",gsa.getDisplayName());
+            startActivity(intent);
+        }
+
         auth = FirebaseAuth.getInstance();
 
         btn_googlesign = findViewById(R.id.btn_googlesign);
@@ -54,6 +71,15 @@ public class SigninActivity extends AppCompatActivity implements GoogleApiClient
                 startActivityForResult(intent, REQ_GOOGLE_SIGN);
             }
         });
+
+        btn_withdraw = (Button)findViewById(R.id.btn_withdraw);
+        btn_withdraw.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                revokeAccess();
+            }
+        });
+
     }
 
     @Override
@@ -63,8 +89,8 @@ public class SigninActivity extends AppCompatActivity implements GoogleApiClient
         if(requestCode == REQ_GOOGLE_SIGN){
             GoogleSignInResult result =  Auth.GoogleSignInApi.getSignInResultFromIntent(data);
             if(result.isSuccess()){
-                GoogleSignInAccount account = result.getSignInAccount();
-                resultLogin(account);
+                gsa = result.getSignInAccount();
+                resultLogin(gsa);
             }
         }
     }
@@ -78,7 +104,9 @@ public class SigninActivity extends AppCompatActivity implements GoogleApiClient
                         if(task.isSuccessful()){
                             Toast.makeText(getApplicationContext(),"호에엥 성공이야 ㅜ",Toast.LENGTH_SHORT).show();
                             Intent intent = new Intent(getApplicationContext(),MainActivity.class);
-                            intent.putExtra("Id",account.getId());
+                            String name = account.getDisplayName();
+                            intent.putExtra("name",name);
+                            Toast.makeText(getApplicationContext(),name,Toast.LENGTH_SHORT).show();
                             startActivity(intent);
                         }
                         else{
@@ -91,5 +119,9 @@ public class SigninActivity extends AppCompatActivity implements GoogleApiClient
     @Override
     public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
 
+    }
+    private void revokeAccess() {
+        auth.getCurrentUser().delete();
+        finishAffinity();
     }
 }
