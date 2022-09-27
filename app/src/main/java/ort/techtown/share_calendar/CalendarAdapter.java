@@ -43,6 +43,7 @@ public class CalendarAdapter extends RecyclerView.Adapter<CalendarAdapter.Calend
 
             if(day.equals(CalendarUtil.today)){
                 holder.parentView.setBackgroundColor(Color.LTGRAY);
+                Log.d("todaycolor","바뀌긴 했네용 근데 좆버그 난거지 이제");
             }
 
             ///텍스트 색상 지정 (토, 일)
