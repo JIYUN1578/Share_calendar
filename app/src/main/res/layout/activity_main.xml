@@ -12,26 +12,12 @@
         android:layout_height="match_parent"
         android:orientation="vertical" >
 
-        <include layout="@layout/toolbar"/>
-
-        <Button
-            android:id="@+id/btn_open"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="슬라이드바" />
-
-        <Button
-            android:id="@+id/btn_logout"
-            android:layout_gravity="center_horizontal"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="로그아웃" />
+        <include layout="@layout/toolbar" />
 
        <LinearLayout
            android:layout_width="match_parent"
            android:layout_height="wrap_content"
-           android:orientation="vertical"
-           >
+           android:orientation="vertical">
 
            <LinearLayout
                android:gravity="center"
@@ -95,8 +81,7 @@
                    android:layout_weight="1"
                    android:layout_width="match_parent"
                    android:layout_height="wrap_content"
-                   android:text="수"
-                    />
+                   android:text="수" />
 
                <TextView
                    android:textSize="20dp"

@@ -15,6 +15,7 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 import androidx.appcompat.widget.Toolbar;
@@ -36,16 +37,16 @@ import java.util.ArrayList;
 public class MainActivity extends AppCompatActivity implements GoogleApiClient.OnConnectionFailedListener {
 
     private GoogleApiClient googleApiClient;
-    TextView temp;
     Button btn_logout;
     String TAG = "MainActivity";
     // drawerLayout
     private DrawerLayout drawerLayout;
     private View drawerView;
+    private ImageView menu_open;
     // 달력
     TextView tv_monthyear;
     RecyclerView recyclerView;
-    //일정추가버튼
+    // 일정 추가 버튼
     ImageButton btn_goAddActivity;
 
 
@@ -73,12 +74,13 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.O
 
         Toolbar toolbar = (Toolbar)findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+        getSupportActionBar().setTitle("");
 
         // drawerLayout
         drawerLayout = (DrawerLayout)findViewById(R.id.drawer_layout);
         drawerView = (View)findViewById(R.id.drawer);
-        Button btn_open = (Button)findViewById(R.id.btn_open);
-        btn_open.setOnClickListener(new View.OnClickListener() {
+        menu_open = (ImageView)findViewById(R.id.menu_open);
+        menu_open.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 drawerLayout.openDrawer(drawerView);
@@ -115,7 +117,7 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.O
         btn_pre.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                //한달 전전
+                // 한달 전전
                 CalendarUtil.selectedDate = CalendarUtil.selectedDate.minusMonths(1);
                 setMonthview();
             }
@@ -123,7 +125,7 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.O
         btn_next.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                //한달 뒤
+                // 한달 뒤
                 CalendarUtil.selectedDate = CalendarUtil.selectedDate.plusMonths(1);
                 setMonthview();
             }

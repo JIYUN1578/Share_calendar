@@ -52,8 +52,6 @@ public class SigninActivity extends AppCompatActivity implements GoogleApiClient
         // 기존에 로그인 했던 계정을 확인한다.
         gsa = GoogleSignIn.getLastSignedInAccount(SigninActivity.this);
 
-        Log.e("###",gsa.toString());
-
         // 로그인 되있는 경우
         if (gsa != null) {
             // 로그인 성공입니다.
