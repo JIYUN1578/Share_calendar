@@ -37,7 +37,7 @@ public class CalendarAdapter extends RecyclerView.Adapter<CalendarAdapter.Calend
 
         LocalDate day = datList.get(position);
         if(day == null){
-            holder.tv_day.setText("");
+            holder.tv_day.setText("!");
         }else{
             holder.tv_day.setText(String.valueOf(day.getDayOfMonth()));
 

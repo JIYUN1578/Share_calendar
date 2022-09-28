@@ -175,9 +175,20 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.O
         // 첫번째 날 요일 가져오기
         int dayOfweek = firstday.getDayOfWeek().getValue();
         // 날짜 생성
-        for(int i = 1 ; i < 42 ; i++){
-            if( i <= dayOfweek || i> lastday + dayOfweek){
-                daylist.add(null);
+        for(int i = 1 ; i <= 42 ; i++){
+            if(i <=dayOfweek){
+                LocalDate premonthDate = CalendarUtil.selectedDate.minusMonths(1);
+                int lastdayOfpremonth = premonthDate.lengthOfMonth();
+                daylist.add(LocalDate.of(premonthDate.getYear(), premonthDate.getMonth(),
+                       lastdayOfpremonth - dayOfweek + i ));
+                Log.d("달력 남은 날짜", premonthDate.toString() );
+            }
+            else if(i> lastday + dayOfweek){
+                LocalDate nextmonthDate = CalendarUtil.selectedDate.plusMonths(1);
+                daylist.add(LocalDate.of(nextmonthDate.getYear(),
+                        nextmonthDate.getMonth(),
+                        i - lastday-dayOfweek));
+                Log.d("달력 남은 날짜",nextmonthDate.toString() );
             }else{
                 daylist.add(LocalDate.of(CalendarUtil.selectedDate.getYear(),
                         CalendarUtil.selectedDate.getMonth(),
