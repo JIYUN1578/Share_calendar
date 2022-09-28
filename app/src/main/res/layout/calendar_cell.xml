@@ -4,15 +4,17 @@
     android:id="@+id/parent_view"
     android:backgroundTint="@color/white"
     xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="20dp"
+    android:layout_width="match_parent"
     android:layout_height="50dp">
 
     <TextView
+        android:id="@+id/tv_day"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:gravity="center"
         android:text="1"
         android:textStyle="bold"
-        android:id="@+id/tv_day"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 

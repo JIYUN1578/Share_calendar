@@ -34,6 +34,7 @@
            >
 
            <LinearLayout
+               android:gravity="center"
                android:layout_width="match_parent"
                android:layout_height="wrap_content"
                android:orientation="horizontal">
@@ -42,20 +43,17 @@
                    android:id="@+id/btn_frontmonth"
                    android:layout_width="wrap_content"
                    android:layout_height="wrap_content"
-                   android:layout_marginTop="28dp"
                    android:src="@drawable/ic_baseline_arrow_back_24" />
                <TextView
                    android:id="@+id/tv_month_year"
                    android:layout_width="wrap_content"
                    android:layout_height="wrap_content"
-                   android:layout_marginTop="40dp"
                    android:text="몇년 몇월" />
 
                <ImageButton
                    android:id="@+id/btn_nextmonth"
                    android:layout_width="wrap_content"
                    android:layout_height="wrap_content"
-                   android:layout_marginTop="28dp"
                    android:src="@drawable/ic_baseline_arrow_forward_24" />
 
 
@@ -67,46 +65,60 @@
                android:orientation="horizontal">
 
                <TextView
+                   android:textSize="20dp"
+                   android:gravity="center"
                    android:layout_weight="1"
-               android:layout_width="wrap_content"
-               android:layout_height="wrap_content"
-               android:text="일" />
+                   android:layout_width="match_parent"
+                   android:layout_height="wrap_content"
+                   android:text="일" />
 
                <TextView
+                   android:textSize="20dp"
+                   android:gravity="center"
                    android:layout_weight="1"
-                   android:layout_width="wrap_content"
+                   android:layout_width="match_parent"
                    android:layout_height="wrap_content"
                    android:text="월"/>
 
                <TextView
+                   android:textSize="20dp"
+                   android:gravity="center"
                    android:layout_weight="1"
                    android:id="@+id/tv_tuesday"
-                   android:layout_width="wrap_content"
+                   android:layout_width="match_parent"
                    android:layout_height="wrap_content"
                    android:text="화"/>
 
                <TextView
+                   android:textSize="20dp"
+                   android:gravity="center"
                    android:layout_weight="1"
-                   android:layout_width="wrap_content"
+                   android:layout_width="match_parent"
                    android:layout_height="wrap_content"
                    android:text="수"
                     />
 
                <TextView
+                   android:textSize="20dp"
+                   android:gravity="center"
                    android:layout_weight="1"
-                   android:layout_width="wrap_content"
+                   android:layout_width="match_parent"
                    android:layout_height="wrap_content"
                    android:text="목"/>
 
                <TextView
+                   android:textSize="20dp"
+                   android:gravity="center"
                    android:layout_weight="1"
-                   android:layout_width="wrap_content"
+                   android:layout_width="match_parent"
                    android:layout_height="wrap_content"
                    android:text="금" />
 
                <TextView
+                   android:textSize="20dp"
+                   android:gravity="center"
                    android:layout_weight="1"
-                   android:layout_width="wrap_content"
+                   android:layout_width="match_parent"
                    android:layout_height="wrap_content"
                    android:text="토" />
 
