@@ -58,7 +58,6 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.O
         String name = intent.getStringExtra("name");
         if(name != null){
             Toast.makeText(getApplicationContext(),intent.getStringExtra("name").toString(),Toast.LENGTH_SHORT).show();
-            temp.setText(name);
         }
         else{
             Toast.makeText(getApplicationContext(),"없다는데?",Toast.LENGTH_SHORT).show();

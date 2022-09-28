@@ -85,12 +85,17 @@ public class SigninActivity extends AppCompatActivity implements GoogleApiClient
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-
+        Log.e("###","여기 들어옴1");
         if(requestCode == REQ_GOOGLE_SIGN){
+            Log.e("###","여기 들어옴2");
             GoogleSignInResult result =  Auth.GoogleSignInApi.getSignInResultFromIntent(data);
             if(result.isSuccess()){
+                Log.e("###","여기 들어옴3");
                 gsa = result.getSignInAccount();
                 resultLogin(gsa);
+            }
+            if(!result.isSuccess()){
+                Log.e("###","실패입니다");
             }
         }
     }
