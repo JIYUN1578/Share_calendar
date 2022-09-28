@@ -45,6 +45,8 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.O
     // 달력
     TextView tv_monthyear;
     RecyclerView recyclerView;
+    //일정추가버튼
+    ImageButton btn_goAddActivity;
 
 
     @Override
@@ -133,6 +135,19 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.O
                 setMonthview();
             }
         });
+
+        btn_goAddActivity = (ImageButton) findViewById(R.id.btn_gotoAddActivity);
+        btn_goAddActivity.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent= new Intent(MainActivity.this,AddActivity.class);
+                // Bundle bundle = ActivityOptions.makeSceneTransitionAnimation(MainActivity.this).toBundle();
+                startActivity(intent);
+                finish();
+                overridePendingTransition(R.anim.anim_in,R.anim.anim_out);
+            }
+        });
+
     }
 
     // 달력
