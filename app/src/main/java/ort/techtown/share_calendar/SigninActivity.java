@@ -52,6 +52,8 @@ public class SigninActivity extends AppCompatActivity implements GoogleApiClient
         // 기존에 로그인 했던 계정을 확인한다.
         gsa = GoogleSignIn.getLastSignedInAccount(SigninActivity.this);
 
+        Log.e("###",gsa.toString());
+
         // 로그인 되있는 경우
         if (gsa != null) {
             // 로그인 성공입니다.
@@ -79,23 +81,16 @@ public class SigninActivity extends AppCompatActivity implements GoogleApiClient
                 revokeAccess();
             }
         });
-
     }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        Log.e("###","여기 들어옴1");
         if(requestCode == REQ_GOOGLE_SIGN){
-            Log.e("###","여기 들어옴2");
             GoogleSignInResult result =  Auth.GoogleSignInApi.getSignInResultFromIntent(data);
             if(result.isSuccess()){
-                Log.e("###","여기 들어옴3");
                 gsa = result.getSignInAccount();
                 resultLogin(gsa);
-            }
-            if(!result.isSuccess()){
-                Log.e("###","실패입니다");
             }
         }
     }
@@ -107,7 +102,6 @@ public class SigninActivity extends AppCompatActivity implements GoogleApiClient
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         if(task.isSuccessful()){
-                            Toast.makeText(getApplicationContext(),"호에엥 성공이야 ㅜ",Toast.LENGTH_SHORT).show();
                             Intent intent = new Intent(getApplicationContext(),MainActivity.class);
                             String name = account.getDisplayName();
                             intent.putExtra("name",name);
@@ -115,7 +109,7 @@ public class SigninActivity extends AppCompatActivity implements GoogleApiClient
                             startActivity(intent);
                         }
                         else{
-                            Toast.makeText(getApplicationContext(),"실패당ㅜ",Toast.LENGTH_SHORT).show();
+                            Toast.makeText(getApplicationContext(),"로그인에 실패하셨습니다.",Toast.LENGTH_SHORT).show();
                         }
                     }
                 });
@@ -126,7 +120,6 @@ public class SigninActivity extends AppCompatActivity implements GoogleApiClient
 
     }
     private void revokeAccess() {
-        auth.getCurrentUser().delete();
-        finishAffinity();
+        // FirebaseAuth.getInstance().getCurrentUser().delete();
     }
 }

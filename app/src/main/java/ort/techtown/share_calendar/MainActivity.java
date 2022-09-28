@@ -57,23 +57,17 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.O
         Intent intent = getIntent();
         String name = intent.getStringExtra("name");
         if(name != null){
-            Toast.makeText(getApplicationContext(),intent.getStringExtra("name").toString(),Toast.LENGTH_SHORT).show();
+            Toast.makeText(this,name,Toast.LENGTH_SHORT).show();
         }
         else{
-            Toast.makeText(getApplicationContext(),"없다는데?",Toast.LENGTH_SHORT).show();
         }
 
         btn_logout = (Button)findViewById(R.id.btn_logout);
         btn_logout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Log.d(TAG,FirebaseAuth.getInstance().toString());
                 FirebaseAuth.getInstance().signOut();
-                Log.d(TAG,FirebaseAuth.getInstance().toString());
-                startActivity(new Intent(MainActivity.this, SigninActivity.class));
-                Log.d(TAG, "넘어갔어요~");
                 finish();
-
             }
         });
 
