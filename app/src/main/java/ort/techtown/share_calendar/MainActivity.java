@@ -37,10 +37,9 @@ import java.util.ArrayList;
 public class MainActivity extends AppCompatActivity implements GoogleApiClient.OnConnectionFailedListener {
 
     private GoogleApiClient googleApiClient;
-    Button btn_logout;
-    String TAG = "MainActivity";
     // drawerLayout
     private DrawerLayout drawerLayout;
+    private Button btn_logout, btn_calendar, btn_search, btn_make, btn_group, btn_close;
     private View drawerView;
     private ImageView menu_open;
     // 달력
@@ -49,7 +48,6 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.O
     // 일정 추가 버튼
     ImageButton btn_goAddActivity;
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -57,20 +55,6 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.O
 
         Intent intent = getIntent();
         String name = intent.getStringExtra("name");
-        if(name != null){
-            Toast.makeText(this,name,Toast.LENGTH_SHORT).show();
-        }
-        else{
-        }
-
-        btn_logout = (Button)findViewById(R.id.btn_logout);
-        btn_logout.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                FirebaseAuth.getInstance().signOut();
-                finish();
-            }
-        });
 
         Toolbar toolbar = (Toolbar)findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -79,6 +63,8 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.O
         // drawerLayout
         drawerLayout = (DrawerLayout)findViewById(R.id.drawer_layout);
         drawerView = (View)findViewById(R.id.drawer);
+
+        // drawerLayout 열기 버튼
         menu_open = (ImageView)findViewById(R.id.menu_open);
         menu_open.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -87,11 +73,59 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.O
             }
         });
 
-        Button btn_close = (Button)findViewById(R.id.btn_close);
+        // drawLayout 닫기 버튼
+        btn_close = (Button)findViewById(R.id.btn_close);
         btn_close.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 drawerLayout.closeDrawers();
+            }
+        });
+
+        // 마이캘린더 버튼
+        btn_calendar = (Button)findViewById(R.id.btn_calendar);
+        btn_calendar.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+            }
+        });
+
+        // 그룹 생성 버튼
+        btn_make = (Button)findViewById(R.id.btn_make);
+        btn_make.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(MainActivity.this, MakeActivity.class);
+                startActivity(intent);
+            }
+        });
+
+        // 그룹 검색 버튼
+        btn_search = (Button)findViewById(R.id.btn_search);
+        btn_search.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+            }
+        });
+
+        // 마이그룹 버튼
+        btn_group = (Button)findViewById(R.id.btn_group);
+        btn_group.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+            }
+        });
+
+        // 로그아웃 버튼
+        btn_logout = (Button)findViewById(R.id.btn_logout);
+        btn_logout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                FirebaseAuth.getInstance().signOut();
+                finish();
             }
         });
 
