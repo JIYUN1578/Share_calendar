@@ -55,6 +55,7 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.O
 
         Intent intent = getIntent();
         String name = intent.getStringExtra("name");
+        String uid = intent.getStringExtra("uid");
 
         Toolbar toolbar = (Toolbar)findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -88,6 +89,7 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.O
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(MainActivity.this, MakeActivity.class);
+                intent.putExtra("uid",uid);
                 startActivity(intent);
             }
         });
@@ -98,6 +100,7 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.O
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(MainActivity.this, SearchActivity.class);
+                intent.putExtra("uid",uid);
                 startActivity(intent);
             }
         });
@@ -108,6 +111,7 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.O
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(MainActivity.this, GroupActivity.class);
+                intent.putExtra("uid",uid);
                 startActivity(intent);
             }
         });

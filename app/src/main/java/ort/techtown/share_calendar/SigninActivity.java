@@ -29,7 +29,7 @@ import com.google.firebase.auth.GoogleAuthProvider;
 public class SigninActivity extends AppCompatActivity implements GoogleApiClient.OnConnectionFailedListener {
 
     private SignInButton btn_googlesign;
-    Button btn_signout, btn_withdraw;
+    Button btn_withdraw;
     private FirebaseAuth auth;
     GoogleSignInAccount gsa;
     private GoogleApiClient googleApiClient;
@@ -49,19 +49,19 @@ public class SigninActivity extends AppCompatActivity implements GoogleApiClient
                 .addApi(Auth.GOOGLE_SIGN_IN_API,googleSignInOptions)
                 .build();
 
+        auth = FirebaseAuth.getInstance();
+
         // 기존에 로그인 했던 계정을 확인한다.
         gsa = GoogleSignIn.getLastSignedInAccount(SigninActivity.this);
 
         // 로그인 되있는 경우
         if (gsa != null) {
             // 로그인 성공입니다.
-            Toast.makeText(this, "이미 로그인 되어있음", Toast.LENGTH_SHORT).show();
             Intent intent = new Intent(getApplicationContext(),MainActivity.class);
             intent.putExtra("name",gsa.getDisplayName());
+            intent.putExtra("uid",auth.getUid());
             startActivity(intent);
         }
-
-        auth = FirebaseAuth.getInstance();
 
         btn_googlesign = findViewById(R.id.btn_googlesign);
         btn_googlesign.setOnClickListener(new View.OnClickListener() {
@@ -103,7 +103,7 @@ public class SigninActivity extends AppCompatActivity implements GoogleApiClient
                             Intent intent = new Intent(getApplicationContext(),MainActivity.class);
                             String name = account.getDisplayName();
                             intent.putExtra("name",name);
-                            Toast.makeText(getApplicationContext(),name,Toast.LENGTH_SHORT).show();
+                            intent.putExtra("uid",auth.getUid());
                             startActivity(intent);
                         }
                         else{
