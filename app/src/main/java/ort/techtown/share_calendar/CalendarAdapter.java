@@ -15,6 +15,8 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 
+import javax.security.auth.callback.Callback;
+
 import kotlin.contracts.CallsInPlace;
 
 public class CalendarAdapter extends RecyclerView.Adapter<CalendarAdapter.CalendarViewHolder>{
@@ -34,6 +36,16 @@ public class CalendarAdapter extends RecyclerView.Adapter<CalendarAdapter.Calend
         View view = inflater.inflate(R.layout.calendar_cell, parent,false);
 
         return new CalendarViewHolder(view);
+    }
+
+    interface OnItemClickListener{
+        void onItemClick(View v, int position); //뷰와 포지션값
+    }
+    //리스너 객체 참조 변수
+    private OnItemClickListener mListener = null;
+    //리스너 객체 참조를 어댑터에 전달 메서드
+    public void setOnItemClickListener(OnItemClickListener listener) {
+        this.mListener = listener;
     }
 
     @Override
@@ -74,9 +86,16 @@ public class CalendarAdapter extends RecyclerView.Adapter<CalendarAdapter.Calend
                 DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
 
                 CalendarUtil.selectedDate = LocalDate.parse(sdate , formatter);
+                if (position!=RecyclerView.NO_POSITION){
+                    if (mListener!=null){
+                        mListener.onItemClick (view,position);
+                    }
+                }
             }
         });
     }
+
+
 
     @Override
     public int getItemCount() {
@@ -91,9 +110,11 @@ public class CalendarAdapter extends RecyclerView.Adapter<CalendarAdapter.Calend
         public CalendarViewHolder(@NonNull View itemView) {
             super(itemView);
 
+
             tv_day = itemView.findViewById(R.id.tv_day);
 
             parentView = itemView.findViewById(R.id.parent_view);
         }
     }
+
 }

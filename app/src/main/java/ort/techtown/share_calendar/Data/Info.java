@@ -17,6 +17,15 @@ public class Info {
         this.info = info;
     }
 
+    public Info() {
+        this.isDone = false;
+        this.isOpen = false;
+        this.start = "~~";
+        this.end = "!!";
+        this.title = "title";
+        this.info = "info";
+    }
+
     public boolean isDone() {
         return isDone;
     }

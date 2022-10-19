@@ -194,7 +194,7 @@ public class AddActivity extends AppCompatActivity {
                         cb_isSecret.isChecked(),
                         tv_addStartDay.getText()+" "+tv_addStartTime.getText(),
                         tv_addEndDay.getText()+" "+tv_addEndTime.getText().toString(),
-                        "title sample",
+                        edt_toDo.getText().toString(),
                         edt_toDo.getText().toString());
 
                 //upload 하면 되지롱

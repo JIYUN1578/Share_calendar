@@ -6,6 +6,7 @@ import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.recyclerview.widget.GridLayoutManager;
+import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Intent;
@@ -28,11 +29,18 @@ import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.common.internal.Objects;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 import java.time.LocalDate;
 import java.time.YearMonth;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+
+import ort.techtown.share_calendar.Data.Info;
 
 public class MainActivity extends AppCompatActivity implements GoogleApiClient.OnConnectionFailedListener {
 
@@ -42,9 +50,10 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.O
     private Button btn_logout, btn_calendar, btn_search, btn_make, btn_group, btn_close;
     private View drawerView;
     private ImageView menu_open;
+    String uid;
     // 달력
     TextView tv_monthyear;
-    RecyclerView recyclerView;
+    RecyclerView recyclerView, todoListRecyclerView;
     // 일정 추가 버튼
     ImageButton btn_goAddActivity;
 
@@ -55,7 +64,7 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.O
 
         Intent intent = getIntent();
         String name = intent.getStringExtra("name");
-        String uid = intent.getStringExtra("uid");
+        uid = intent.getStringExtra("uid");
 
         Toolbar toolbar = (Toolbar)findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -139,7 +148,7 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.O
         ImageButton btn_pre = findViewById(R.id.btn_frontmonth);
         ImageButton btn_next = findViewById(R.id.btn_nextmonth);
         recyclerView = findViewById(R.id.recyclerview);
-
+        todoListRecyclerView = findViewById(R.id.todoListRecyclerView);
         CalendarUtil.selectedDate = LocalDate.now();
         CalendarUtil.today = LocalDate.now();
 
@@ -151,6 +160,7 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.O
                 // 한달 전전
                 CalendarUtil.selectedDate = CalendarUtil.selectedDate.minusMonths(1);
                 setMonthview();
+                setTodoList(uid);
             }
         });
         btn_next.setOnClickListener(new View.OnClickListener() {
@@ -159,6 +169,7 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.O
                 // 한달 뒤
                 CalendarUtil.selectedDate = CalendarUtil.selectedDate.plusMonths(1);
                 setMonthview();
+                setTodoList(uid);
             }
         });
 
@@ -191,8 +202,52 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.O
         recyclerView.setLayoutManager(manager);
         // 어뎁터 적용
         recyclerView.setAdapter(adapter);
+        adapter.setOnItemClickListener(new CalendarAdapter.OnItemClickListener() {
+            @Override
+            public void onItemClick(View v, int position) {
+                setTodoList(uid);
+            }
+        });
     }
+    private void setTodoList(String uid) {
+        // 해당 일정 가져오기
+        ArrayList<Info> infolist = new ArrayList<>();
+        FirebaseDatabase database = FirebaseDatabase.getInstance();
+        DatabaseReference reference;
 
+        TodoListAdapter adapter = new TodoListAdapter(infolist);
+        RecyclerView.LayoutManager manager = new LinearLayoutManager(getApplicationContext());
+        // 어뎁터 적용
+        todoListRecyclerView.setLayoutManager(manager);
+        todoListRecyclerView.setAdapter(adapter);
+        try{
+            reference = database.getReference("User").child(uid).child("Calender").child(CalendarUtil.selectedDate.toString());
+            reference.addValueEventListener(new ValueEventListener() {
+                @Override
+                public void onDataChange(DataSnapshot dataSnapshot) {
+                    for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
+                        infolist.add(snapshot.getValue(Info.class));
+                        Log.e("111",infolist.toString());
+
+                        TodoListAdapter adapter = new TodoListAdapter(infolist);
+                        RecyclerView.LayoutManager manager = new LinearLayoutManager(getApplicationContext());
+                        // 어뎁터 적용
+                        todoListRecyclerView.setLayoutManager(manager);
+                        todoListRecyclerView.setAdapter(adapter);
+                    }
+                }
+                @Override
+                public void onCancelled(DatabaseError databaseError) {
+
+                }
+            });
+        } catch (Exception e) {
+            e.printStackTrace();
+            Toast.makeText(getApplicationContext(), "지금 안돼유",Toast.LENGTH_SHORT).show();
+        }
+        Log.e("222",infolist.toString());
+        // 어뎁터 데이터 적용
+    }
     // 날짜 타입 설정
     private String monthYearFromDate(LocalDate localDate){
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("MM월 yyyy");
@@ -231,6 +286,7 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.O
         }
         return daylist;
     }
+
 
     // drawerLayout 리스너
     DrawerLayout.DrawerListener listener = new DrawerLayout.DrawerListener() {
