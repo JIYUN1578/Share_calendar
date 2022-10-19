@@ -36,11 +36,15 @@ public class MakeActivity extends AppCompatActivity {
     // 파이어베이스
     private FirebaseDatabase database = FirebaseDatabase.getInstance();
     private DatabaseReference databaseReference = database.getReference();
+    private String uid;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_make);
+
+        Intent intent = getIntent();
+        uid = intent.getStringExtra("uid");
 
         Toolbar toolbar = (Toolbar)findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -74,6 +78,7 @@ public class MakeActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(MakeActivity.this, MainActivity.class);
+                intent.putExtra("uid",uid);
                 startActivity(intent);
             }
         });
@@ -84,6 +89,7 @@ public class MakeActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(MakeActivity.this, SearchActivity.class);
+                intent.putExtra("uid",uid);
                 startActivity(intent);
             }
         });
@@ -94,6 +100,7 @@ public class MakeActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(MakeActivity.this, GroupActivity.class);
+                intent.putExtra("uid",uid);
                 startActivity(intent);
             }
         });
@@ -124,7 +131,7 @@ public class MakeActivity extends AppCompatActivity {
         btn_save.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                addGroup(et_groupname.getText().toString(), et_introduce.getText().toString());
+                addGroup(et_groupname.getText().toString(), et_introduce.getText().toString(), uid,1);
                 Toast.makeText(getApplicationContext(),"그룹이 생성되었습니다.",Toast.LENGTH_SHORT).show();
                 finish();
             }
@@ -148,8 +155,10 @@ public class MakeActivity extends AppCompatActivity {
     };
 
     // 그룹 데이터 저장 함수
-    public void addGroup(String groupname, String introduce) {
-        Group group = new Group(groupname, introduce);
+    public void addGroup(String groupname, String introduce, String hostuid, Integer groupnum) {
+        Group group = new Group(groupname, introduce, hostuid, groupnum);
         databaseReference.child("Group").child(groupname).setValue(group);
+        databaseReference.child("Group").child(groupname).child("Uid").push().setValue(uid);
+        databaseReference.child("User").child(uid).child("Group").push().setValue(groupname);
     }
 }
