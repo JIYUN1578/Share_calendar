@@ -2,14 +2,12 @@ package ort.techtown.share_calendar;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import android.annotation.SuppressLint;
 import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
 import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.CheckBox;
 import android.widget.DatePicker;
@@ -17,18 +15,14 @@ import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.TimePicker;
-import android.widget.Toast;
 
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
-import org.w3c.dom.Text;
-
-import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.time.Year;
 import java.time.format.DateTimeFormatter;
 
+import ort.techtown.share_calendar.Data.CalendarUtil;
 import ort.techtown.share_calendar.Data.Info;
 
 public class AddActivity extends AppCompatActivity {
@@ -211,6 +205,7 @@ public class AddActivity extends AppCompatActivity {
     public void onBackPressed() {
         //super.onBackPressed();
         Intent intent = new Intent(AddActivity.this, MainActivity.class);
+        intent.putExtra("uid",uid);
         startActivity(intent);
         finish();
         overridePendingTransition(R.anim.anim_left_in,R.anim.anim_left_out);

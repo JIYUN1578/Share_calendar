@@ -1,6 +1,5 @@
-package ort.techtown.share_calendar;
+package ort.techtown.share_calendar.Adapter;
 
-import android.graphics.Color;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -9,10 +8,10 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-import java.time.LocalDate;
 import java.util.ArrayList;
 
 import ort.techtown.share_calendar.Data.Info;
+import ort.techtown.share_calendar.R;
 
 public class TodoListAdapter extends RecyclerView.Adapter<TodoListAdapter.TodoListViewHolder> {
 
@@ -37,9 +36,9 @@ public class TodoListAdapter extends RecyclerView.Adapter<TodoListAdapter.TodoLi
         Info cur = datalist.get(position);
 
         holder.tv_title.setText(cur.getTitle().toString());
-        holder.tv_startTime2.setText(cur.getStart().toString());
-        holder.tv_startTime.setText(cur.getStart().toString());
-        holder.tv_endTime.setText(cur.getEnd().toString());
+        holder.tv_startTime2.setText(cur.getStart().toString().substring(11));
+        holder.tv_startTime.setText(cur.getStart().toString().substring(11));
+        holder.tv_endTime.setText(cur.getEnd().toString().substring(11));
 
 
     }

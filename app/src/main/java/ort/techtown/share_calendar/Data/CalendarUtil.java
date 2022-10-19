@@ -1,4 +1,4 @@
-package ort.techtown.share_calendar;
+package ort.techtown.share_calendar.Data;
 
 import java.time.LocalDate;
 

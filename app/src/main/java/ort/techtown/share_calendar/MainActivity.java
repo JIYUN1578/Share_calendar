@@ -1,8 +1,6 @@
 package ort.techtown.share_calendar;
 
 import androidx.annotation.NonNull;
-import androidx.appcompat.app.ActionBar;
-import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.recyclerview.widget.GridLayoutManager;
@@ -21,13 +19,8 @@ import android.widget.TextView;
 import android.widget.Toast;
 import androidx.appcompat.widget.Toolbar;
 
-import com.google.android.gms.auth.api.Auth;
-import com.google.android.gms.auth.api.signin.GoogleSignIn;
-import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
-import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
-import com.google.android.gms.common.internal.Objects;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -40,6 +33,9 @@ import java.time.YearMonth;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 
+import ort.techtown.share_calendar.Adapter.CalendarAdapter;
+import ort.techtown.share_calendar.Adapter.TodoListAdapter;
+import ort.techtown.share_calendar.Data.CalendarUtil;
 import ort.techtown.share_calendar.Data.Info;
 
 public class MainActivity extends AppCompatActivity implements GoogleApiClient.OnConnectionFailedListener {
@@ -244,8 +240,8 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.O
         } catch (Exception e) {
             e.printStackTrace();
             Toast.makeText(getApplicationContext(), "지금 안돼유",Toast.LENGTH_SHORT).show();
+            Log.e("222",infolist.toString());
         }
-        Log.e("222",infolist.toString());
         // 어뎁터 데이터 적용
     }
     // 날짜 타입 설정

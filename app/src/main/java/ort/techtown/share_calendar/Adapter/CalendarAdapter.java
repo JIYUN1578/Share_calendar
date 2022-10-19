@@ -1,23 +1,19 @@
-package ort.techtown.share_calendar;
+package ort.techtown.share_calendar.Adapter;
 import android.graphics.Color;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 
-import javax.security.auth.callback.Callback;
-
-import kotlin.contracts.CallsInPlace;
+import ort.techtown.share_calendar.Data.CalendarUtil;
+import ort.techtown.share_calendar.R;
 
 public class CalendarAdapter extends RecyclerView.Adapter<CalendarAdapter.CalendarViewHolder>{
 
@@ -38,7 +34,7 @@ public class CalendarAdapter extends RecyclerView.Adapter<CalendarAdapter.Calend
         return new CalendarViewHolder(view);
     }
 
-    interface OnItemClickListener{
+    public interface OnItemClickListener{
         void onItemClick(View v, int position); //뷰와 포지션값
     }
     //리스너 객체 참조 변수
