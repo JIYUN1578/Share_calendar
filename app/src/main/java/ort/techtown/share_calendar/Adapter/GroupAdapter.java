@@ -26,6 +26,17 @@ public class GroupAdapter extends RecyclerView.Adapter<GroupAdapter.GroupViewHol
         this.context = context;
     }
 
+    // 아이템 클릭 리스너
+    public interface OnItemClickListener {
+        void onItemClick(View v, int position);
+    }
+
+    private OnItemClickListener mListener = null;
+
+    public void setOnItemClickListener(OnItemClickListener listener) {
+        this.mListener = listener;
+    }
+
     @NonNull
     @Override
     public GroupViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
@@ -53,6 +64,18 @@ public class GroupAdapter extends RecyclerView.Adapter<GroupAdapter.GroupViewHol
 
             this.group_name = itemView.findViewById(R.id.group_name);
             this.group_introduce = itemView.findViewById(R.id.group_introduce);
+
+            itemView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    int position = getAdapterPosition();
+                    if(position!=RecyclerView.NO_POSITION) {
+                        if(mListener!=null) {
+                            mListener.onItemClick(v ,position);
+                        }
+                    }
+                }
+            });
         }
     }
 }

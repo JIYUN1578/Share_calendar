@@ -4,32 +4,20 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.drawerlayout.widget.DrawerLayout;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
-import android.widget.Adapter;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.ValueEventListener;
 
-import java.util.ArrayList;
-
-import ort.techtown.share_calendar.Adapter.GroupAdapter;
-import ort.techtown.share_calendar.Data.Group;
-import ort.techtown.share_calendar.Data.GroupRecyclerView;
-
-public class GroupActivity extends AppCompatActivity {
+public class PostActivity extends AppCompatActivity {
 
     // drawerLayout
     private DrawerLayout drawerLayout;
@@ -40,23 +28,14 @@ public class GroupActivity extends AppCompatActivity {
     private FirebaseDatabase database = FirebaseDatabase.getInstance();
     private DatabaseReference databaseReference = database.getReference();
     private DatabaseReference mReference = database.getReference();
-    private String uid;
-    // 그룹 정보 담는 리스트
-    private ArrayList<String> arrayList;
-    private ArrayList<GroupRecyclerView> groupList;
-    // 리사이클러뷰
-    private RecyclerView group_recyclerview;
-    private RecyclerView.LayoutManager layoutManager;
-    private GroupAdapter adapter;
-    private GroupRecyclerView data;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_group);
+        setContentView(R.layout.activity_post);
 
-        Intent intent = getIntent();
-        uid = intent.getStringExtra("uid");
+        String groupname = getIntent().getStringExtra("groupname");
+        String uid = getIntent().getStringExtra("uid");
 
         Toolbar toolbar = (Toolbar)findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -86,7 +65,7 @@ public class GroupActivity extends AppCompatActivity {
         btn_calendar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(GroupActivity.this, MainActivity.class);
+                Intent intent = new Intent(PostActivity.this, MainActivity.class);
                 intent.putExtra("uid",uid);
                 startActivity(intent);
             }
@@ -96,7 +75,7 @@ public class GroupActivity extends AppCompatActivity {
         btn_make.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(GroupActivity.this, MakeActivity.class);
+                Intent intent = new Intent(PostActivity.this, MakeActivity.class);
                 intent.putExtra("uid",uid);
                 startActivity(intent);
             }
@@ -106,7 +85,17 @@ public class GroupActivity extends AppCompatActivity {
         btn_search.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(GroupActivity.this, SearchActivity.class);
+                Intent intent = new Intent(PostActivity.this, SearchActivity.class);
+                intent.putExtra("uid",uid);
+                startActivity(intent);
+            }
+        });
+        // 마이그룹 버튼
+        btn_group = (Button)findViewById(R.id.btn_group);
+        btn_group.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(PostActivity.this, GroupActivity.class);
                 intent.putExtra("uid",uid);
                 startActivity(intent);
             }
@@ -127,28 +116,6 @@ public class GroupActivity extends AppCompatActivity {
                 return true;
             }
         });
-
-        // 마이그룹 정보 가져오기
-        group_recyclerview = (RecyclerView)findViewById(R.id.group_recyclerview);
-        group_recyclerview.setHasFixedSize(true);
-        layoutManager = new LinearLayoutManager(this);
-        group_recyclerview.setLayoutManager(layoutManager);
-        arrayList = new ArrayList<>();
-        groupList = new ArrayList<>();
-        adapter = new GroupAdapter(groupList, getApplicationContext());
-        getGroupInfo();
-
-        // 그룹 클릭 리스너
-        adapter.setOnItemClickListener(new GroupAdapter.OnItemClickListener() {
-            @Override
-            public void onItemClick(View v, int position) {
-                String groupname = groupList.get(position).getGroup_name();
-                Intent intent = new Intent(GroupActivity.this, PostActivity.class);
-                intent.putExtra("groupname",groupname);
-                intent.putExtra("uid",uid);
-                startActivity(intent);
-            }
-        });
     }
 
     // drawerLayout 리스너
@@ -166,42 +133,4 @@ public class GroupActivity extends AppCompatActivity {
         public void onDrawerStateChanged(int newState) {
         }
     };
-
-    public void getGroupInfo() {
-        String path = "/User/" + uid + "/Group";
-        databaseReference = database.getReference(path);
-
-        databaseReference.addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot snapshot) {
-                for(DataSnapshot dataSnapshot : snapshot.getChildren()) {
-                    String groupname = dataSnapshot.getValue().toString();
-                    arrayList.add(groupname);
-                }
-            }
-            @Override
-            public void onCancelled(@NonNull DatabaseError error) {
-            }
-        });
-
-        mReference.addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot snapshot) {
-                groupList.clear();
-                for(int i=0; i<arrayList.size(); i++) {
-                    data = new GroupRecyclerView();
-                    String group_name = snapshot.child("Group").child(arrayList.get(i)).child("groupname").getValue().toString();
-                    String group_introduce = snapshot.child("Group").child(arrayList.get(i)).child("introduce").getValue().toString();
-                    data.setGroup_name(group_name);
-                    data.setGroup_introduce(group_introduce);
-                    groupList.add(data);
-                }
-                adapter.notifyDataSetChanged();
-                group_recyclerview.setAdapter(adapter);
-            }
-            @Override
-            public void onCancelled(@NonNull DatabaseError error) {
-            }
-        });
-    }
 }
