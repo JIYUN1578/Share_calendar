@@ -7,6 +7,8 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.TextView;
 
+import androidx.recyclerview.widget.RecyclerView;
+
 import java.util.List;
 
 import ort.techtown.share_calendar.R;
@@ -22,8 +24,10 @@ public class SearchAdapter extends BaseAdapter {
         this.context = context;
         this.inflate = LayoutInflater.from(context);
     }
+
     @Override
     public int getCount() {
+        if(list.size() > 7) return 7;
         return list.size();
     }
     @Override

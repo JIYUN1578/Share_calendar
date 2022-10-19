@@ -1,5 +1,7 @@
 package ort.techtown.share_calendar;
 
+import static android.view.View.VISIBLE;
+
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
@@ -12,11 +14,13 @@ import android.text.TextWatcher;
 import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
@@ -26,6 +30,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 import ort.techtown.share_calendar.Adapter.SearchAdapter;
@@ -41,12 +46,17 @@ public class SearchActivity extends AppCompatActivity {
     // 파이어베이스
     private FirebaseDatabase database = FirebaseDatabase.getInstance();
     private DatabaseReference databaseReference = database.getReference();
+    private DatabaseReference mReference = database.getReference();
     // 검색 관련 기능
     private List<String> list;
     private ListView listView;
     private EditText editSearch;
     private SearchAdapter adapter;
     private ArrayList<String> arraylist;
+    // 그룹
+    private TextView group_name, group_introduce;
+    private Button btn_sign;
+    private Integer group_num;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -139,6 +149,12 @@ public class SearchActivity extends AppCompatActivity {
         editSearch = (EditText) findViewById(R.id.editSearch);
         listView = (ListView) findViewById(R.id.listView);
 
+        editSearch.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                listView.setVisibility(VISIBLE);
+            }
+        });
         list = new ArrayList<String>();
         arraylist = new ArrayList<String>();
         settingList();
@@ -154,8 +170,60 @@ public class SearchActivity extends AppCompatActivity {
 
             @Override
             public void afterTextChanged(Editable editable) {
+                listView.setVisibility(VISIBLE);
                 String text = editSearch.getText().toString();
                 search(text);
+            }
+        });
+
+        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                String search_group = list.get(i);
+                listView.setVisibility(View.GONE);
+                adapter.notifyDataSetChanged();
+                databaseReference = database.getReference();
+                group_name = (TextView)findViewById(R.id.group_name);
+                group_introduce = (TextView)findViewById(R.id.group_introduce);
+                btn_sign = (Button)findViewById(R.id.btn_sign);
+                databaseReference.addListenerForSingleValueEvent(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot snapshot) {
+                        group_name.setText(snapshot.child("Group").child(search_group).child("groupname").getValue().toString());
+                        group_introduce.setText(snapshot.child("Group").child(search_group).child("introduce").getValue().toString());
+                    }
+
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError error) {
+                    }
+                });
+                btn_sign.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        databaseReference = database.getReference("Group").child(search_group).child("Uid");
+                        databaseReference.addListenerForSingleValueEvent(new ValueEventListener() {
+                            @Override
+                            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                                boolean endkey = false;
+                                for(DataSnapshot dataSnapshot : snapshot.getChildren()) {
+                                    if(uid.equals(dataSnapshot.getValue().toString())) {
+                                        Toast.makeText(getApplicationContext(),"이미 가입되어있습니다.",Toast.LENGTH_SHORT).show();
+                                        endkey = true;
+                                        break;
+                                    }
+                                }
+                                if(!endkey) {
+                                    Toast.makeText(getApplicationContext(),"그룹에 가입되셨습니다.",Toast.LENGTH_SHORT).show();
+                                    mReference.child("Group").child(search_group).child("Uid").push().setValue(uid);
+                                    mReference.child("User").child(uid).child("Group").push().setValue(search_group);
+                                }
+                            }
+                            @Override
+                            public void onCancelled(@NonNull DatabaseError error) {
+                            }
+                        });
+                    }
+                });
             }
         });
     }
