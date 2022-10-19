@@ -2,10 +2,11 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/parent_view"
-    android:backgroundTint="@color/black"
+    android:background="@drawable/underline"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="75dp">
+    android:layout_margin="5dp"
+    android:layout_height="70dp">
 
     <TextView
         android:id="@+id/tv_startTime"

@@ -256,7 +256,7 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.O
     }
     // 날짜 타입 설정
     private String monthYearFromDate(LocalDate localDate){
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("MM월 yyyy");
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy년 MM월");
         return localDate.format(formatter);
     }
 
