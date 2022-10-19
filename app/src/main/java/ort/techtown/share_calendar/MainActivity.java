@@ -82,15 +82,6 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.O
             }
         });
 
-        // 마이캘린더 버튼
-        btn_calendar = (Button)findViewById(R.id.btn_calendar);
-        btn_calendar.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
-            }
-        });
-
         // 그룹 생성 버튼
         btn_make = (Button)findViewById(R.id.btn_make);
         btn_make.setOnClickListener(new View.OnClickListener() {
@@ -106,7 +97,8 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.O
         btn_search.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+                Intent intent = new Intent(MainActivity.this, SearchActivity.class);
+                startActivity(intent);
             }
         });
 
@@ -115,7 +107,8 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.O
         btn_group.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+                Intent intent = new Intent(MainActivity.this, GroupActivity.class);
+                startActivity(intent);
             }
         });
 
