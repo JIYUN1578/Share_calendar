@@ -13,6 +13,7 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -28,12 +29,12 @@ public class MakeActivity extends AppCompatActivity {
 
     // drawerLayout
     private DrawerLayout drawerLayout;
-    private Button btn_logout, btn_calendar, btn_search, btn_make, btn_group, btn_close;
+    private Button btn_logout, btn_calendar, btn_search, btn_group, btn_close,btn_make;
+    private ImageButton  btn_save;
     private View drawerView;
     private ImageView menu_open;
     private TextView tv_title;
     // 그룹 생성
-    private Button btn_save;
     private EditText et_groupname, et_introduce;
     // 파이어베이스
     private FirebaseDatabase database = FirebaseDatabase.getInstance();
@@ -130,7 +131,7 @@ public class MakeActivity extends AppCompatActivity {
         // 그룹 생성
         et_groupname = (EditText)findViewById(R.id.et_groupname);
         et_introduce = (EditText)findViewById(R.id.et_introduce);
-        btn_save = (Button)findViewById(R.id.btn_save);
+        btn_save = (ImageButton)findViewById(R.id.btn_save);
 
         btn_save.setOnClickListener(new View.OnClickListener() {
             @Override

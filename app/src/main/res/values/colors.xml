@@ -10,4 +10,6 @@
     <color name="gray">#E0E0E0</color>
     <color name="paper">#F7F4EF</color>
     <color name="pink">#FFAFB0</color>
+    <color name="yellow">#FFE4AF</color>
+    <color name="darkPink">#973C5D</color>
 </resources>

@@ -4,6 +4,7 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.drawerlayout.widget.DrawerLayout;
+import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -135,7 +136,8 @@ public class GroupActivity extends AppCompatActivity {
         // 마이그룹 정보 가져오기
         group_recyclerview = (RecyclerView)findViewById(R.id.group_recyclerview);
         group_recyclerview.setHasFixedSize(true);
-        layoutManager = new LinearLayoutManager(this);
+
+        layoutManager = new GridLayoutManager(getApplicationContext(),2);
         group_recyclerview.setLayoutManager(layoutManager);
         arrayList = new ArrayList<>();
         groupList = new ArrayList<>();
