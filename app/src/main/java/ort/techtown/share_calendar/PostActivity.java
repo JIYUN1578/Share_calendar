@@ -54,6 +54,7 @@ public class PostActivity extends AppCompatActivity {
     RecyclerView recyclerView, todoListRecyclerView;
     // 그룹 정보
     private String groupname, uid;
+    private ArrayList<String> UidList;
     private TextView group_name, group_introduce;
     private ImageView group_image;
 
@@ -217,6 +218,7 @@ public class PostActivity extends AppCompatActivity {
             }
         });
     }
+
     private void setTodoList(String uid) {
         // 해당 일정 가져오기
         ArrayList<Info> infolist = new ArrayList<>();
@@ -246,13 +248,10 @@ public class PostActivity extends AppCompatActivity {
                 }
                 @Override
                 public void onCancelled(DatabaseError databaseError) {
-
                 }
             });
         } catch (Exception e) {
             e.printStackTrace();
-            Toast.makeText(getApplicationContext(), "지금 안돼유",Toast.LENGTH_SHORT).show();
-            Log.e("222",infolist.toString());
         }
         // 어뎁터 데이터 적용
     }
@@ -262,7 +261,7 @@ public class PostActivity extends AppCompatActivity {
         return localDate.format(formatter);
     }
 
-    private ArrayList<LocalDate>  daysInMonthArray(LocalDate localDate){
+    private ArrayList<LocalDate> daysInMonthArray(LocalDate localDate){
         ArrayList<LocalDate> daylist = new ArrayList<>();
         YearMonth yearMonth = YearMonth.from(localDate);
         // 해당 월 마지막 날짜 가져오기

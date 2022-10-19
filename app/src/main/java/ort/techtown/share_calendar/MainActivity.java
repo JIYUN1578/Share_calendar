@@ -48,10 +48,13 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.O
     private View drawerView;
     private ImageView menu_open;
     private TextView tv_title;
-    String uid;
+    private String uid, name;
     // 달력
     TextView tv_monthyear;
     RecyclerView recyclerView, todoListRecyclerView;
+    // 파이어베이스
+    private FirebaseDatabase database = FirebaseDatabase.getInstance();
+    private DatabaseReference databaseReference = database.getReference();
     // 일정 추가 버튼
     ImageButton btn_goAddActivity;
 
@@ -65,18 +68,33 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.O
         ImageButton btn_next = findViewById(R.id.btn_nextmonth);
         recyclerView = findViewById(R.id.recyclerview);
         todoListRecyclerView = findViewById(R.id.todoListRecyclerView);
-
         CalendarUtil.today = LocalDate.now();
 
         Intent intent = getIntent();
-        String name = intent.getStringExtra("name");
+        name = intent.getStringExtra("name");
         uid = intent.getStringExtra("uid");
+
+        // 이름 저장
+        databaseReference.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                if(snapshot.child("User").child(uid).child("Name").getValue() == null) {
+                    databaseReference.child("User").child(uid).child("Name").setValue(name);
+                }
+            }
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+            }
+        });
+
+        // 달력 초기 설정
         boolean fromOther = false;
         fromOther = intent.getBooleanExtra("fromOther", false);
         if(!fromOther) CalendarUtil.selectedDate = LocalDate.now();
         Log.d("selected date: ",CalendarUtil.selectedDate.toString());
         setTodoList(uid);
 
+        // 툴바
         Toolbar toolbar = (Toolbar)findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         getSupportActionBar().setTitle("");
