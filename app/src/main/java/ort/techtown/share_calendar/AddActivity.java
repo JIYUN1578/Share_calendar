@@ -8,6 +8,7 @@ import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.CheckBox;
 import android.widget.DatePicker;
@@ -19,6 +20,7 @@ import android.widget.TimePicker;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
@@ -196,7 +198,10 @@ public class AddActivity extends AppCompatActivity {
                 String nnow =  DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss").format(LocalDateTime.now());
                 databaseReference.child("User").child(uid).child("Calender").child(tv_addStartDay.getText().toString())
                                 .child(nnow).setValue(newInfo);
-
+                CalendarUtil.selectedDate = LocalDate.parse(tv_addStartDay.getText(),
+                        DateTimeFormatter.ofPattern("yyyy-MM-dd"));
+                Log.d("selected date: ",CalendarUtil.selectedDate.toString());
+                onBackPressed();
             }
         });
     }
@@ -206,6 +211,7 @@ public class AddActivity extends AppCompatActivity {
         //super.onBackPressed();
         Intent intent = new Intent(AddActivity.this, MainActivity.class);
         intent.putExtra("uid",uid);
+        intent.putExtra("fromOther", true);
         startActivity(intent);
         finish();
         overridePendingTransition(R.anim.anim_left_in,R.anim.anim_left_out);

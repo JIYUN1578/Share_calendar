@@ -26,6 +26,7 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 
 import java.time.LocalDate;
@@ -57,10 +58,23 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.O
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        // 달력
+        tv_monthyear = findViewById(R.id.tv_month_year);
+        ImageButton btn_pre = findViewById(R.id.btn_frontmonth);
+        ImageButton btn_next = findViewById(R.id.btn_nextmonth);
+        recyclerView = findViewById(R.id.recyclerview);
+        todoListRecyclerView = findViewById(R.id.todoListRecyclerView);
+
+        CalendarUtil.today = LocalDate.now();
 
         Intent intent = getIntent();
         String name = intent.getStringExtra("name");
         uid = intent.getStringExtra("uid");
+        boolean fromOther = false;
+        fromOther = intent.getBooleanExtra("fromOther", false);
+        if(!fromOther) CalendarUtil.selectedDate = LocalDate.now();
+        Log.d("selected date: ",CalendarUtil.selectedDate.toString());
+        setTodoList(uid);
 
         Toolbar toolbar = (Toolbar)findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -139,14 +153,6 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.O
             }
         });
 
-        // 달력
-        tv_monthyear = findViewById(R.id.tv_month_year);
-        ImageButton btn_pre = findViewById(R.id.btn_frontmonth);
-        ImageButton btn_next = findViewById(R.id.btn_nextmonth);
-        recyclerView = findViewById(R.id.recyclerview);
-        todoListRecyclerView = findViewById(R.id.todoListRecyclerView);
-        CalendarUtil.selectedDate = LocalDate.now();
-        CalendarUtil.today = LocalDate.now();
 
         // 화면 설정
         setMonthview();
@@ -218,13 +224,13 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.O
         todoListRecyclerView.setAdapter(adapter);
         try{
             reference = database.getReference("User").child(uid).child("Calender").child(CalendarUtil.selectedDate.toString());
-            reference.addValueEventListener(new ValueEventListener() {
+            Query myTopPostsQuery = reference.orderByChild("start");
+            myTopPostsQuery.addValueEventListener(new ValueEventListener() {
                 @Override
                 public void onDataChange(DataSnapshot dataSnapshot) {
                     for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
                         infolist.add(snapshot.getValue(Info.class));
                         Log.e("111",infolist.toString());
-
                         TodoListAdapter adapter = new TodoListAdapter(infolist);
                         RecyclerView.LayoutManager manager = new LinearLayoutManager(getApplicationContext());
                         // 어뎁터 적용
