@@ -15,6 +15,7 @@ import android.view.View;
 import android.widget.Adapter;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.TextView;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
@@ -36,6 +37,7 @@ public class GroupActivity extends AppCompatActivity {
     private Button btn_logout, btn_calendar, btn_search, btn_make, btn_group, btn_close;
     private View drawerView;
     private ImageView menu_open;
+    private TextView tv_title;
     // 파이어베이스
     private FirebaseDatabase database = FirebaseDatabase.getInstance();
     private DatabaseReference databaseReference = database.getReference();
@@ -61,6 +63,8 @@ public class GroupActivity extends AppCompatActivity {
         Toolbar toolbar = (Toolbar)findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         getSupportActionBar().setTitle("");
+        tv_title = (TextView)findViewById(R.id.tv_title);
+        tv_title.setText("마이그룹");
 
         // drawerLayout
         drawerLayout = (DrawerLayout)findViewById(R.id.drawer_layout);

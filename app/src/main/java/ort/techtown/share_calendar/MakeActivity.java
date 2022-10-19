@@ -14,6 +14,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.gms.common.ConnectionResult;
@@ -30,6 +31,7 @@ public class MakeActivity extends AppCompatActivity {
     private Button btn_logout, btn_calendar, btn_search, btn_make, btn_group, btn_close;
     private View drawerView;
     private ImageView menu_open;
+    private TextView tv_title;
     // 그룹 생성
     private Button btn_save;
     private EditText et_groupname, et_introduce;
@@ -49,6 +51,8 @@ public class MakeActivity extends AppCompatActivity {
         Toolbar toolbar = (Toolbar)findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         getSupportActionBar().setTitle("");
+        tv_title = (TextView)findViewById(R.id.tv_title);
+        tv_title.setText("그룹생성");
 
         // drawerLayout
         drawerLayout = (DrawerLayout)findViewById(R.id.drawer_layout);

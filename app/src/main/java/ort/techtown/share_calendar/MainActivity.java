@@ -47,6 +47,7 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.O
     private Button btn_logout, btn_calendar, btn_search, btn_make, btn_group, btn_close;
     private View drawerView;
     private ImageView menu_open;
+    private TextView tv_title;
     String uid;
     // 달력
     TextView tv_monthyear;
@@ -79,6 +80,8 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.O
         Toolbar toolbar = (Toolbar)findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         getSupportActionBar().setTitle("");
+        tv_title = (TextView)findViewById(R.id.tv_title);
+        tv_title.setText("마이캘린더");
 
         // drawerLayout
         drawerLayout = (DrawerLayout)findViewById(R.id.drawer_layout);
