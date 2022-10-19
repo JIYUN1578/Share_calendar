@@ -11,7 +11,11 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+
+import kotlin.contracts.CallsInPlace;
 
 public class CalendarAdapter extends RecyclerView.Adapter<CalendarAdapter.CalendarViewHolder>{
 
@@ -66,8 +70,10 @@ public class CalendarAdapter extends RecyclerView.Adapter<CalendarAdapter.Calend
                 int iMonth = day.getMonthValue();
                 int iDay = day.getDayOfMonth();
 
-                String yearMonday = iYear + "년" + iMonth + "월" + iDay + "일";
-                Toast.makeText(holder.itemView.getContext(),yearMonday,Toast.LENGTH_SHORT).show();
+                String sdate = iYear + "-" + String.format("%02d",iMonth) +"-"+String.format("%02d",iDay);
+                DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+
+                CalendarUtil.selectedDate = LocalDate.parse(sdate , formatter);
             }
         });
     }

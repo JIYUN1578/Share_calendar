@@ -22,6 +22,8 @@ import android.widget.Toast;
 import org.w3c.dom.Text;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.Year;
 import java.time.format.DateTimeFormatter;
 
 public class AddActivity extends AppCompatActivity {
@@ -33,17 +35,17 @@ public class AddActivity extends AppCompatActivity {
     TextView tv_addEndTime;
     CheckBox cb_isSecret;
 
-    int pStartHour = 8;
-    int pStartMin = 0;
-    int pEndHour = 9;
-    int pEndMin = 0;
+    int pStartHour ;
+    int pStartMin ;
+    int pEndHour ;
+    int pEndMin ;
 
-    int pSYear = CalendarUtil.today.getYear();
-    int pSMonth = CalendarUtil.today.getMonthValue();
-    int pSDay = CalendarUtil.today.getDayOfMonth();
-    int pEYear = CalendarUtil.today.getYear();
-    int pEMonth = CalendarUtil.today.getMonthValue();
-    int pEDay = CalendarUtil.today.getDayOfMonth();
+    int pSYear ;
+    int pSMonth ;
+    int pSDay ;
+    int pEYear;
+    int pEMonth;
+    int pEDay ;
 
     DatePickerDialog datePickerDialog;
     TimePickerDialog timePickerDialog;
@@ -62,6 +64,23 @@ public class AddActivity extends AppCompatActivity {
         tv_addStartTime = (TextView) findViewById(R.id.tv_addStartTime);
         tv_addEndTime = (TextView) findViewById(R.id.tv_addEndTime );
 
+        tv_addStartTime.setText("08:00");
+        tv_addEndTime.setText("09:00");
+        tv_addStartDay.setText(CalendarUtil.selectedDate.toString());
+        tv_addEndDay.setText(CalendarUtil.selectedDate.toString());
+
+
+        pStartHour = 8;
+        pStartMin = 0;
+        pEndHour = 9;
+        pEndMin = 0;
+
+        pSYear = CalendarUtil.selectedDate.getYear();
+        pSMonth = CalendarUtil.selectedDate.getMonthValue();
+        pSDay = CalendarUtil.selectedDate.getDayOfMonth();
+        pEYear = CalendarUtil.selectedDate.getYear();
+        pEMonth = CalendarUtil.selectedDate.getMonthValue();
+        pEDay = CalendarUtil.selectedDate.getDayOfMonth();
 
        // Log.d("시간", String.valueOf());
 
@@ -76,24 +95,9 @@ public class AddActivity extends AppCompatActivity {
                                 String pStartTime;
                                 pStartHour = hour;
                                 pStartMin = min;
-                                pStartTime = String.valueOf(hour)+":"+String.valueOf(min);
+                                pStartTime = String.format("%02d",hour)+":"+String.format("%02d",min);
                                 tv_addStartTime.setText(pStartTime);
-
-                                if(pStartHour > pEndHour) {
-                                    pEndHour = (pStartHour + 1) % 24;
-                                    pEndMin = pStartMin;
-                                    tv_addEndTime.setText(pEndHour+":"+pEndMin);
-                                }
-                                else if(pStartHour == pEndHour && pStartMin > pEndMin){
-                                    pEndHour = (pStartHour + 1) % 24;
-                                    pEndMin = pStartMin;
-                                    tv_addEndTime.setText(pEndHour+":"+pEndMin);
-                                }
-                                else if(tv_addEndTime.getText().equals("종료시간")){
-                                    pEndHour = (pStartHour + 1) % 24;
-                                    pEndMin = pStartMin;
-                                    tv_addEndTime.setText(pEndHour+":"+pEndMin);
-                                }
+                                updatecal(true);
                             }
                         }
                         ,pStartHour, pStartMin, false
@@ -112,31 +116,10 @@ public class AddActivity extends AppCompatActivity {
                         new TimePickerDialog.OnTimeSetListener() {
                         @Override
                         public void onTimeSet(TimePicker timePicker, int hour, int min) {
-                            String pEndTime;
-                            pEndTime = String.valueOf(hour)+":"+String.valueOf(min);
-
                             pEndHour = hour;
                             pEMonth = min;
-
-                            tv_addEndTime.setText(pEndTime);
-                            if(pEndHour == 0 ){
-                                pStartHour = 0;
-                                if(pEndMin < pStartMin)
-                                    pStartMin = pEndMin;
-                            }
-                            if(pStartHour > pEndHour) {
-                                pStartHour = (pEndHour -1) % 24 ;
-                                pStartMin = pEndMin;
-                            }
-                            else if(pStartHour == pEndHour && pStartMin > pEndMin){
-                                pStartHour = (pEndHour -1) % 24 ;
-                                pStartMin = pEndMin;
-                            }else if(tv_addStartTime.getText().equals("시작시간")){
-                                pStartHour = (pEndHour -1) % 24 ;
-                                Log.d("신나는 좆버그", String.valueOf(pStartHour));
-                                pStartMin = pEndMin;
-                            }
-                            tv_addStartTime.setText(pStartHour+":"+pStartMin);
+                            tv_addEndTime.setText(String.format("%02d",hour)+":"+String.format("%02d",min));
+                            updatecal(false);
                         }
                     }
                     ,pEndHour, pEndMin, false);
@@ -158,23 +141,9 @@ public class AddActivity extends AppCompatActivity {
                                 pSDay = day;
                                 pSMonth = month +1 ;
 
-                                String date;
-                                if(pSMonth < 10){
-                                    date = pSYear + "-0" + pSMonth;
-                                }else{
-                                    date = pSYear + "-" + pSMonth ;
-                                }
-
-                                if(pSDay < 10){
-                                    date = date + "-0"+pSDay;
-                                }else{
-                                    date = date + "-" + pSDay;
-                                }
-                                tv_addStartDay.setText(date);
-
-                                if(pSYear < pEYear){
-
-                                }
+                                tv_addStartDay.setText(String.valueOf(pSYear)+"-"+
+                                        String.format("%02d",pSMonth)+"-"+String.format("%02d",pSDay));
+                                updatecal(true);
                             }
                         },pSYear,pSMonth-1,pSDay );
                 //달력에서 0이 1월이니까 지금 달 하려면 -1 해야 해당 달이 나온다
@@ -195,19 +164,9 @@ public class AddActivity extends AppCompatActivity {
                                 pEDay = day;
                                 pEMonth = month +1 ;
 
-                                String date;
-                                if(pEMonth < 10){
-                                    date = pSYear + "-0" + pSMonth;
-                                }else{
-                                    date = pSYear + "-" + pSMonth ;
-                                }
-
-                                if(pEDay < 10){
-                                    date = date + "-0"+pSDay;
-                                }else{
-                                    date = date + "-" + pSDay;
-                                }
-                                tv_addEndDay.setText(date);
+                                tv_addEndDay.setText(String.valueOf(pEYear)+"-"+
+                                        String.format("%02d",pEMonth)+"-"+String.format("%02d",pEDay));
+                                updatecal(false);
                             }
                         },pEYear,pEMonth-1,pEDay );
                 //달력에서 0이 1월이니까 지금 달 하려면 -1 해야 해당 달이 나온다
@@ -235,5 +194,25 @@ public class AddActivity extends AppCompatActivity {
         startActivity(intent);
         finish();
         overridePendingTransition(R.anim.anim_left_in,R.anim.anim_left_out);
+    }
+
+    public void updatecal(boolean iscurrent){
+        LocalDateTime current, future;
+        current  = LocalDateTime.parse(tv_addStartDay.getText()+" "+tv_addStartTime.getText(),
+                DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm"));
+        future  = LocalDateTime.parse(tv_addEndDay.getText()+" "+tv_addEndTime.getText(),
+                DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm"));
+        if(current.isAfter(future)){
+            if(iscurrent == true){ // 현재를 바꾼거면
+                future =current.plusHours(1);
+                tv_addEndDay.setText(future.toString().substring(0,10));
+                tv_addEndTime.setText(future.toString().substring(11,future.toString().length()));
+            }
+            else{ //과거를 바꿨으면
+                current =future.minusHours(1);
+                tv_addStartDay.setText(current.toString().substring(0,10));
+                tv_addStartTime.setText(current.toString().substring(11,current.toString().length()));
+            }
+        }
     }
 }
