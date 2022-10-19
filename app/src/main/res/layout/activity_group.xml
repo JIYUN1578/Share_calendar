@@ -14,6 +14,11 @@
 
     <include layout="@layout/toolbar" />
 
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/group_recyclerview"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
+
     </LinearLayout>
 
     <include layout="@layout/activity_drawer" />

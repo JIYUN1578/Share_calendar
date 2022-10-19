@@ -4,21 +4,30 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.drawerlayout.widget.DrawerLayout;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
+import android.widget.Adapter;
 import android.widget.Button;
 import android.widget.ImageView;
 
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
 
+import ort.techtown.share_calendar.Adapter.GroupAdapter;
 import ort.techtown.share_calendar.Data.Group;
+import ort.techtown.share_calendar.Data.GroupRecyclerView;
 
 public class GroupActivity extends AppCompatActivity {
 
@@ -30,9 +39,16 @@ public class GroupActivity extends AppCompatActivity {
     // 파이어베이스
     private FirebaseDatabase database = FirebaseDatabase.getInstance();
     private DatabaseReference databaseReference = database.getReference();
+    private DatabaseReference mReference = database.getReference();
     private String uid;
     // 그룹 정보 담는 리스트
-    ArrayList<String> groupList = new ArrayList<>();
+    private ArrayList<String> arrayList;
+    private ArrayList<GroupRecyclerView> groupList;
+    // 리사이클러뷰
+    private RecyclerView group_recyclerview;
+    private RecyclerView.LayoutManager layoutManager;
+    private RecyclerView.Adapter adapter;
+    private GroupRecyclerView data;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -113,6 +129,16 @@ public class GroupActivity extends AppCompatActivity {
         });
 
         // 마이그룹 정보 가져오기
+        group_recyclerview = (RecyclerView)findViewById(R.id.group_recyclerview);
+        group_recyclerview.setHasFixedSize(true);
+        layoutManager = new LinearLayoutManager(this);
+        group_recyclerview.setLayoutManager(layoutManager);
+        arrayList = new ArrayList<>();
+        groupList = new ArrayList<>();
+        adapter = new GroupAdapter(groupList, getApplicationContext());
+        adapter.notifyDataSetChanged();
+        group_recyclerview.setAdapter(adapter);
+        getGroupInfo();
     }
 
     // drawerLayout 리스너
@@ -130,4 +156,43 @@ public class GroupActivity extends AppCompatActivity {
         public void onDrawerStateChanged(int newState) {
         }
     };
+
+    public void getGroupInfo() {
+        String path = "/User/" + uid + "/Group";
+        databaseReference = database.getReference(path);
+
+        databaseReference.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                for(DataSnapshot dataSnapshot : snapshot.getChildren()) {
+                    String groupname = dataSnapshot.getValue().toString();
+                    arrayList.add(groupname);
+                }
+            }
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+            }
+        });
+
+        mReference.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                groupList.clear();
+                for(int i=0; i<arrayList.size(); i++) {
+                    data = new GroupRecyclerView();
+                    String group_name = snapshot.child("Group").child(arrayList.get(i)).child("groupname").getValue().toString();
+                    String group_introduce = snapshot.child("Group").child(arrayList.get(i)).child("introduce").getValue().toString();
+                    data.setGroup_name(group_name);
+                    data.setGroup_introduce(group_introduce);
+                    groupList.add(data);
+                }
+                adapter = new GroupAdapter(groupList, getApplicationContext());
+                adapter.notifyDataSetChanged();
+                group_recyclerview.setAdapter(adapter);
+            }
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+            }
+        });
+    }
 }
