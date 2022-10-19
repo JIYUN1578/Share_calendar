@@ -7,15 +7,28 @@ import androidx.drawerlayout.widget.DrawerLayout;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
+import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.ListView;
 import android.widget.TextView;
 
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import ort.techtown.share_calendar.Adapter.SearchAdapter;
 
 public class SearchActivity extends AppCompatActivity {
 
@@ -28,6 +41,12 @@ public class SearchActivity extends AppCompatActivity {
     // 파이어베이스
     private FirebaseDatabase database = FirebaseDatabase.getInstance();
     private DatabaseReference databaseReference = database.getReference();
+    // 검색 관련 기능
+    private List<String> list;
+    private ListView listView;
+    private EditText editSearch;
+    private SearchAdapter adapter;
+    private ArrayList<String> arraylist;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -113,6 +132,66 @@ public class SearchActivity extends AppCompatActivity {
             @Override
             public boolean onTouch(View view, MotionEvent motionEvent) {
                 return true;
+            }
+        });
+
+        // 검색 기능
+        editSearch = (EditText) findViewById(R.id.editSearch);
+        listView = (ListView) findViewById(R.id.listView);
+
+        list = new ArrayList<String>();
+        arraylist = new ArrayList<String>();
+        settingList();
+        adapter = new SearchAdapter(list, this);
+
+        editSearch.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+            }
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+                String text = editSearch.getText().toString();
+                search(text);
+            }
+        });
+    }
+
+    // 검색 수행
+    public void search(String charText) {
+        list.clear();
+        if (charText.length() == 0) {
+            list.addAll(arraylist);
+        }
+        else {
+            for(int i = 0;i < arraylist.size(); i++) {
+                if (arraylist.get(i).toLowerCase().contains(charText)) {
+                    list.add(arraylist.get(i));
+                }
+            }
+        }
+        adapter.notifyDataSetChanged();
+    }
+
+    // 그룹 리스트
+    private void settingList(){
+        databaseReference = database.getReference("/Group");
+        databaseReference.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                list.clear();
+                for(DataSnapshot dataSnapshot : snapshot.getChildren()) {
+                    String groupname = dataSnapshot.getKey();
+                    list.add(groupname);
+                }
+                arraylist.addAll(list);
+                listView.setAdapter(adapter);
+            }
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
             }
         });
     }
