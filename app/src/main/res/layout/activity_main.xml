@@ -3,19 +3,23 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/drawer_layout"
+    android:background="@drawable/main_gradation"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".MainActivity">
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="match_parent"
         android:orientation="vertical" >
 
         <include layout="@layout/toolbar" />
 
        <LinearLayout
-           android:layout_width="match_parent"
+           android:layout_marginTop="10dp"
+           android:background="@drawable/bg_calendar"
+           android:layout_gravity="center"
+           android:layout_width="390dp"
            android:layout_height="wrap_content"
            android:orientation="vertical">
 
@@ -51,61 +55,68 @@
                android:orientation="horizontal">
 
                <TextView
-                   android:textSize="20dp"
+                   android:background="@drawable/underline"
+                   android:textSize="10dp"
                    android:gravity="center"
                    android:layout_weight="1"
                    android:layout_width="match_parent"
                    android:layout_height="wrap_content"
-                   android:text="일" />
+                   android:text="SUN" />
 
                <TextView
-                   android:textSize="20dp"
+                   android:background="@drawable/underline"
+                   android:textSize="10dp"
                    android:gravity="center"
                    android:layout_weight="1"
                    android:layout_width="match_parent"
                    android:layout_height="wrap_content"
-                   android:text="월"/>
+                   android:text="MON"/>
 
                <TextView
-                   android:textSize="20dp"
+                   android:background="@drawable/underline"
+                   android:textSize="10dp"
                    android:gravity="center"
                    android:layout_weight="1"
                    android:id="@+id/tv_tuesday"
                    android:layout_width="match_parent"
                    android:layout_height="wrap_content"
-                   android:text="화"/>
+                   android:text="TUE"/>
 
                <TextView
-                   android:textSize="20dp"
+                   android:background="@drawable/underline"
+                   android:textSize="10dp"
                    android:gravity="center"
                    android:layout_weight="1"
                    android:layout_width="match_parent"
                    android:layout_height="wrap_content"
-                   android:text="수" />
+                   android:text="WEN" />
 
                <TextView
-                   android:textSize="20dp"
+                   android:background="@drawable/underline"
+                   android:textSize="10dp"
                    android:gravity="center"
                    android:layout_weight="1"
                    android:layout_width="match_parent"
                    android:layout_height="wrap_content"
-                   android:text="목"/>
+                   android:text="THU"/>
 
                <TextView
-                   android:textSize="20dp"
+                   android:background="@drawable/underline"
+                   android:textSize="10dp"
                    android:gravity="center"
                    android:layout_weight="1"
                    android:layout_width="match_parent"
                    android:layout_height="wrap_content"
-                   android:text="금" />
+                   android:text="FRI" />
 
                <TextView
-                   android:textSize="20dp"
+                   android:background="@drawable/underline"
+                   android:textSize="10dp"
                    android:gravity="center"
                    android:layout_weight="1"
                    android:layout_width="match_parent"
                    android:layout_height="wrap_content"
-                   android:text="토" />
+                   android:text="SAT" />
 
            </LinearLayout>
 
@@ -115,19 +126,17 @@
                android:layout_width="match_parent"
                android:layout_height="301dp" />
 
-           <ImageButton
-               android:layout_gravity="center"
-               android:id="@+id/btn_gotoAddActivity"
-               android:layout_width="wrap_content"
-               android:layout_height="wrap_content"
-               android:src="@drawable/ic_baseline_add_box_24"
-               app:layout_constraintBottom_toBottomOf="parent"
-               app:layout_constraintEnd_toEndOf="parent"
-               app:layout_constraintStart_toStartOf="parent"
-               app:layout_constraintTop_toBottomOf="@+id/recyclerview" />
-
-
        </LinearLayout>
+        <ImageButton
+        android:layout_gravity="center"
+        android:id="@+id/btn_gotoAddActivity"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/ic_baseline_add_box_24"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/recyclerview" />
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/todoListRecyclerView"
             android:layout_width="match_parent"

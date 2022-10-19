@@ -210,6 +210,7 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.O
         adapter.setOnItemClickListener(new CalendarAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(View v, int position) {
+                setMonthview();
                 setTodoList(uid);
             }
         });

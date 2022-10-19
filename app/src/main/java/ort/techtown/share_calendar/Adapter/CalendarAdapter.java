@@ -53,11 +53,11 @@ public class CalendarAdapter extends RecyclerView.Adapter<CalendarAdapter.Calend
         }else{
             holder.tv_day.setText(String.valueOf(day.getDayOfMonth()));
 
-            if(day.equals(CalendarUtil.today)){
-                holder.parentView.setBackgroundColor(Color.LTGRAY);
+            if(day.equals(CalendarUtil.selectedDate)){
+                holder.parentView.setBackgroundResource(R.drawable.selectedday);
             }
-            else{
-                holder.parentView.setBackgroundColor(Color.BLACK);
+            if(day.equals(CalendarUtil.today)){
+                holder.tv_day.setBackgroundResource(R.drawable.gb_circle);
             }
 
             ///텍스트 색상 지정 (토, 일)
@@ -78,13 +78,10 @@ public class CalendarAdapter extends RecyclerView.Adapter<CalendarAdapter.Calend
                 int iMonth = day.getMonthValue();
                 int iDay = day.getDayOfMonth();
 
-                String sdate = iYear + "-" + String.format("%02d",iMonth) +"-"+String.format("%02d",iDay);
-                DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
-
-                CalendarUtil.selectedDate = LocalDate.parse(sdate , formatter);
-                if (position!=RecyclerView.NO_POSITION){
+                CalendarUtil.selectedDate = LocalDate.of(iYear,iMonth,iDay);
+                if (holder.getAdapterPosition()!=RecyclerView.NO_POSITION){
                     if (mListener!=null){
-                        mListener.onItemClick (view,position);
+                        mListener.onItemClick (view,holder.getAdapterPosition());
                     }
                 }
             }
