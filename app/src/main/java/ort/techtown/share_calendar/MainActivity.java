@@ -168,6 +168,7 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.O
             public void onClick(View view) {
                 Intent intent= new Intent(MainActivity.this,AddActivity.class);
                 // Bundle bundle = ActivityOptions.makeSceneTransitionAnimation(MainActivity.this).toBundle();
+                intent.putExtra("uid",uid);
                 startActivity(intent);
                 finish();
                 overridePendingTransition(R.anim.anim_in,R.anim.anim_out);

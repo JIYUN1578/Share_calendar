@@ -19,12 +19,17 @@ import android.widget.TextView;
 import android.widget.TimePicker;
 import android.widget.Toast;
 
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+
 import org.w3c.dom.Text;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.Year;
 import java.time.format.DateTimeFormatter;
+
+import ort.techtown.share_calendar.Data.Info;
 
 public class AddActivity extends AppCompatActivity {
 
@@ -50,10 +55,18 @@ public class AddActivity extends AppCompatActivity {
     DatePickerDialog datePickerDialog;
     TimePickerDialog timePickerDialog;
 
+    //파이어베이스
+    private FirebaseDatabase database = FirebaseDatabase.getInstance();
+    private DatabaseReference databaseReference = database.getReference();
+    private String uid;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add);
+
+        Intent intent = getIntent();
+        uid = intent.getStringExtra("uid");
 
         btn_addInfo = (ImageButton) findViewById(R.id.btn_addInfo);
         edt_toDo = (EditText) findViewById(R.id.edt_addTodo);
@@ -177,11 +190,18 @@ public class AddActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 String toDo = edt_toDo.getText().toString();
-                DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
-                LocalDate pDate = LocalDate.parse(tv_addStartDay.getText().toString(),formatter);
-                boolean isSecret = cb_isSecret.isChecked(); //체크 되어있으면 비공개
+                Info newInfo = new Info(false,
+                        cb_isSecret.isChecked(),
+                        tv_addStartDay.getText()+" "+tv_addStartTime.getText(),
+                        tv_addEndDay.getText()+" "+tv_addEndTime.getText().toString(),
+                        "title sample",
+                        edt_toDo.getText().toString());
 
                 //upload 하면 되지롱
+
+                String nnow =  DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss").format(LocalDateTime.now());
+                databaseReference.child("User").child(uid).child("Calender").child(tv_addStartDay.getText().toString())
+                                .child(nnow).setValue(newInfo);
 
             }
         });
