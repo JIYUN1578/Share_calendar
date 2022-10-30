@@ -36,12 +36,14 @@ import java.util.ArrayList;
 
 import ort.techtown.share_calendar.Adapter.CalendarAdapter;
 import ort.techtown.share_calendar.Adapter.TodoListAdapter;
+import ort.techtown.share_calendar.Class.BackKeyHandler;
 import ort.techtown.share_calendar.Data.CalendarUtil;
 import ort.techtown.share_calendar.Data.Info;
 
 public class MainActivity extends AppCompatActivity implements GoogleApiClient.OnConnectionFailedListener {
 
     private GoogleApiClient googleApiClient;
+    private BackKeyHandler backKeyHandler = new BackKeyHandler(this);
     // drawerLayout
     private DrawerLayout drawerLayout;
     private Button btn_logout, btn_calendar, btn_search, btn_make, btn_group, btn_close;
@@ -131,6 +133,7 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.O
                 Intent intent = new Intent(MainActivity.this, MakeActivity.class);
                 intent.putExtra("uid",uid);
                 startActivity(intent);
+                finish();
             }
         });
 
@@ -142,6 +145,7 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.O
                 Intent intent = new Intent(MainActivity.this, SearchActivity.class);
                 intent.putExtra("uid",uid);
                 startActivity(intent);
+                finish();
             }
         });
 
@@ -153,6 +157,7 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.O
                 Intent intent = new Intent(MainActivity.this, GroupActivity.class);
                 intent.putExtra("uid",uid);
                 startActivity(intent);
+                finish();
             }
         });
 
@@ -330,5 +335,10 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.O
 
     @Override
     public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
+    }
+
+    @Override
+    public void onBackPressed() {
+        backKeyHandler.onBackPressed();
     }
 }

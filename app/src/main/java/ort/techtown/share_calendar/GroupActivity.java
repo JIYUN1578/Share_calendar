@@ -28,11 +28,13 @@ import com.google.firebase.database.ValueEventListener;
 import java.util.ArrayList;
 
 import ort.techtown.share_calendar.Adapter.GroupAdapter;
+import ort.techtown.share_calendar.Class.BackKeyHandler;
 import ort.techtown.share_calendar.Data.Group;
 import ort.techtown.share_calendar.Data.GroupRecyclerView;
 
 public class GroupActivity extends AppCompatActivity {
 
+    private BackKeyHandler backKeyHandler = new BackKeyHandler(this);
     // drawerLayout
     private DrawerLayout drawerLayout;
     private Button btn_logout, btn_calendar, btn_search, btn_make, btn_group, btn_close;
@@ -94,6 +96,7 @@ public class GroupActivity extends AppCompatActivity {
                 Intent intent = new Intent(GroupActivity.this, MainActivity.class);
                 intent.putExtra("uid",uid);
                 startActivity(intent);
+                finish();
             }
         });
         // 그룹 생성 버튼
@@ -104,6 +107,7 @@ public class GroupActivity extends AppCompatActivity {
                 Intent intent = new Intent(GroupActivity.this, MakeActivity.class);
                 intent.putExtra("uid",uid);
                 startActivity(intent);
+                finish();
             }
         });
         // 그룹 검색 버튼
@@ -114,6 +118,7 @@ public class GroupActivity extends AppCompatActivity {
                 Intent intent = new Intent(GroupActivity.this, SearchActivity.class);
                 intent.putExtra("uid",uid);
                 startActivity(intent);
+                finish();
             }
         });
         // 로그아웃 버튼
@@ -153,6 +158,7 @@ public class GroupActivity extends AppCompatActivity {
                 intent.putExtra("groupname",groupname);
                 intent.putExtra("uid",uid);
                 startActivity(intent);
+                finish();
             }
         });
     }
@@ -209,5 +215,10 @@ public class GroupActivity extends AppCompatActivity {
             public void onCancelled(@NonNull DatabaseError error) {
             }
         });
+    }
+
+    @Override
+    public void onBackPressed() {
+        backKeyHandler.onBackPressed();
     }
 }

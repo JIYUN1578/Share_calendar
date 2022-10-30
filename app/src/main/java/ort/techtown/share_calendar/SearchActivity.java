@@ -34,9 +34,11 @@ import java.util.HashMap;
 import java.util.List;
 
 import ort.techtown.share_calendar.Adapter.SearchAdapter;
+import ort.techtown.share_calendar.Class.BackKeyHandler;
 
 public class SearchActivity extends AppCompatActivity {
 
+    private BackKeyHandler backKeyHandler = new BackKeyHandler(this);
     // drawerLayout
     private DrawerLayout drawerLayout;
     private Button btn_logout, btn_calendar, btn_search, btn_make, btn_group, btn_close;
@@ -102,6 +104,7 @@ public class SearchActivity extends AppCompatActivity {
                 Intent intent = new Intent(SearchActivity.this, MainActivity.class);
                 intent.putExtra("uid",uid);
                 startActivity(intent);
+                finish();
             }
         });
 
@@ -113,6 +116,7 @@ public class SearchActivity extends AppCompatActivity {
                 Intent intent = new Intent(SearchActivity.this, MakeActivity.class);
                 intent.putExtra("uid",uid);
                 startActivity(intent);
+                finish();
             }
         });
 
@@ -124,6 +128,7 @@ public class SearchActivity extends AppCompatActivity {
                 Intent intent = new Intent(SearchActivity.this, GroupActivity.class);
                 intent.putExtra("uid",uid);
                 startActivity(intent);
+                finish();
             }
         });
 
@@ -278,4 +283,9 @@ public class SearchActivity extends AppCompatActivity {
         public void onDrawerStateChanged(int newState) {
         }
     };
+
+    @Override
+    public void onBackPressed() {
+        backKeyHandler.onBackPressed();
+    }
 }

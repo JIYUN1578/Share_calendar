@@ -37,11 +37,13 @@ import java.util.ArrayList;
 
 import ort.techtown.share_calendar.Adapter.CalendarAdapter;
 import ort.techtown.share_calendar.Adapter.TodoListAdapter;
+import ort.techtown.share_calendar.Class.BackKeyHandler;
 import ort.techtown.share_calendar.Data.CalendarUtil;
 import ort.techtown.share_calendar.Data.Info;
 
 public class PostActivity extends AppCompatActivity {
 
+    private BackKeyHandler backKeyHandler = new BackKeyHandler(this);
     // drawerLayout
     private DrawerLayout drawerLayout;
     private Button btn_logout, btn_calendar, btn_search, btn_make, btn_group, btn_close;
@@ -133,6 +135,7 @@ public class PostActivity extends AppCompatActivity {
                 Intent intent = new Intent(PostActivity.this, MainActivity.class);
                 intent.putExtra("uid",uid);
                 startActivity(intent);
+                finish();
             }
         });
         // 그룹 생성 버튼
@@ -143,6 +146,7 @@ public class PostActivity extends AppCompatActivity {
                 Intent intent = new Intent(PostActivity.this, MakeActivity.class);
                 intent.putExtra("uid",uid);
                 startActivity(intent);
+                finish();
             }
         });
         // 그룹 검색 버튼
@@ -153,6 +157,7 @@ public class PostActivity extends AppCompatActivity {
                 Intent intent = new Intent(PostActivity.this, SearchActivity.class);
                 intent.putExtra("uid",uid);
                 startActivity(intent);
+                finish();
             }
         });
         // 마이그룹 버튼
@@ -163,6 +168,7 @@ public class PostActivity extends AppCompatActivity {
                 Intent intent = new Intent(PostActivity.this, GroupActivity.class);
                 intent.putExtra("uid",uid);
                 startActivity(intent);
+                finish();
             }
         });
         // 로그아웃 버튼
@@ -332,4 +338,9 @@ public class PostActivity extends AppCompatActivity {
         public void onDrawerStateChanged(int newState) {
         }
     };
+
+    @Override
+    public void onBackPressed() {
+        backKeyHandler.onBackPressed();
+    }
 }

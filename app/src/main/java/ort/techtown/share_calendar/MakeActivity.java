@@ -23,10 +23,12 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
+import ort.techtown.share_calendar.Class.BackKeyHandler;
 import ort.techtown.share_calendar.Data.Group;
 
 public class MakeActivity extends AppCompatActivity {
 
+    private BackKeyHandler backKeyHandler = new BackKeyHandler(this);
     // drawerLayout
     private DrawerLayout drawerLayout;
     private Button btn_logout, btn_calendar, btn_search, btn_group, btn_close,btn_make;
@@ -85,6 +87,7 @@ public class MakeActivity extends AppCompatActivity {
                 Intent intent = new Intent(MakeActivity.this, MainActivity.class);
                 intent.putExtra("uid",uid);
                 startActivity(intent);
+                finish();
             }
         });
 
@@ -96,6 +99,7 @@ public class MakeActivity extends AppCompatActivity {
                 Intent intent = new Intent(MakeActivity.this, SearchActivity.class);
                 intent.putExtra("uid",uid);
                 startActivity(intent);
+                finish();
             }
         });
 
@@ -107,6 +111,7 @@ public class MakeActivity extends AppCompatActivity {
                 Intent intent = new Intent(MakeActivity.this, GroupActivity.class);
                 intent.putExtra("uid",uid);
                 startActivity(intent);
+                finish();
             }
         });
 
@@ -165,5 +170,10 @@ public class MakeActivity extends AppCompatActivity {
         databaseReference.child("Group").child(groupname).setValue(group);
         databaseReference.child("Group").child(groupname).child("Uid").push().setValue(uid);
         databaseReference.child("User").child(uid).child("Group").push().setValue(groupname);
+    }
+
+    @Override
+    public void onBackPressed() {
+        backKeyHandler.onBackPressed();
     }
 }
