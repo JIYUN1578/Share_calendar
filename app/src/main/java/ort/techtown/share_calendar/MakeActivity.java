@@ -41,7 +41,7 @@ public class MakeActivity extends AppCompatActivity {
     // 파이어베이스
     private FirebaseDatabase database = FirebaseDatabase.getInstance();
     private DatabaseReference databaseReference = database.getReference();
-    private String uid;
+    private String uid, name;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -50,6 +50,7 @@ public class MakeActivity extends AppCompatActivity {
 
         Intent intent = getIntent();
         uid = intent.getStringExtra("uid");
+        name = intent.getStringExtra("name");
 
         Toolbar toolbar = (Toolbar)findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -85,6 +86,7 @@ public class MakeActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(MakeActivity.this, MainActivity.class);
+                intent.putExtra("name",name);
                 intent.putExtra("uid",uid);
                 startActivity(intent);
                 finish();
@@ -97,6 +99,7 @@ public class MakeActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(MakeActivity.this, SearchActivity.class);
+                intent.putExtra("name",name);
                 intent.putExtra("uid",uid);
                 startActivity(intent);
                 finish();
@@ -109,6 +112,7 @@ public class MakeActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(MakeActivity.this, GroupActivity.class);
+                intent.putExtra("name",name);
                 intent.putExtra("uid",uid);
                 startActivity(intent);
                 finish();

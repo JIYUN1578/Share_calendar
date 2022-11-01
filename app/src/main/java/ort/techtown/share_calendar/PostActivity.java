@@ -59,7 +59,7 @@ public class PostActivity extends AppCompatActivity {
     TextView tv_monthyear;
     RecyclerView recyclerView, todoListRecyclerView;
     // 그룹 정보
-    private String groupname, uid, tmp_name, tmp_uid;
+    private String groupname, uid, name, tmp_name, tmp_uid;
     private TextView group_name, group_introduce;
     private ImageView group_image;
     // 게시판 이동
@@ -72,6 +72,7 @@ public class PostActivity extends AppCompatActivity {
 
         groupname = getIntent().getStringExtra("groupname");
         uid = getIntent().getStringExtra("uid");
+        name = getIntent().getStringExtra("name");
 
         // 툴바 게시판 이동
         tv_postmove = findViewById(R.id.tv_postmove);
@@ -80,6 +81,7 @@ public class PostActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(PostActivity.this,NoticeBoardActivity.class);
+                intent.putExtra("name",name);
                 intent.putExtra("groupname",groupname);
                 intent.putExtra("uid",uid);
                 startActivity(intent);
@@ -149,6 +151,7 @@ public class PostActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(PostActivity.this, MainActivity.class);
+                intent.putExtra("name",name);
                 intent.putExtra("uid",uid);
                 startActivity(intent);
                 finish();
@@ -160,6 +163,7 @@ public class PostActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(PostActivity.this, MakeActivity.class);
+                intent.putExtra("name",name);
                 intent.putExtra("uid",uid);
                 startActivity(intent);
                 finish();
@@ -171,6 +175,7 @@ public class PostActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(PostActivity.this, SearchActivity.class);
+                intent.putExtra("name",name);
                 intent.putExtra("uid",uid);
                 startActivity(intent);
                 finish();
@@ -182,6 +187,7 @@ public class PostActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(PostActivity.this, GroupActivity.class);
+                intent.putExtra("name",name);
                 intent.putExtra("uid",uid);
                 startActivity(intent);
                 finish();

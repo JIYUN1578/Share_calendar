@@ -67,6 +67,7 @@ public class SearchActivity extends AppCompatActivity {
 
         Intent intent = getIntent();
         String uid = intent.getStringExtra("uid");
+        String name = intent.getStringExtra("name");
 
         Toolbar toolbar = (Toolbar)findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -102,6 +103,7 @@ public class SearchActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(SearchActivity.this, MainActivity.class);
+                intent.putExtra("name",name);
                 intent.putExtra("uid",uid);
                 startActivity(intent);
                 finish();
@@ -114,6 +116,7 @@ public class SearchActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(SearchActivity.this, MakeActivity.class);
+                intent.putExtra("name",name);
                 intent.putExtra("uid",uid);
                 startActivity(intent);
                 finish();
@@ -126,6 +129,7 @@ public class SearchActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(SearchActivity.this, GroupActivity.class);
+                intent.putExtra("name",name);
                 intent.putExtra("uid",uid);
                 startActivity(intent);
                 finish();

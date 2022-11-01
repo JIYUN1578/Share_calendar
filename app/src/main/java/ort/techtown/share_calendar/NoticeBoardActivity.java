@@ -34,7 +34,7 @@ public class NoticeBoardActivity extends AppCompatActivity {
     private DatabaseReference mReference = database.getReference();
     private DatabaseReference reference = database.getReference();
     // 그룹 정보
-    private String groupname, uid;
+    private String groupname, uid, name;
     // 그룹캘린더 이동
     private TextView tv_postmove;
 
@@ -45,6 +45,7 @@ public class NoticeBoardActivity extends AppCompatActivity {
 
         groupname = getIntent().getStringExtra("groupname");
         uid = getIntent().getStringExtra("uid");
+        name = getIntent().getStringExtra("name");
 
         // 툴바 그룹캘린더 이동
         tv_postmove = findViewById(R.id.tv_postmove);
@@ -53,6 +54,7 @@ public class NoticeBoardActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(NoticeBoardActivity.this,PostActivity.class);
+                intent.putExtra("name",name);
                 intent.putExtra("groupname",groupname);
                 intent.putExtra("uid",uid);
                 startActivity(intent);
@@ -92,6 +94,7 @@ public class NoticeBoardActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(NoticeBoardActivity.this, MainActivity.class);
+                intent.putExtra("name",name);
                 intent.putExtra("uid",uid);
                 startActivity(intent);
                 finish();
@@ -103,6 +106,7 @@ public class NoticeBoardActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(NoticeBoardActivity.this, MakeActivity.class);
+                intent.putExtra("name",name);
                 intent.putExtra("uid",uid);
                 startActivity(intent);
                 finish();
@@ -114,6 +118,7 @@ public class NoticeBoardActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(NoticeBoardActivity.this, SearchActivity.class);
+                intent.putExtra("name",name);
                 intent.putExtra("uid",uid);
                 startActivity(intent);
                 finish();
@@ -125,6 +130,7 @@ public class NoticeBoardActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(NoticeBoardActivity.this, GroupActivity.class);
+                intent.putExtra("name",name);
                 intent.putExtra("uid",uid);
                 startActivity(intent);
                 finish();

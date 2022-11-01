@@ -45,7 +45,7 @@ public class GroupActivity extends AppCompatActivity {
     private FirebaseDatabase database = FirebaseDatabase.getInstance();
     private DatabaseReference databaseReference = database.getReference();
     private DatabaseReference mReference = database.getReference();
-    private String uid;
+    private String uid, name;
     // 그룹 정보 담는 리스트
     private ArrayList<String> arrayList;
     private ArrayList<GroupRecyclerView> groupList;
@@ -62,6 +62,7 @@ public class GroupActivity extends AppCompatActivity {
 
         Intent intent = getIntent();
         uid = intent.getStringExtra("uid");
+        name = intent.getStringExtra("name");
 
         Toolbar toolbar = (Toolbar)findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -94,6 +95,7 @@ public class GroupActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(GroupActivity.this, MainActivity.class);
+                intent.putExtra("name",name);
                 intent.putExtra("uid",uid);
                 startActivity(intent);
                 finish();
@@ -105,6 +107,7 @@ public class GroupActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(GroupActivity.this, MakeActivity.class);
+                intent.putExtra("name",name);
                 intent.putExtra("uid",uid);
                 startActivity(intent);
                 finish();
@@ -116,6 +119,7 @@ public class GroupActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(GroupActivity.this, SearchActivity.class);
+                intent.putExtra("name",name);
                 intent.putExtra("uid",uid);
                 startActivity(intent);
                 finish();

@@ -44,7 +44,7 @@ public class AddActivity extends AppCompatActivity {
     //파이어베이스
     private FirebaseDatabase database = FirebaseDatabase.getInstance();
     private DatabaseReference databaseReference = database.getReference();
-    private String uid;
+    private String uid, name;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -53,6 +53,7 @@ public class AddActivity extends AppCompatActivity {
 
         Intent intent = getIntent();
         uid = intent.getStringExtra("uid");
+        name = intent.getStringExtra("name");
 
         btn_addInfo = (ImageButton) findViewById(R.id.btn_addInfo);
         edt_toDo = (EditText) findViewById(R.id.edt_addTodo);
@@ -68,7 +69,6 @@ public class AddActivity extends AppCompatActivity {
         tv_addStartDay.setText(CalendarUtil.selectedDate.toString());
         tv_addEndDay.setText(CalendarUtil.selectedDate.toString());
 
-
         pStartHour = 8;
         pStartMin = 0;
         pEndHour = 9;
@@ -80,8 +80,6 @@ public class AddActivity extends AppCompatActivity {
         pEYear = CalendarUtil.selectedDate.getYear();
         pEMonth = CalendarUtil.selectedDate.getMonthValue();
         pEDay = CalendarUtil.selectedDate.getDayOfMonth();
-
-       // Log.d("시간", String.valueOf());
 
         tv_addStartTime.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -102,7 +100,6 @@ public class AddActivity extends AppCompatActivity {
                         ,pStartHour, pStartMin, false
                 );
                 timePickerDialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
-
                 timePickerDialog.show();
             }
         });
@@ -135,7 +132,6 @@ public class AddActivity extends AppCompatActivity {
                         new DatePickerDialog.OnDateSetListener() {
                             @Override
                             public void onDateSet(DatePicker datePicker, int year, int month, int day) {
-
                                 pSYear = year;
                                 pSDay = day;
                                 pSMonth = month +1 ;
@@ -157,8 +153,6 @@ public class AddActivity extends AppCompatActivity {
                         new DatePickerDialog.OnDateSetListener() {
                             @Override
                             public void onDateSet(DatePicker datePicker, int year, int month, int day) {
-
-
                                 pEYear = year;
                                 pEDay = day;
                                 pEMonth = month +1 ;
@@ -182,9 +176,7 @@ public class AddActivity extends AppCompatActivity {
                         tv_addEndDay.getText()+" "+tv_addEndTime.getText().toString(),
                         edt_toDo.getText().toString(),
                         edt_toDo.getText().toString());
-
-                //upload 하면 되지롱
-
+                //upload
                 String nnow =  DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss").format(LocalDateTime.now());
                 databaseReference.child("User").child(uid).child("Calender").child(tv_addStartDay.getText().toString())
                                 .child(nnow).setValue(newInfo);
@@ -201,6 +193,7 @@ public class AddActivity extends AppCompatActivity {
         //super.onBackPressed();
         Intent intent = new Intent(AddActivity.this, MainActivity.class);
         intent.putExtra("uid",uid);
+        intent.putExtra("name",name);
         intent.putExtra("fromOther", true);
         startActivity(intent);
         finish();
