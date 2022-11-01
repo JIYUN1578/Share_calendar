@@ -1,10 +1,16 @@
 package ort.techtown.share_calendar.Class;
 
+import java.util.ArrayList;
+
 public class Post {
-    private String image_url, title, summary, name;
-    private Boolean vote;
+    private String image_url, title, summary, name, uid;
+    private Boolean isVote;
 
     public Post() {}
+
+    public String getUid() {return uid;}
+
+    public void setUid(String uid) {this.uid = uid;}
 
     public String getImage_url() {return image_url;}
 
@@ -22,7 +28,7 @@ public class Post {
 
     public void setName(String name) {this.name = name;}
 
-    public Boolean getVote() {return vote;}
+    public Boolean getVote() {return isVote;}
 
-    public void setVote(Boolean vote) {this.vote = vote;}
+    public void setVote(Boolean vote) {isVote = vote;}
 }

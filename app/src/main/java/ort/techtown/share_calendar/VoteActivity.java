@@ -4,32 +4,21 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.drawerlayout.widget.DrawerLayout;
-import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.MotionEvent;
 import android.view.View;
-import android.view.animation.Animation;
-import android.view.animation.AnimationUtils;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton;
-import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
-import java.util.ArrayList;
+public class VoteActivity extends AppCompatActivity {
 
-import ort.techtown.share_calendar.Class.BackKeyHandler;
-import ort.techtown.share_calendar.Class.Post;
-
-public class NoticeBoardActivity extends AppCompatActivity implements View.OnClickListener {
-
-    private BackKeyHandler backKeyHandler = new BackKeyHandler(this);
     // drawerLayout
     private DrawerLayout drawerLayout;
     private Button btn_logout, btn_calendar, btn_search, btn_make, btn_group, btn_close;
@@ -43,40 +32,15 @@ public class NoticeBoardActivity extends AppCompatActivity implements View.OnCli
     private DatabaseReference reference = database.getReference();
     // 그룹 정보
     private String groupname, uid, name;
-    // 그룹캘린더 이동
-    private TextView tv_postmove;
-    // 게시판 관련
-    private RecyclerView recyclerView;
-    private RecyclerView.Adapter adapter;
-    private RecyclerView.LayoutManager layoutManager;
-    private ArrayList<Post> arrayList;
-    private FloatingActionButton btn_write, btn_vote, btn_notice;
-    private Animation fab_open, fab_close;
-    private Boolean isFabOpen = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_notice_board);
+        setContentView(R.layout.activity_vote);
 
         groupname = getIntent().getStringExtra("groupname");
         uid = getIntent().getStringExtra("uid");
         name = getIntent().getStringExtra("name");
-
-        // 툴바 그룹캘린더 이동
-        tv_postmove = findViewById(R.id.tv_postmove);
-        tv_postmove.setText("그룹캘린더 이동");
-        tv_postmove.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(NoticeBoardActivity.this,PostActivity.class);
-                intent.putExtra("name",name);
-                intent.putExtra("groupname",groupname);
-                intent.putExtra("uid",uid);
-                startActivity(intent);
-                finish();
-            }
-        });
 
         // 툴바
         Toolbar toolbar = (Toolbar)findViewById(R.id.toolbar);
@@ -109,7 +73,7 @@ public class NoticeBoardActivity extends AppCompatActivity implements View.OnCli
         btn_calendar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(NoticeBoardActivity.this, MainActivity.class);
+                Intent intent = new Intent(VoteActivity.this, MainActivity.class);
                 intent.putExtra("name",name);
                 intent.putExtra("uid",uid);
                 startActivity(intent);
@@ -121,7 +85,7 @@ public class NoticeBoardActivity extends AppCompatActivity implements View.OnCli
         btn_make.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(NoticeBoardActivity.this, MakeActivity.class);
+                Intent intent = new Intent(VoteActivity.this, MakeActivity.class);
                 intent.putExtra("name",name);
                 intent.putExtra("uid",uid);
                 startActivity(intent);
@@ -133,7 +97,7 @@ public class NoticeBoardActivity extends AppCompatActivity implements View.OnCli
         btn_search.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(NoticeBoardActivity.this, SearchActivity.class);
+                Intent intent = new Intent(VoteActivity.this, SearchActivity.class);
                 intent.putExtra("name",name);
                 intent.putExtra("uid",uid);
                 startActivity(intent);
@@ -145,7 +109,7 @@ public class NoticeBoardActivity extends AppCompatActivity implements View.OnCli
         btn_group.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(NoticeBoardActivity.this, GroupActivity.class);
+                Intent intent = new Intent(VoteActivity.this, GroupActivity.class);
                 intent.putExtra("name",name);
                 intent.putExtra("uid",uid);
                 startActivity(intent);
@@ -168,61 +132,6 @@ public class NoticeBoardActivity extends AppCompatActivity implements View.OnCli
                 return true;
             }
         });
-
-        // 게시판 작성
-        fab_open = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.fab_open);
-        fab_close = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.fab_close);
-
-        btn_write = (FloatingActionButton) findViewById(R.id.btn_write);
-        btn_vote = (FloatingActionButton) findViewById(R.id.btn_vote);
-        btn_notice = (FloatingActionButton) findViewById(R.id.btn_notice);
-
-        btn_write.setOnClickListener(this);
-        btn_vote.setOnClickListener(this);
-        btn_notice.setOnClickListener(this);
-    }
-
-    // 플로팅버튼 클릭 리스너
-    @Override
-    public void onClick(View v) {
-        int id = v.getId();
-        switch (id) {
-            case R.id.btn_write:
-                anim();
-                break;
-            case R.id.btn_vote:
-                anim();
-                Intent intent1 = new Intent(NoticeBoardActivity.this, VoteActivity.class);
-                intent1.putExtra("groupname",groupname);
-                intent1.putExtra("name",name);
-                intent1.putExtra("uid",uid);
-                startActivity(intent1);
-                break;
-            case R.id.btn_notice:
-                anim();
-                Intent intent2 = new Intent(NoticeBoardActivity.this, WriteActivity.class);
-                intent2.putExtra("groupname",groupname);
-                intent2.putExtra("name",name);
-                intent2.putExtra("uid",uid);
-                startActivity(intent2);
-                break;
-        }
-    }
-
-    public void anim() {
-        if (isFabOpen) {
-            btn_vote.startAnimation(fab_close);
-            btn_notice.startAnimation(fab_close);
-            btn_vote.setClickable(false);
-            btn_notice.setClickable(false);
-            isFabOpen = false;
-        } else {
-            btn_vote.startAnimation(fab_open);
-            btn_notice.startAnimation(fab_open);
-            btn_vote.setClickable(true);
-            btn_notice.setClickable(true);
-            isFabOpen = true;
-        }
     }
 
     // drawerLayout 리스너
@@ -240,9 +149,4 @@ public class NoticeBoardActivity extends AppCompatActivity implements View.OnCli
         public void onDrawerStateChanged(int newState) {
         }
     };
-
-    @Override
-    public void onBackPressed() {
-        backKeyHandler.onBackPressed();
-    }
 }

@@ -1,21 +1,28 @@
 package ort.techtown.share_calendar;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.drawerlayout.widget.DrawerLayout;
 
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+
+import ort.techtown.share_calendar.Class.Post;
 
 public class WriteActivity extends AppCompatActivity {
 
@@ -32,6 +39,12 @@ public class WriteActivity extends AppCompatActivity {
     private DatabaseReference reference = database.getReference();
     // 그룹 정보
     private String groupname, uid, name;
+    // 게시글 관련
+    private EditText et_title, et_summary;
+    private ImageView iv_image;
+    private FloatingActionButton btn_camera;
+    private static final int REQUEST_CODE = 0;
+    private TextView tv_register;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -132,6 +145,48 @@ public class WriteActivity extends AppCompatActivity {
                 return true;
             }
         });
+
+        // 게시글 적기
+        et_title = (EditText)findViewById(R.id.et_title);
+        et_summary = (EditText)findViewById(R.id.et_summary);
+        iv_image = (ImageView)findViewById(R.id.iv_image);
+        btn_camera = (FloatingActionButton)findViewById(R.id.btn_camera);
+
+        btn_camera.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                iv_image.setImageResource(0);
+                Intent intent = new Intent();
+                intent.setType("image/*");
+                intent.setAction(Intent.ACTION_GET_CONTENT);
+                startActivityForResult(intent, REQUEST_CODE);
+            }
+        });
+
+        // 게시글 등록하기
+        tv_register = (TextView) findViewById(R.id.tv_postmove);
+        tv_register.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Post post = new Post();
+            }
+        });
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if(requestCode == REQUEST_CODE) {
+            if(resultCode == RESULT_OK) {
+                try{
+                    Uri uri = data.getData();
+                    Glide.with(getApplicationContext()).load(uri).into(iv_image);
+                } catch(Exception e){
+                }
+            }
+            else if(resultCode == RESULT_CANCELED){
+            }
+        }
     }
 
     // drawerLayout 리스너
