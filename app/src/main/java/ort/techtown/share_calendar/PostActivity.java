@@ -62,6 +62,8 @@ public class PostActivity extends AppCompatActivity {
     private String groupname, uid, tmp_name, tmp_uid;
     private TextView group_name, group_introduce;
     private ImageView group_image;
+    // 게시판 이동
+    private TextView tv_postmove;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -70,6 +72,20 @@ public class PostActivity extends AppCompatActivity {
 
         groupname = getIntent().getStringExtra("groupname");
         uid = getIntent().getStringExtra("uid");
+
+        // 툴바 게시판 이동
+        tv_postmove = findViewById(R.id.tv_postmove);
+        tv_postmove.setText("게시판 이동");
+        tv_postmove.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(PostActivity.this,NoticeBoardActivity.class);
+                intent.putExtra("groupname",groupname);
+                intent.putExtra("uid",uid);
+                startActivity(intent);
+                finish();
+            }
+        });
 
         // 달력
         tv_monthyear = findViewById(R.id.tv_month_year);

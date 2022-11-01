@@ -32,21 +32,11 @@ public class AddActivity extends AppCompatActivity {
     ImageButton btn_addInfo;
     EditText edt_toDo;
     TextView tv_addStartDay, tv_addEndDay;
-    TextView tv_addStartTime;
-    TextView tv_addEndTime;
+    TextView tv_addStartTime, tv_addEndTime;
     CheckBox cb_isSecret;
 
-    int pStartHour ;
-    int pStartMin ;
-    int pEndHour ;
-    int pEndMin ;
-
-    int pSYear ;
-    int pSMonth ;
-    int pSDay ;
-    int pEYear;
-    int pEMonth;
-    int pEDay ;
+    int pStartHour, pStartMin, pEndHour, pEndMin;
+    int pSYear, pSMonth, pSDay, pEYear, pEMonth, pEDay;
 
     DatePickerDialog datePickerDialog;
     TimePickerDialog timePickerDialog;
