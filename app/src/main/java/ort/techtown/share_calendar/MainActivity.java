@@ -242,6 +242,7 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.O
             }
         });
     }
+
     private void setTodoList(String uid) {
         // 해당 일정 가져오기
         ArrayList<Info> infolist = new ArrayList<>();

@@ -2,15 +2,13 @@ package ort.techtown.share_calendar.Data;
 
 public class Info {
     boolean isDone;
-    boolean isOpen;
     String start;
     String end;
     String title;
     String info;
 
-    public Info(boolean isDone, boolean isOpen, String start, String end, String title, String info) {
+    public Info( boolean isOpen, String start, String end, String title, String info) {
         this.isDone = isDone;
-        this.isOpen = isOpen;
         this.start = start;
         this.end = end;
         this.title = title;
@@ -19,7 +17,6 @@ public class Info {
 
     public Info() {
         this.isDone = false;
-        this.isOpen = false;
         this.start = "~~";
         this.end = "!!";
         this.title = "title";
@@ -32,14 +29,6 @@ public class Info {
 
     public void setDone(boolean done) {
         isDone = done;
-    }
-
-    public boolean isOpen() {
-        return isOpen;
-    }
-
-    public void setOpen(boolean open) {
-        isOpen = open;
     }
 
     public String getStart() {

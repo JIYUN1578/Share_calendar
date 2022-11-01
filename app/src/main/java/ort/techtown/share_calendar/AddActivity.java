@@ -1,6 +1,8 @@
 package ort.techtown.share_calendar;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
@@ -16,15 +18,25 @@ import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.TimePicker;
+import android.widget.Toast;
 
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.Query;
+import com.google.firebase.database.ValueEventListener;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
 
+import ort.techtown.share_calendar.Adapter.GroupAdapter;
+import ort.techtown.share_calendar.Adapter.GrouplistAdapter;
+import ort.techtown.share_calendar.Adapter.TodoListAdapter;
 import ort.techtown.share_calendar.Data.CalendarUtil;
+import ort.techtown.share_calendar.Data.Grouplist;
 import ort.techtown.share_calendar.Data.Info;
 
 public class AddActivity extends AppCompatActivity {
@@ -33,8 +45,8 @@ public class AddActivity extends AppCompatActivity {
     EditText edt_toDo;
     TextView tv_addStartDay, tv_addEndDay;
     TextView tv_addStartTime, tv_addEndTime;
-    CheckBox cb_isSecret;
-
+    ImageButton cb_isSecret;
+    RecyclerView recyclerView;
     int pStartHour, pStartMin, pEndHour, pEndMin;
     int pSYear, pSMonth, pSDay, pEYear, pEMonth, pEDay;
 
@@ -54,12 +66,12 @@ public class AddActivity extends AppCompatActivity {
         Intent intent = getIntent();
         uid = intent.getStringExtra("uid");
         name = intent.getStringExtra("name");
-
+        recyclerView = findViewById(R.id.group_list);
         btn_addInfo = (ImageButton) findViewById(R.id.btn_addInfo);
         edt_toDo = (EditText) findViewById(R.id.edt_addTodo);
         tv_addStartDay = (TextView) findViewById(R.id.tv_addStartDay);
         tv_addEndDay = (TextView)findViewById(R.id.tv_addEndtDay);
-        cb_isSecret = (CheckBox) findViewById(R.id.cb_isSecret);
+        cb_isSecret = (ImageButton) findViewById(R.id.cb_isSecret);
         tv_addStartDay.setText(CalendarUtil.today.toString());
         tv_addStartTime = (TextView) findViewById(R.id.tv_addStartTime);
         tv_addEndTime = (TextView) findViewById(R.id.tv_addEndTime );
@@ -104,6 +116,7 @@ public class AddActivity extends AppCompatActivity {
             }
         });
 
+        setGroup();
         tv_addEndTime.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -155,10 +168,10 @@ public class AddActivity extends AppCompatActivity {
                             public void onDateSet(DatePicker datePicker, int year, int month, int day) {
                                 pEYear = year;
                                 pEDay = day;
-                                pEMonth = month +1 ;
+                                pEMonth = month + 1;
 
-                                tv_addEndDay.setText(String.valueOf(pEYear)+"-"+
-                                        String.format("%02d",pEMonth)+"-"+String.format("%02d",pEDay));
+                                tv_addEndDay.setText(String.valueOf(pEYear) + "-" +
+                                        String.format("%02d", pEMonth) + "-" + String.format("%02d", pEDay));
                                 updatecal(false);
                             }
                         },pEYear,pEMonth-1,pEDay );
@@ -171,7 +184,6 @@ public class AddActivity extends AppCompatActivity {
             public void onClick(View view) {
                 String toDo = edt_toDo.getText().toString();
                 Info newInfo = new Info(false,
-                        cb_isSecret.isChecked(),
                         tv_addStartDay.getText()+" "+tv_addStartTime.getText(),
                         tv_addEndDay.getText()+" "+tv_addEndTime.getText().toString(),
                         edt_toDo.getText().toString(),
@@ -180,12 +192,59 @@ public class AddActivity extends AppCompatActivity {
                 String nnow =  DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss").format(LocalDateTime.now());
                 databaseReference.child("User").child(uid).child("Calender").child(tv_addStartDay.getText().toString())
                                 .child(nnow).setValue(newInfo);
+                makeprivacy();
                 CalendarUtil.selectedDate = LocalDate.parse(tv_addStartDay.getText(),
                         DateTimeFormatter.ofPattern("yyyy-MM-dd"));
                 Log.d("selected date: ",CalendarUtil.selectedDate.toString());
                 onBackPressed();
             }
         });
+    }
+
+
+    private void setGroup( ) {
+        // 해당 일정 가져오기
+        ArrayList<Grouplist> grouplist = new ArrayList<>();
+        FirebaseDatabase database = FirebaseDatabase.getInstance();
+        DatabaseReference reference;
+
+        GrouplistAdapter adapter = new GrouplistAdapter(grouplist);
+        RecyclerView.LayoutManager manager = new LinearLayoutManager(getApplicationContext());
+        // 어뎁터 적용
+        recyclerView.setLayoutManager(manager);
+        recyclerView.setAdapter(adapter);
+        try{
+            reference = database.getReference("User").child(uid).child("Group");
+            reference.addValueEventListener(new ValueEventListener() {
+                @Override
+                public void onDataChange(DataSnapshot dataSnapshot) {
+                    for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
+                        Grouplist temp = new Grouplist("temp",false);
+                        temp.setGrname((String)snapshot.getValue());
+                        grouplist.add(temp);
+                        Log.e("111",grouplist.toString());
+                        GrouplistAdapter adapter = new GrouplistAdapter(grouplist);
+                        RecyclerView.LayoutManager manager = new LinearLayoutManager(getApplicationContext());
+                        // 어뎁터 적용
+                        recyclerView.setLayoutManager(manager);
+                        recyclerView.setAdapter(adapter);
+                    }
+                }
+                @Override
+                public void onCancelled(DatabaseError databaseError) {
+
+                }
+            });
+        } catch (Exception e) {
+            e.printStackTrace();
+            Toast.makeText(getApplicationContext(), "지금 안돼유",Toast.LENGTH_SHORT).show();
+            Log.e("222",grouplist.toString());
+        }
+        // 어뎁터 데이터 적용
+    }
+
+    public void makeprivacy(){ //체크박스 넣자
+
     }
 
     @Override
