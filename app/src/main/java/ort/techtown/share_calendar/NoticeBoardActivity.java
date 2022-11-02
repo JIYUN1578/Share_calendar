@@ -9,6 +9,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.animation.Animation;
@@ -27,6 +28,7 @@ import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
 
+import ort.techtown.share_calendar.Adapter.GroupAdapter;
 import ort.techtown.share_calendar.Adapter.PostAdapter;
 import ort.techtown.share_calendar.Data.BackKeyHandler;
 import ort.techtown.share_calendar.Data.Post;
@@ -49,7 +51,7 @@ public class NoticeBoardActivity extends AppCompatActivity implements View.OnCli
     private TextView tv_postmove;
     // 게시판 관련
     private RecyclerView recyclerView;
-    private RecyclerView.Adapter adapter;
+    private PostAdapter adapter;
     private RecyclerView.LayoutManager layoutManager;
     private ArrayList<Post> arrayList;
     private FloatingActionButton btn_write, btn_vote, btn_notice;
@@ -188,13 +190,13 @@ public class NoticeBoardActivity extends AppCompatActivity implements View.OnCli
                     arrayList.add(post);
                 }
                 adapter.notifyDataSetChanged();
+                recyclerView.setAdapter(adapter);
             }
             @Override
             public void onCancelled(@NonNull DatabaseError error) {
             }
         });
         adapter = new PostAdapter(arrayList, this);
-        recyclerView.setAdapter(adapter);
 
         // 게시판 작성
         fab_open = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.fab_open);
@@ -207,6 +209,21 @@ public class NoticeBoardActivity extends AppCompatActivity implements View.OnCli
         btn_write.setOnClickListener(this);
         btn_vote.setOnClickListener(this);
         btn_notice.setOnClickListener(this);
+
+        // 게시글 클릭 리스너
+        adapter.setOnItemClickListener(new PostAdapter.OnItemClickListener() {
+            @Override
+            public void onItemClick(View v, int position) {
+                String time = arrayList.get(position).getTime();
+                Intent intent = new Intent(NoticeBoardActivity.this, NoticeActivity.class);
+                intent.putExtra("groupname",groupname);
+                intent.putExtra("name",name);
+                intent.putExtra("uid",uid);
+                intent.putExtra("time",time);
+                startActivity(intent);
+                finish();
+            }
+        });
     }
 
     // 플로팅버튼 클릭 리스너
@@ -236,6 +253,7 @@ public class NoticeBoardActivity extends AppCompatActivity implements View.OnCli
         }
     }
 
+    // 플로팅버튼 애니메이션
     public void anim() {
         if (isFabOpen) {
             btn_vote.startAnimation(fab_close);

@@ -27,6 +27,15 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.PostViewHolder
         this.context = context;
     }
 
+    // 아이템 클릭 리스너
+    public interface OnItemClickListener {
+        void onItemClick(View v, int position);
+    }
+
+    private OnItemClickListener mListener = null;
+
+    public void setOnItemClickListener(OnItemClickListener listener) {this.mListener = listener; }
+
     @NonNull
     @Override
     public PostViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
@@ -65,6 +74,18 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.PostViewHolder
             this.tv_posttitle = itemView.findViewById(R.id.tv_posttitle);
             this.tv_postsummary = itemView.findViewById(R.id.tv_postsummary);
             this.tv_name = itemView.findViewById(R.id.tv_name);
+
+            itemView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    int position = getAdapterPosition();
+                    if(position!=RecyclerView.NO_POSITION) {
+                        if(mListener!=null) {
+                            mListener.onItemClick(v, position);
+                        }
+                    }
+                }
+            });
         }
     }
 }
