@@ -4,8 +4,12 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.drawerlayout.widget.DrawerLayout;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
+import android.content.Context;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.MotionEvent;
@@ -14,9 +18,24 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
+
+import java.util.ArrayList;
+
+import ort.techtown.share_calendar.Adapter.PostAdapter;
+import ort.techtown.share_calendar.Adapter.VoteAdapter;
+import ort.techtown.share_calendar.Data.Post;
+import ort.techtown.share_calendar.Data.Vote;
 
 public class NoticeActivity extends AppCompatActivity {
 
@@ -29,8 +48,22 @@ public class NoticeActivity extends AppCompatActivity {
     // 파이어베이스
     private FirebaseDatabase database = FirebaseDatabase.getInstance();
     private DatabaseReference databaseReference = database.getReference();
+    private DatabaseReference mReference = database.getReference();
+    private DatabaseReference dbReference = database.getReference();
+    private FirebaseStorage firebaseStorage = FirebaseStorage.getInstance();
+    private StorageReference storageReference = firebaseStorage.getReference();
     // 그룹 정보
     private String groupname, uid, name, time;
+    // 게시글, 투표글 관련
+    private Boolean isVote;
+    private Post post;
+    private Vote vote;
+    private ArrayList<Vote> voteArrayList;
+    private ImageView iv_profile, iv_image;
+    private TextView tv_name, tv_time, tv_noticetitle, tv_noticesummary;
+    private RecyclerView vote_recyclerview;
+    private RecyclerView.LayoutManager layoutManager;
+    private VoteAdapter adapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -41,8 +74,6 @@ public class NoticeActivity extends AppCompatActivity {
         uid = getIntent().getStringExtra("uid");
         name = getIntent().getStringExtra("name");
         time = getIntent().getStringExtra("time");
-
-        Log.e("time",time);
 
         // 툴바
         Toolbar toolbar = (Toolbar)findViewById(R.id.toolbar);
@@ -132,6 +163,85 @@ public class NoticeActivity extends AppCompatActivity {
             @Override
             public boolean onTouch(View view, MotionEvent motionEvent) {
                 return true;
+            }
+        });
+
+        // 게시글, 투표글 구분하고 그에 맞게 보여주기
+        iv_profile = (ImageView)findViewById(R.id.iv_profile);
+        iv_image = (ImageView)findViewById(R.id.iv_image);
+        tv_name = (TextView)findViewById(R.id.tv_name);
+        tv_time = (TextView)findViewById(R.id.tv_time);
+        tv_noticetitle = (TextView)findViewById(R.id.tv_noticetitle);
+        tv_noticesummary = (TextView)findViewById(R.id.tv_noticesummary);
+        vote_recyclerview = (RecyclerView)findViewById(R.id.vote_recyclerview);
+        vote_recyclerview.setHasFixedSize(true);
+        layoutManager = new LinearLayoutManager(this);
+        vote_recyclerview.setLayoutManager(layoutManager);
+        voteArrayList = new ArrayList<>();
+        databaseReference.child("Group").child(groupname).child("Post").child(time).child("vote").addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                // isVote로 게시글, 투표글 구분하기
+                isVote = snapshot.getValue(Boolean.class);
+                // 투표글일 경우
+                if(isVote == true) {
+                    mReference.child("Group").child(groupname).child("Post").child(time).addListenerForSingleValueEvent(new ValueEventListener() {
+                        @Override
+                        public void onDataChange(@NonNull DataSnapshot datasnapshot) {
+                            post = datasnapshot.getValue(Post.class);
+                            iv_profile.setImageResource(R.drawable.ic_baseline_person_24);
+                            tv_name.setText(post.getName());
+                            tv_time.setText(post.getTime());
+                            tv_noticetitle.setText(post.getTitle());
+                            tv_noticesummary.setText(post.getSummary());
+                            vote_recyclerview.setVisibility(View.VISIBLE);
+                            adapter = new VoteAdapter(voteArrayList, getApplicationContext());
+                            vote_recyclerview.setAdapter(adapter);
+                            for(int i=0; i<post.getVoteArrayList().size(); i++) {
+                                voteArrayList.add(post.getVoteArrayList().get(i));
+                                adapter.notifyDataSetChanged();
+                            }
+                        }
+                        @Override
+                        public void onCancelled(@NonNull DatabaseError error) {
+                        }
+                    });
+                }
+                // 게시글일 경우
+                else {
+                    mReference.child("Group").child(groupname).child("Post").child(time).addListenerForSingleValueEvent(new ValueEventListener() {
+                        @Override
+                        public void onDataChange(@NonNull DataSnapshot datasnapshot) {
+                            post = datasnapshot.getValue(Post.class);
+                            iv_profile.setImageResource(R.drawable.ic_baseline_person_24);
+                            tv_name.setText(post.getName());
+                            tv_time.setText(post.getTime());
+                            tv_noticetitle.setText(post.getTitle());
+                            tv_noticesummary.setText(post.getSummary());
+                            if(post.getImage_url()!=null) {
+                                Log.e("url",post.getImage_url());
+                                StorageReference pathReference = storageReference.child("post_img/"+post.getImage_url());
+                                pathReference.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+                                    @Override
+                                    public void onSuccess(Uri uri) {
+                                        iv_image.setVisibility(View.VISIBLE);
+                                        Glide.with(NoticeActivity.this).load(uri).into(iv_image);
+                                    }
+                                }).addOnFailureListener(new OnFailureListener() {
+                                    @Override
+                                    public void onFailure(@NonNull Exception e) {
+                                    }
+                                });
+                            }
+                        }
+                        @Override
+                        public void onCancelled(@NonNull DatabaseError error) {
+                        }
+                    });
+                }
+            }
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
             }
         });
     }

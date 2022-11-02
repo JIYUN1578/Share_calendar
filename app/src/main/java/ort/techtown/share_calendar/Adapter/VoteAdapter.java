@@ -13,6 +13,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import java.util.ArrayList;
 
 import ort.techtown.share_calendar.Data.Vote;
+import ort.techtown.share_calendar.NoticeActivity;
 import ort.techtown.share_calendar.R;
 
 public class VoteAdapter extends RecyclerView.Adapter<VoteAdapter.VoteViewHolder> {
@@ -20,7 +21,7 @@ public class VoteAdapter extends RecyclerView.Adapter<VoteAdapter.VoteViewHolder
     private ArrayList<Vote> arrayList;
     private Context context;
 
-    public VoteAdapter(ArrayList<Vote> arrayList) {
+    public VoteAdapter(ArrayList<Vote> arrayList, Context context) {
         this.arrayList = arrayList;
         this.context = context;
     }

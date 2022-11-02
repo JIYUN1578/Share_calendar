@@ -10,6 +10,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
@@ -164,7 +165,7 @@ public class VoteActivity extends AppCompatActivity {
         layoutManager = new LinearLayoutManager(this);
         vote_recyclerview.setLayoutManager(layoutManager);
         arrayList = new ArrayList<>();
-        adapter = new VoteAdapter(arrayList);
+        adapter = new VoteAdapter(arrayList, this);
         vote_recyclerview.setAdapter(adapter);
         btn_plus.setOnClickListener(new View.OnClickListener() {
             @Override

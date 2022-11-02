@@ -186,7 +186,6 @@ public class NoticeBoardActivity extends AppCompatActivity implements View.OnCli
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 arrayList.clear();
                 for(DataSnapshot dataSnapshot:snapshot.getChildren()) {
-
                     Post post = dataSnapshot.getValue(Post.class);
                     arrayList.add(post);
                 }
