@@ -91,6 +91,19 @@ public class CalendarAdapter extends RecyclerView.Adapter<CalendarAdapter.Calend
             }
         });
 
+//        if(localDate.toString().equals("2022-11-03")){
+//            GradientDrawable background = new GradientDrawable();
+//            holder.v1.setVisibility(View.GONE);
+//            background = (GradientDrawable) holder.v2.getBackground();
+//                background.setColor(Color.parseColor("#FFAFB0"));
+//            background = (GradientDrawable) holder.v3.getBackground();
+//                background.setColor(Color.parseColor("#FFE4AF"));
+//        }else{
+            holder.v1.setVisibility(View.GONE);
+            holder.v2.setVisibility(View.GONE);
+            holder.v3.setVisibility(View.GONE);
+       // }
+
 
 //        switch (getItemCount()){
 //            case 0:
@@ -139,10 +152,10 @@ public class CalendarAdapter extends RecyclerView.Adapter<CalendarAdapter.Calend
 
 
             tv_day = itemView.findViewById(R.id.tv_day);
-//
-//            v1 = itemView.findViewById(R.id.v1);
-//            v2 = itemView.findViewById(R.id.v2);
-//            v3 = itemView.findViewById(R.id.v3);
+
+            v1 = itemView.findViewById(R.id.v1);
+            v2 = itemView.findViewById(R.id.v2);
+            v3 = itemView.findViewById(R.id.v3);
             parentView = itemView.findViewById(R.id.parent_view);
         }
     }

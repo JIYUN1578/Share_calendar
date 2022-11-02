@@ -53,6 +53,7 @@ public class VoteAdapter extends RecyclerView.Adapter<VoteAdapter.VoteViewHolder
             this.tv_votesummary = itemView.findViewById(R.id.tv_votesummary);
             this.tv_num = itemView.findViewById(R.id.tv_num);
             this.checkbox_vote = itemView.findViewById(R.id.checkbox_vote);
+            checkbox_vote.setButtonDrawable(R.drawable.check);
         }
     }
 }

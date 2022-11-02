@@ -31,27 +31,27 @@
         app:layout_constraintTop_toBottomOf="@+id/tv_day"
         app:layout_constraintVertical_bias="0.0">
 
-<!--        <View-->
-<!--            android:layout_margin="5dp"-->
-<!--            android:layout_width="5dp"-->
-<!--            android:layout_gravity="center"-->
-<!--            android:layout_height="5dp"-->
-<!--            android:id="@+id/v1"-->
-<!--            android:background="@drawable/bg_round"/>-->
-<!--        <View-->
-<!--            android:layout_gravity="center"-->
-<!--            android:layout_margin="5dp"-->
-<!--            android:layout_width="5dp"-->
-<!--            android:layout_height="5dp"-->
-<!--            android:id="@+id/v2"-->
-<!--            android:background="@drawable/bg_round"/>-->
-<!--        <View-->
-<!--            android:layout_gravity="center"-->
-<!--            android:layout_margin="5dp"-->
-<!--            android:layout_width="5dp"-->
-<!--            android:layout_height="5dp"-->
-<!--            android:id="@+id/v3"-->
-<!--            android:background="@drawable/bg_round"/>-->
+        <View
+            android:layout_margin="5dp"
+            android:layout_width="5dp"
+            android:layout_gravity="center"
+            android:layout_height="5dp"
+            android:id="@+id/v1"
+            android:background="@drawable/bg_round"/>
+        <View
+            android:layout_gravity="center"
+            android:layout_margin="5dp"
+            android:layout_width="5dp"
+            android:layout_height="5dp"
+            android:id="@+id/v2"
+            android:background="@drawable/bg_round"/>
+        <View
+            android:layout_gravity="center"
+            android:layout_margin="5dp"
+            android:layout_width="5dp"
+            android:layout_height="5dp"
+            android:id="@+id/v3"
+            android:background="@drawable/bg_round"/>
     </LinearLayout>
 
 
