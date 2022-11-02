@@ -15,26 +15,33 @@
         <include layout="@layout/toolbar" />
 
         <LinearLayout
+            android:background="@color/paper"
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_weight="10"
             android:orientation="vertical">
 
             <EditText
+                android:layout_marginTop="15dp"
                 android:id="@+id/et_title"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_width="380dp"
+                android:layout_height="40dp"
+                android:layout_gravity="center_horizontal"
                 android:ems="10"
-                android:hint="제목을 입력하세요" />
+                android:background="@drawable/bg_round"
+                android:hint="  제목을 입력하세요" />
 
             <EditText
+                android:background="@drawable/bg_round"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginTop="15dp"
                 android:id="@+id/et_summary"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_width="380dp"
+                android:layout_height="500dp"
                 android:ems="10"
                 android:maxLines="5"
                 android:scrollbars="vertical"
-                android:hint="내용을 입력하세요" />
+                android:hint="  내용을 입력하세요" />
 
             <ImageView
                 android:id="@+id/iv_image"
@@ -46,6 +53,7 @@
         </LinearLayout>
 
         <androidx.coordinatorlayout.widget.CoordinatorLayout
+            android:background="@color/paper"
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_weight="2"

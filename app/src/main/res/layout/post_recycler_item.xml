@@ -14,7 +14,6 @@
         <LinearLayout
             android:paddingTop="10dp"
             android:paddingLeft="10dp"
-            android:paddingRight="10dp"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_weight="1"
@@ -30,7 +29,6 @@
                 tools:srcCompat="@tools:sample/avatars" />
 
             <LinearLayout
-                android:paddingLeft="5dp"
                 android:layout_marginTop="5dp"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
@@ -47,7 +45,7 @@
                     android:id="@+id/tv_name"
                     android:layout_marginLeft="5dp"
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
+                    android:layout_height="20dp"
                     android:layout_gravity="center_horizontal"
                     android:textStyle="bold"
                     android:text="TextView" />
