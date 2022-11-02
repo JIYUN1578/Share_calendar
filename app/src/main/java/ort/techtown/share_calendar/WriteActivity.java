@@ -185,19 +185,25 @@ public class WriteActivity extends AppCompatActivity {
                 Date date = new Date(now);
                 SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
                 String time = sdf.format(date);
-                String filename = uri.toString() + ".jpg";
-                StorageReference riverRef = storageReference.child("post_img/"+filename);
-                UploadTask uploadTask = riverRef.putFile(uri);
-                uploadTask.addOnFailureListener(new OnFailureListener() {
-                    @Override
-                    public void onFailure(@NonNull Exception e) {
-                    }
-                }).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
-                    @Override
-                    public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-                    }
-                });
-                Post post = new Post(uid, name, time, filename, et_title.getText().toString(), et_summary.getText().toString(),false);
+                String filename;
+                if(uri!=null) {
+                    filename = uri.toString() + ".jpg";
+                    StorageReference riverRef = storageReference.child("post_img/"+filename);
+                    UploadTask uploadTask = riverRef.putFile(uri);
+                    uploadTask.addOnFailureListener(new OnFailureListener() {
+                        @Override
+                        public void onFailure(@NonNull Exception e) {
+                        }
+                    }).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                        @Override
+                        public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                        }
+                    });
+                }
+                else {
+                    filename = " ";
+                }
+                Post post = new Post(uid, name, time, filename, et_title.getText().toString(), et_summary.getText().toString(),false,null);
                 databaseReference.child("Group").child(groupname).child("Post").child(time).setValue(post);
                 Toast.makeText(getApplicationContext(),"작성이 완료되었습니다.",Toast.LENGTH_SHORT).show();
                 finish();

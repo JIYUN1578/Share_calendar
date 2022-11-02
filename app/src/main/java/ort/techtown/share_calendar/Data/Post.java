@@ -5,6 +5,7 @@ import java.util.ArrayList;
 public class Post {
     private String image_url, title, summary, name, uid, time;
     private Boolean isVote;
+    private ArrayList<Vote> voteArrayList;
 
     public Post() {}
 
@@ -36,7 +37,11 @@ public class Post {
 
     public void setTime(String time) {this.time = time;}
 
-    public Post(String uid, String name, String time, String image_url, String title, String summary, Boolean isVote) {
+    public ArrayList<Vote> getVoteArrayList() {return voteArrayList;}
+
+    public void setVoteArrayList(ArrayList<Vote> voteArrayList) {this.voteArrayList = voteArrayList;}
+
+    public Post(String uid, String name, String time, String image_url, String title, String summary, Boolean isVote, ArrayList<Vote> voteArrayList) {
         this.uid = uid;
         this.name = name;
         this.time = time;
@@ -44,5 +49,6 @@ public class Post {
         this.title = title;
         this.summary = summary;
         this.isVote = isVote;
+        this.voteArrayList = voteArrayList;
     }
 }
