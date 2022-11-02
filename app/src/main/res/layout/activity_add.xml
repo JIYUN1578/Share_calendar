@@ -16,17 +16,20 @@
         tools:layout_editor_absoluteX="28dp"
         tools:layout_editor_absoluteY="54dp">
 
+        <TextView
+            android:layout_marginTop="30dp"
+            android:layout_width="match_parent"
+            android:layout_height="30dp"
+            android:textSize="20dp"
+            android:layout_marginLeft="30dp"
+            android:text="일정추가"/>
         <LinearLayout
             android:id="@+id/linearLayout"
-            android:layout_width="match_parent"
+            android:layout_width="300dp"
             android:layout_height="wrap_content"
-            android:layout_marginTop="60dp"
+            android:layout_marginLeft="20dp"
             android:orientation="horizontal"
-            android:padding="10dp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.0"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent">
+            android:padding="10dp">
 
             <EditText
                 android:id="@+id/edt_addTodo"
@@ -34,27 +37,62 @@
                 android:layout_height="wrap_content"
                 android:hint="일정" />
 
-            <ImageButton
-                android:id="@+id/cb_isSecret"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:src="@drawable/ic_baseline_privacy_tip_24"
-                android:text="비공개" />
+        </LinearLayout>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="30dp"
+            android:textSize="20dp"
+            android:layout_marginLeft="30dp"
+            android:text="color"/>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:orientation="horizontal"
+            android:gravity="center"
+            android:layout_height="70dp">
+            <androidx.constraintlayout.utils.widget.ImageFilterView
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:src="@drawable/bg_ab_circle"
+                android:id="@+id/color1"/>
+            <androidx.constraintlayout.utils.widget.ImageFilterView
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:src="@drawable/bg_ab_circle2"
+                android:layout_margin="20dp"
+                android:id="@+id/color2"/>
+
+            <androidx.constraintlayout.utils.widget.ImageFilterView
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:src="@drawable/bg_ab_circle3"
+                android:id="@+id/color3"/>
+
+            <androidx.constraintlayout.utils.widget.ImageFilterView
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:src="@drawable/bg_ab_circle4"
+                android:layout_margin="20dp"
+                android:id="@+id/color4"/>
+            <androidx.constraintlayout.utils.widget.ImageFilterView
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:src="@drawable/bg_ab_circle5"
+                android:id="@+id/color5"/>
         </LinearLayout>
 
         <View
+            android:layout_marginTop="10dp"
             android:layout_width="350dp"
             android:layout_height="2px"
             android:background="@color/gray"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.508"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/linearLayout2" />
+            android:layout_gravity="center"/>
 
         <LinearLayout
             android:id="@+id/linearLayout2"
             android:layout_width="match_parent"
-            android:layout_height="200dp"
+            android:layout_height="80dp"
             android:orientation="horizontal">
 
             <LinearLayout
@@ -116,25 +154,44 @@
             android:layout_width="350dp"
             android:layout_height="2px"
             android:background="@color/gray"
-            app:layout_constraintBottom_toTopOf="@+id/linearLayout2"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent" />
+            android:layout_gravity="center" />
+
+        <LinearLayout
+            android:layout_weight="0.1"
+            android:layout_width="match_parent"
+            android:layout_height="30dp"
+            android:orientation="horizontal">
+            <TextView
+                android:layout_weight="5"
+                android:layout_marginTop="10dp"
+                android:layout_width="wrap_content"
+                android:layout_height="30dp"
+                android:textSize="20dp"
+                android:layout_marginLeft="30dp"
+                android:text="일정 공개할 그룹"/>
+        </LinearLayout>
+
 
         <androidx.recyclerview.widget.RecyclerView
+            android:layout_marginLeft="15dp"
+            android:layout_marginRight="15dp"
+            android:layout_weight="1"
+            android:background="@drawable/bg_grouplist"
             android:layout_width="match_parent"
+            android:layout_marginBottom="10dp"
             android:scrollbars="vertical"
-            android:layout_height="300dp"
+            android:layout_height="wrap_content"
             android:id="@+id/group_list"/>
 
-        <ImageButton
+        <Button
+            android:layout_marginBottom="10dp"
+            android:background="@drawable/bg_button3"
+            android:text="저장"
+            android:layout_gravity="center"
             android:id="@+id/btn_addInfo"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:backgroundTint="#00000000"
-            android:src="@drawable/add_square" />
-
-
-
+            android:layout_height="30dp"
+            />
 
 
 

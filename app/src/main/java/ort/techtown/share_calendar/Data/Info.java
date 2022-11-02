@@ -6,23 +6,24 @@ public class Info {
     String end;
     String title;
     String info;
+    String color;
 
-    public Info( boolean isOpen, String start, String end, String title, String info) {
+    public Info(boolean isDone, String start, String end, String title, String info, String color) {
         this.isDone = isDone;
         this.start = start;
         this.end = end;
         this.title = title;
         this.info = info;
+        this.color = color;
     }
-
     public Info() {
         this.isDone = false;
-        this.start = "~~";
+        this.start = "!!";
         this.end = "!!";
-        this.title = "title";
-        this.info = "info";
+        this.title = "!!";
+        this.info = "!!";
+        this.color = "!!";
     }
-
     public boolean isDone() {
         return isDone;
     }
@@ -61,5 +62,13 @@ public class Info {
 
     public void setInfo(String info) {
         this.info = info;
+    }
+
+    public String getColor() {
+        return color;
+    }
+
+    public void setColor(String color) {
+        this.color = color;
     }
 }

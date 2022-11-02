@@ -1,5 +1,6 @@
 package ort.techtown.share_calendar;
 
+import androidx.annotation.ColorInt;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -9,13 +10,16 @@ import android.app.TimePickerDialog;
 import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.TimePicker;
 import android.widget.Toast;
@@ -41,17 +45,18 @@ import ort.techtown.share_calendar.Data.Info;
 
 public class AddActivity extends AppCompatActivity {
 
-    ImageButton btn_addInfo;
+    Button btn_addInfo;
     EditText edt_toDo;
     TextView tv_addStartDay, tv_addEndDay;
     TextView tv_addStartTime, tv_addEndTime;
-    ImageButton cb_isSecret;
+    ImageView color1, color2, color3, color4, color5;
     RecyclerView recyclerView;
     int pStartHour, pStartMin, pEndHour, pEndMin;
     int pSYear, pSMonth, pSDay, pEYear, pEMonth, pEDay;
     GrouplistAdapter adapter;
     DatePickerDialog datePickerDialog;
     TimePickerDialog timePickerDialog;
+    String pColor;
 
     //파이어베이스
     private FirebaseDatabase database = FirebaseDatabase.getInstance();
@@ -62,16 +67,15 @@ public class AddActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add);
-
+        pColor = "0";
         Intent intent = getIntent();
         uid = intent.getStringExtra("uid");
         name = intent.getStringExtra("name");
         recyclerView = findViewById(R.id.group_list);
-        btn_addInfo = (ImageButton) findViewById(R.id.btn_addInfo);
+        btn_addInfo = (Button) findViewById(R.id.btn_addInfo);
         edt_toDo = (EditText) findViewById(R.id.edt_addTodo);
         tv_addStartDay = (TextView) findViewById(R.id.tv_addStartDay);
         tv_addEndDay = (TextView)findViewById(R.id.tv_addEndtDay);
-        cb_isSecret = (ImageButton) findViewById(R.id.cb_isSecret);
         tv_addStartDay.setText(CalendarUtil.today.toString());
         tv_addStartTime = (TextView) findViewById(R.id.tv_addStartTime);
         tv_addEndTime = (TextView) findViewById(R.id.tv_addEndTime );
@@ -85,6 +89,48 @@ public class AddActivity extends AppCompatActivity {
         pStartMin = 0;
         pEndHour = 9;
         pEndMin = 0;
+
+        color1 = (ImageView)findViewById(R.id.color1);
+        color2 = (ImageView)findViewById(R.id.color2);
+        color3 = (ImageView)findViewById(R.id.color3);
+        color4 = (ImageView)findViewById(R.id.color4);
+        color5 = (ImageView)findViewById(R.id.color5);
+
+        color1.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                setcolor();
+                pColor = "#FFAFB0";
+            }
+        });
+        color2.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                setcolor();
+                pColor = "#FFE4AF";
+            }
+        });
+        color3.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                setcolor();pColor = "#8EB695";
+            }
+        });
+        color4.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                setcolor();
+                pColor = "#C6E1FF";
+            }
+        });
+        color5.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                setcolor();
+                pColor = "#E0E0E0";
+            }
+        });
 
         pSYear = CalendarUtil.selectedDate.getYear();
         pSMonth = CalendarUtil.selectedDate.getMonthValue();
@@ -182,12 +228,11 @@ public class AddActivity extends AppCompatActivity {
         btn_addInfo.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                String toDo = edt_toDo.getText().toString();
                 Info newInfo = new Info(false,
                         tv_addStartDay.getText()+" "+tv_addStartTime.getText(),
                         tv_addEndDay.getText()+" "+tv_addEndTime.getText().toString(),
-                        edt_toDo.getText().toString(),
-                        edt_toDo.getText().toString());
+                        edt_toDo.getText().toString(),edt_toDo.getText().toString()
+                         ,pColor);
                 //upload
                 String nnow =  DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss").format(LocalDateTime.now());
                 databaseReference.child("User").child(uid).child("Calender").child(tv_addStartDay.getText().toString())
@@ -201,6 +246,9 @@ public class AddActivity extends AppCompatActivity {
         });
     }
 
+    private void setcolor(){
+        //나중에 구현하자
+    }
 
     private void setGroup( ) {
         // 해당 일정 가져오기

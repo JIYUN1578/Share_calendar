@@ -68,6 +68,7 @@ public class GrouplistAdapter extends RecyclerView.Adapter<ort.techtown.share_ca
         public GrouplistViewHolder(@NonNull View itemView) {
             super(itemView);
             ch_isSeen = itemView.findViewById(R.id.ch_isSeen);
+            ch_isSeen.setButtonDrawable(R.drawable.check);
             tv_grname = itemView.findViewById(R.id.tv_grname);
             parentView = itemView.findViewById(R.id.parent_view);
         }
