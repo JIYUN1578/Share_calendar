@@ -1,7 +1,5 @@
 package ort.techtown.share_calendar;
 
-import static ort.techtown.share_calendar.R.id.toolbar;
-
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
@@ -18,12 +16,11 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.google.android.gms.common.ConnectionResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
-import ort.techtown.share_calendar.Class.BackKeyHandler;
+import ort.techtown.share_calendar.Data.BackKeyHandler;
 import ort.techtown.share_calendar.Data.Group;
 
 public class MakeActivity extends AppCompatActivity {

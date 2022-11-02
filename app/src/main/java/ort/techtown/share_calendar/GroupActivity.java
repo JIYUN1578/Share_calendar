@@ -5,15 +5,12 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.recyclerview.widget.GridLayoutManager;
-import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
-import android.widget.Adapter;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -28,8 +25,7 @@ import com.google.firebase.database.ValueEventListener;
 import java.util.ArrayList;
 
 import ort.techtown.share_calendar.Adapter.GroupAdapter;
-import ort.techtown.share_calendar.Class.BackKeyHandler;
-import ort.techtown.share_calendar.Data.Group;
+import ort.techtown.share_calendar.Data.BackKeyHandler;
 import ort.techtown.share_calendar.Data.GroupRecyclerView;
 
 public class GroupActivity extends AppCompatActivity {
@@ -160,6 +156,7 @@ public class GroupActivity extends AppCompatActivity {
                 String groupname = groupList.get(position).getGroup_name();
                 Intent intent = new Intent(GroupActivity.this, PostActivity.class);
                 intent.putExtra("groupname",groupname);
+                intent.putExtra("name",name);
                 intent.putExtra("uid",uid);
                 startActivity(intent);
                 finish();

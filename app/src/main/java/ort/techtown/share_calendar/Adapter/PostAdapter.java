@@ -14,7 +14,7 @@ import com.bumptech.glide.Glide;
 
 import java.util.ArrayList;
 
-import ort.techtown.share_calendar.Class.Post;
+import ort.techtown.share_calendar.Data.Post;
 import ort.techtown.share_calendar.R;
 
 public class PostAdapter extends RecyclerView.Adapter<PostAdapter.PostViewHolder> {
@@ -38,10 +38,13 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.PostViewHolder
 
     @Override
     public void onBindViewHolder(@NonNull PostViewHolder holder, int position) {
-        Glide.with(holder.itemView)
-                .load(arrayList.get(position).getImage_url())
-                .into(holder.iv_image);
-        // vote 유무에 따른 벡터 어셋
+        holder.iv_image.setImageResource(R.drawable.ic_baseline_person_24);
+        if(arrayList.get(position).getVote() == true) {
+            holder.iv_separate.setImageResource(R.drawable.ic_baseline_how_to_vote_24);
+        } else {
+            holder.iv_separate.setImageResource(R.drawable.ic_baseline_notes_24);
+        }
+        holder.tv_name.setText(arrayList.get(position).getName());
         holder.tv_posttitle.setText(arrayList.get(position).getTitle());
         holder.tv_postsummary.setText(arrayList.get(position).getSummary());
     }
@@ -53,7 +56,7 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.PostViewHolder
 
     public class PostViewHolder extends RecyclerView.ViewHolder{
         ImageView iv_image, iv_separate;
-        TextView tv_posttitle, tv_postsummary;
+        TextView tv_posttitle, tv_postsummary, tv_name;
 
         public PostViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -61,6 +64,7 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.PostViewHolder
             this.iv_separate = itemView.findViewById(R.id.iv_separate);
             this.tv_posttitle = itemView.findViewById(R.id.tv_posttitle);
             this.tv_postsummary = itemView.findViewById(R.id.tv_postsummary);
+            this.tv_name = itemView.findViewById(R.id.tv_name);
         }
     }
 }

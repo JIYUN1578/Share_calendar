@@ -11,7 +11,6 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.AdapterView;
@@ -30,11 +29,10 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 
 import ort.techtown.share_calendar.Adapter.SearchAdapter;
-import ort.techtown.share_calendar.Class.BackKeyHandler;
+import ort.techtown.share_calendar.Data.BackKeyHandler;
 
 public class SearchActivity extends AppCompatActivity {
 

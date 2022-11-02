@@ -4,6 +4,7 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.drawerlayout.widget.DrawerLayout;
+import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Intent;
@@ -16,16 +17,19 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
 
-import ort.techtown.share_calendar.Class.BackKeyHandler;
-import ort.techtown.share_calendar.Class.Post;
+import ort.techtown.share_calendar.Adapter.PostAdapter;
+import ort.techtown.share_calendar.Data.BackKeyHandler;
+import ort.techtown.share_calendar.Data.Post;
 
 public class NoticeBoardActivity extends AppCompatActivity implements View.OnClickListener {
 
@@ -39,8 +43,6 @@ public class NoticeBoardActivity extends AppCompatActivity implements View.OnCli
     // 파이어베이스
     private FirebaseDatabase database = FirebaseDatabase.getInstance();
     private DatabaseReference databaseReference = database.getReference();
-    private DatabaseReference mReference = database.getReference();
-    private DatabaseReference reference = database.getReference();
     // 그룹 정보
     private String groupname, uid, name;
     // 그룹캘린더 이동
@@ -168,6 +170,31 @@ public class NoticeBoardActivity extends AppCompatActivity implements View.OnCli
                 return true;
             }
         });
+
+        // 게시물 받아오기
+        recyclerView = findViewById(R.id.post_recyclerView);
+        recyclerView.setHasFixedSize(true);
+        layoutManager = new LinearLayoutManager(this);
+        recyclerView.setLayoutManager(layoutManager);
+        arrayList = new ArrayList<>();
+
+        databaseReference = database.getReference("Group/"+groupname+"/Post/");
+        databaseReference.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                arrayList.clear();
+                for(DataSnapshot dataSnapshot:snapshot.getChildren()) {
+                    Post post = dataSnapshot.getValue(Post.class);
+                    arrayList.add(post);
+                }
+                adapter.notifyDataSetChanged();
+            }
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+            }
+        });
+        adapter = new PostAdapter(arrayList, this);
+        recyclerView.setAdapter(adapter);
 
         // 게시판 작성
         fab_open = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.fab_open);

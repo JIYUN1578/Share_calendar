@@ -1,7 +1,5 @@
 package ort.techtown.share_calendar;
 
-import static java.lang.Boolean.getBoolean;
-
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
@@ -12,7 +10,6 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.provider.ContactsContract;
 import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
@@ -20,7 +17,6 @@ import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
@@ -37,7 +33,7 @@ import java.util.ArrayList;
 
 import ort.techtown.share_calendar.Adapter.CalendarAdapter;
 import ort.techtown.share_calendar.Adapter.TodoListAdapter;
-import ort.techtown.share_calendar.Class.BackKeyHandler;
+import ort.techtown.share_calendar.Data.BackKeyHandler;
 import ort.techtown.share_calendar.Data.CalendarUtil;
 import ort.techtown.share_calendar.Data.Info;
 

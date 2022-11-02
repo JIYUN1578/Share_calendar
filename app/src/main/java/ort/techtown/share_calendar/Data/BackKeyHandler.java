@@ -1,4 +1,4 @@
-package ort.techtown.share_calendar.Class;
+package ort.techtown.share_calendar.Data;
 
 import android.app.Activity;
 import android.content.Intent;

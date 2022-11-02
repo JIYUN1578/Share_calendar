@@ -9,20 +9,30 @@ import androidx.drawerlayout.widget.DrawerLayout;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
+import com.google.firebase.storage.UploadTask;
 
-import ort.techtown.share_calendar.Class.Post;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
+import ort.techtown.share_calendar.Data.Post;
 
 public class WriteActivity extends AppCompatActivity {
 
@@ -35,8 +45,8 @@ public class WriteActivity extends AppCompatActivity {
     // 파이어베이스
     private FirebaseDatabase database = FirebaseDatabase.getInstance();
     private DatabaseReference databaseReference = database.getReference();
-    private DatabaseReference mReference = database.getReference();
-    private DatabaseReference reference = database.getReference();
+    private FirebaseStorage storage = FirebaseStorage.getInstance();
+    private StorageReference storageReference = storage.getReference();
     // 그룹 정보
     private String groupname, uid, name;
     // 게시글 관련
@@ -45,6 +55,7 @@ public class WriteActivity extends AppCompatActivity {
     private FloatingActionButton btn_camera;
     private static final int REQUEST_CODE = 0;
     private TextView tv_register;
+    private Uri uri;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -54,6 +65,7 @@ public class WriteActivity extends AppCompatActivity {
         groupname = getIntent().getStringExtra("groupname");
         uid = getIntent().getStringExtra("uid");
         name = getIntent().getStringExtra("name");
+        Log.e("name",name);
 
         // 툴바
         Toolbar toolbar = (Toolbar)findViewById(R.id.toolbar);
@@ -165,10 +177,30 @@ public class WriteActivity extends AppCompatActivity {
 
         // 게시글 등록하기
         tv_register = (TextView) findViewById(R.id.tv_postmove);
+        tv_register.setText("완료");
         tv_register.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Post post = new Post();
+                Long now = System.currentTimeMillis();
+                Date date = new Date(now);
+                SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
+                String time = sdf.format(date);
+                String filename = uri.toString() + ".jpg";
+                StorageReference riverRef = storageReference.child("post_img/"+filename);
+                UploadTask uploadTask = riverRef.putFile(uri);
+                uploadTask.addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                    }
+                }).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                    @Override
+                    public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                    }
+                });
+                Post post = new Post(uid, name, time, filename, et_title.getText().toString(), et_summary.getText().toString(),false);
+                databaseReference.child("Group").child(groupname).child("Post").child(time).setValue(post);
+                Toast.makeText(getApplicationContext(),"작성이 완료되었습니다.",Toast.LENGTH_SHORT).show();
+                finish();
             }
         });
     }
@@ -179,7 +211,7 @@ public class WriteActivity extends AppCompatActivity {
         if(requestCode == REQUEST_CODE) {
             if(resultCode == RESULT_OK) {
                 try{
-                    Uri uri = data.getData();
+                    uri = data.getData();
                     Glide.with(getApplicationContext()).load(uri).into(iv_image);
                 } catch(Exception e){
                 }
