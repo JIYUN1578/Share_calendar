@@ -224,10 +224,11 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.O
     private void setMonthview() {
         // 년월 텍스트뷰 셋팅
         tv_monthyear.setText(monthYearFromDate(CalendarUtil.selectedDate));
-        // 해당 월 날짜 가져오기
-        ArrayList<LocalDate> dayList = daysInMonthArray(CalendarUtil.selectedDate);
+        // 어레이들 가져오기, localdates == 해당 년월,
+        ArrayList<LocalDate> localDates = daysInMonthArray(CalendarUtil.selectedDate);
+
         // 어뎁터 데이터 적용
-        CalendarAdapter adapter = new CalendarAdapter(dayList);
+        CalendarAdapter adapter = new CalendarAdapter(localDates);
         // 레이아웃 설정 열 7개
         RecyclerView.LayoutManager manager = new GridLayoutManager(getApplicationContext(),7);
         // 레이아웃 적용
@@ -289,7 +290,7 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.O
     }
 
     private ArrayList<LocalDate>  daysInMonthArray(LocalDate localDate){
-        ArrayList<LocalDate> daylist = new ArrayList<>();
+        ArrayList<LocalDate> localDates = new ArrayList<>();
         YearMonth yearMonth = YearMonth.from(localDate);
         // 해당 월 마지막 날짜 가져오기
         int lastday = yearMonth.lengthOfMonth();
@@ -302,23 +303,23 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.O
             if(i <=dayOfweek){
                 LocalDate premonthDate = CalendarUtil.selectedDate.minusMonths(1);
                 int lastdayOfpremonth = premonthDate.lengthOfMonth();
-                daylist.add(LocalDate.of(premonthDate.getYear(), premonthDate.getMonth(),
+                localDates.add(LocalDate.of(premonthDate.getYear(), premonthDate.getMonth(),
                        lastdayOfpremonth - dayOfweek + i ));
                 Log.d("달력 남은 날짜", premonthDate.toString() );
             }
             else if(i> lastday + dayOfweek){
                 LocalDate nextmonthDate = CalendarUtil.selectedDate.plusMonths(1);
-                daylist.add(LocalDate.of(nextmonthDate.getYear(),
+                localDates.add(LocalDate.of(nextmonthDate.getYear(),
                         nextmonthDate.getMonth(),
                         i - lastday-dayOfweek));
                 Log.d("달력 남은 날짜",nextmonthDate.toString() );
             }else{
-                daylist.add(LocalDate.of(CalendarUtil.selectedDate.getYear(),
+                localDates.add(LocalDate.of(CalendarUtil.selectedDate.getYear(),
                         CalendarUtil.selectedDate.getMonth(),
                         i - dayOfweek));
             }
         }
-        return daylist;
+        return localDates;
     }
 
 

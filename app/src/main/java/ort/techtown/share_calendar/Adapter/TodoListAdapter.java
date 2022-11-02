@@ -1,5 +1,7 @@
 package ort.techtown.share_calendar.Adapter;
 
+import android.graphics.Color;
+import android.graphics.drawable.GradientDrawable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,6 +18,7 @@ import ort.techtown.share_calendar.R;
 public class TodoListAdapter extends RecyclerView.Adapter<TodoListAdapter.TodoListViewHolder> {
 
     ArrayList<Info> datalist;
+    boolean isMyCalendar;
 
     public TodoListAdapter(ArrayList<Info> datalist) {
         this.datalist = datalist;
@@ -25,23 +28,31 @@ public class TodoListAdapter extends RecyclerView.Adapter<TodoListAdapter.TodoLi
     @Override
     public TodoListViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         LayoutInflater inflater = LayoutInflater.from(parent.getContext());
-
+        isMyCalendar = false;
         View view = inflater.inflate(R.layout.todolist_cell, parent,false);
 
         return new TodoListViewHolder(view);
     }
 
+    public void setMyCalendar(boolean nnow){
+        isMyCalendar = nnow;
+    }
+
     @Override
     public void onBindViewHolder(@NonNull TodoListViewHolder holder, int position) {
         Info cur = datalist.get(position);
-
         holder.tv_title.setText(cur.getTitle().toString());
         holder.tv_startTime.setText(cur.getStart().toString().substring(11));
         holder.tv_startTime2.setText(cur.getStart().toString().substring(11) );
         holder.tv_endTime.setText(cur.getEnd().toString().substring(11));
+        GradientDrawable background;
+        //holder.tv_startTime.setVisibility(View.GONE);
 
+        background = (GradientDrawable) holder.colorbar.getBackground();
+        background.setColor(Color.parseColor(cur.getColor()));
 
     }
+
 
     @Override
     public int getItemCount() {
@@ -51,9 +62,10 @@ public class TodoListAdapter extends RecyclerView.Adapter<TodoListAdapter.TodoLi
     public class TodoListViewHolder extends RecyclerView.ViewHolder {
 
         TextView tv_startTime, tv_title, tv_endTime, tv_startTime2;
+        View colorbar;
         public TodoListViewHolder(@NonNull View itemView) {
             super(itemView);
-
+            colorbar = itemView.findViewById(R.id.colorbar);
             tv_endTime = itemView.findViewById(R.id.tv_endTime);
             tv_startTime = itemView.findViewById(R.id.tv_startTime);
             tv_startTime2 = itemView.findViewById(R.id.tv_startTime2);

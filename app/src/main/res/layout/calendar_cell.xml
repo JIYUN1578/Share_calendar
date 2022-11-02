@@ -18,6 +18,41 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
+    <LinearLayout
+        android:id="@+id/linearLayout"
+        android:layout_width="match_parent"
+        android:layout_height="20dp"
+        android:gravity="center_horizontal"
+        android:orientation="horizontal"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tv_day"
+        app:layout_constraintVertical_bias="0.0">
+
+<!--        <View-->
+<!--            android:layout_margin="5dp"-->
+<!--            android:layout_width="5dp"-->
+<!--            android:layout_gravity="center"-->
+<!--            android:layout_height="5dp"-->
+<!--            android:id="@+id/v1"-->
+<!--            android:background="@drawable/bg_round"/>-->
+<!--        <View-->
+<!--            android:layout_gravity="center"-->
+<!--            android:layout_margin="5dp"-->
+<!--            android:layout_width="5dp"-->
+<!--            android:layout_height="5dp"-->
+<!--            android:id="@+id/v2"-->
+<!--            android:background="@drawable/bg_round"/>-->
+<!--        <View-->
+<!--            android:layout_gravity="center"-->
+<!--            android:layout_margin="5dp"-->
+<!--            android:layout_width="5dp"-->
+<!--            android:layout_height="5dp"-->
+<!--            android:id="@+id/v3"-->
+<!--            android:background="@drawable/bg_round"/>-->
+    </LinearLayout>
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

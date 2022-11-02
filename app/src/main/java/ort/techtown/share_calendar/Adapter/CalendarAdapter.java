@@ -1,5 +1,6 @@
 package ort.techtown.share_calendar.Adapter;
 import android.graphics.Color;
+import android.graphics.drawable.GradientDrawable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -9,19 +10,21 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 
 import ort.techtown.share_calendar.Data.CalendarUtil;
+import ort.techtown.share_calendar.Data.Info;
 import ort.techtown.share_calendar.R;
 
 public class CalendarAdapter extends RecyclerView.Adapter<CalendarAdapter.CalendarViewHolder>{
 
-    ArrayList<LocalDate>  datList;
+    ArrayList<LocalDate>  localDates;
+    //ArrayList<Info> infos;
     String TAG = "CalendarAdapter";
 
     public CalendarAdapter(ArrayList<LocalDate> datList) {
-        this.datList = datList;
+        this.localDates = datList;
+        //this.infos = infos;
     }
 
     @NonNull
@@ -47,16 +50,17 @@ public class CalendarAdapter extends RecyclerView.Adapter<CalendarAdapter.Calend
     @Override
     public void onBindViewHolder(@NonNull CalendarViewHolder holder, int position) {
 
-        LocalDate day = datList.get(position);
-        if(day == null){
+        LocalDate localDate = localDates.get(position);
+        //Info info = infos.get(position);
+        if(localDate == null){
             holder.tv_day.setText("!");
         }else{
-            holder.tv_day.setText(String.valueOf(day.getDayOfMonth()));
+            holder.tv_day.setText(String.valueOf(localDate.getDayOfMonth()));
 
-            if(day.equals(CalendarUtil.selectedDate)){
+            if(localDate.equals(CalendarUtil.selectedDate)){
                 holder.parentView.setBackgroundResource(R.drawable.selectedday);
             }
-            if(day.equals(CalendarUtil.today)){
+            if(localDate.equals(CalendarUtil.today)){
                 holder.tv_day.setBackgroundResource(R.drawable.gb_circle);
             }
 
@@ -74,9 +78,9 @@ public class CalendarAdapter extends RecyclerView.Adapter<CalendarAdapter.Calend
             @Override
             public void onClick(View view) {
 
-                int iYear = day.getYear();
-                int iMonth = day.getMonthValue();
-                int iDay = day.getDayOfMonth();
+                int iYear = localDate.getYear();
+                int iMonth = localDate.getMonthValue();
+                int iDay = localDate.getDayOfMonth();
 
                 CalendarUtil.selectedDate = LocalDate.of(iYear,iMonth,iDay);
                 if (holder.getAdapterPosition()!=RecyclerView.NO_POSITION){
@@ -86,13 +90,42 @@ public class CalendarAdapter extends RecyclerView.Adapter<CalendarAdapter.Calend
                 }
             }
         });
+
+
+//        switch (getItemCount()){
+//            case 0:
+//                holder.v3.setVisibility(View.GONE);
+//            case 1:
+//                holder.v2.setVisibility(View.GONE);
+//            case 2:
+//                holder.v3.setVisibility(View.GONE);
+//            default:
+//                break;
+//        }
+//        GradientDrawable background;
+//        switch (position){
+//            case 0:
+//                background = (GradientDrawable) holder.v1.getBackground();
+//                background.setColor(Color.parseColor(info.getColor()));
+//                break;
+//            case 1:
+//                background = (GradientDrawable) holder.v2.getBackground();
+//                background.setColor(Color.parseColor(info.getColor()));
+//                break;
+//            case 2:
+//                background = (GradientDrawable) holder.v3.getBackground();
+//                background.setColor(Color.parseColor(info.getColor()));
+//                break;
+//            default:
+//                break;
+//        }
     }
 
 
 
     @Override
     public int getItemCount() {
-        return datList.size();
+        return localDates.size();
     }
 
     class CalendarViewHolder extends RecyclerView.ViewHolder{
@@ -100,12 +133,16 @@ public class CalendarAdapter extends RecyclerView.Adapter<CalendarAdapter.Calend
         TextView tv_day;
         View parentView;
 
+        View v1, v2, v3;
         public CalendarViewHolder(@NonNull View itemView) {
             super(itemView);
 
 
             tv_day = itemView.findViewById(R.id.tv_day);
-
+//
+//            v1 = itemView.findViewById(R.id.v1);
+//            v2 = itemView.findViewById(R.id.v2);
+//            v3 = itemView.findViewById(R.id.v3);
             parentView = itemView.findViewById(R.id.parent_view);
         }
     }
