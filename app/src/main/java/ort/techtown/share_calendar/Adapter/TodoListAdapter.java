@@ -36,8 +36,8 @@ public class TodoListAdapter extends RecyclerView.Adapter<TodoListAdapter.TodoLi
         Info cur = datalist.get(position);
 
         holder.tv_title.setText(cur.getTitle().toString());
-        holder.tv_startTime2.setText(cur.getStart().toString().substring(11));
         holder.tv_startTime.setText(cur.getStart().toString().substring(11));
+        holder.tv_startTime2.setText(cur.getStart().toString().substring(11) );
         holder.tv_endTime.setText(cur.getEnd().toString().substring(11));
 
 

@@ -49,7 +49,7 @@ public class AddActivity extends AppCompatActivity {
     RecyclerView recyclerView;
     int pStartHour, pStartMin, pEndHour, pEndMin;
     int pSYear, pSMonth, pSDay, pEYear, pEMonth, pEDay;
-
+    GrouplistAdapter adapter;
     DatePickerDialog datePickerDialog;
     TimePickerDialog timePickerDialog;
 
@@ -192,7 +192,7 @@ public class AddActivity extends AppCompatActivity {
                 String nnow =  DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss").format(LocalDateTime.now());
                 databaseReference.child("User").child(uid).child("Calender").child(tv_addStartDay.getText().toString())
                                 .child(nnow).setValue(newInfo);
-                makeprivacy();
+                makeprivacy(nnow);
                 CalendarUtil.selectedDate = LocalDate.parse(tv_addStartDay.getText(),
                         DateTimeFormatter.ofPattern("yyyy-MM-dd"));
                 Log.d("selected date: ",CalendarUtil.selectedDate.toString());
@@ -208,7 +208,7 @@ public class AddActivity extends AppCompatActivity {
         FirebaseDatabase database = FirebaseDatabase.getInstance();
         DatabaseReference reference;
 
-        GrouplistAdapter adapter = new GrouplistAdapter(grouplist);
+        adapter = new GrouplistAdapter(grouplist);
         RecyclerView.LayoutManager manager = new LinearLayoutManager(getApplicationContext());
         // 어뎁터 적용
         recyclerView.setLayoutManager(manager);
@@ -243,8 +243,13 @@ public class AddActivity extends AppCompatActivity {
         // 어뎁터 데이터 적용
     }
 
-    public void makeprivacy(){ //체크박스 넣자
-
+    public void makeprivacy(String nnow){ //체크박스 넣자
+        ArrayList<Grouplist> grouplist ;
+        grouplist = adapter.getDatalist();
+        for( Grouplist glist : grouplist){
+            databaseReference.child("User").child(uid).child("Calender").child(tv_addStartDay.getText().toString())
+                    .child(nnow).child("isSeen").child(glist.getGrname()).setValue(glist.isSeen());
+        }
     }
 
     @Override
