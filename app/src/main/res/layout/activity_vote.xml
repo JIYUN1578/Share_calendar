@@ -44,7 +44,7 @@
                     android:layout_height="70dp"
                     android:background="@drawable/bg_round"
                     android:ems="10"
-                    android:hint="내용을 입력하세요"
+                    android:hint="  내용을 입력하세요"
                     android:maxLines="5"
                     android:scrollbars="vertical" />
 
