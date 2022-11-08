@@ -1,6 +1,7 @@
 package ort.techtown.share_calendar.Adapter;
 
 import android.content.Context;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,6 +13,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.ArrayList;
 
+import ort.techtown.share_calendar.Data.Grouplist;
 import ort.techtown.share_calendar.Data.Vote;
 import ort.techtown.share_calendar.NoticeActivity;
 import ort.techtown.share_calendar.R;
@@ -19,10 +21,14 @@ import ort.techtown.share_calendar.R;
 public class VoteAdapter extends RecyclerView.Adapter<VoteAdapter.VoteViewHolder> {
 
     private ArrayList<Vote> arrayList;
+    private ArrayList<Boolean> voteList;
+    private Boolean voteResult;
     private Context context;
 
-    public VoteAdapter(ArrayList<Vote> arrayList, Context context) {
+    public VoteAdapter(ArrayList<Vote> arrayList, ArrayList<Boolean> voteList, Boolean voteResult, Context context) {
         this.arrayList = arrayList;
+        this.voteList = voteList;
+        this.voteResult = voteResult;
         this.context = context;
     }
 
@@ -38,7 +44,22 @@ public class VoteAdapter extends RecyclerView.Adapter<VoteAdapter.VoteViewHolder
     @Override
     public void onBindViewHolder(@NonNull VoteViewHolder holder, int position) {
         holder.tv_votesummary.setText(arrayList.get(position).getVoteSummary());
-        holder.tv_num.setText(arrayList.get(position).getVoteNum().toString());
+        holder.tv_num.setText(arrayList.get(position).getVoteNum().toString() + '명');
+        holder.checkbox_vote.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+               if(voteList.get(position) == false) {
+                   voteList.set(position, true);
+               }
+               else{
+                   voteList.set(position, false);
+               }
+            }
+        });
+    }
+
+    public ArrayList<Boolean> getCheckList() {
+        return voteList;
     }
 
     @Override
@@ -53,6 +74,14 @@ public class VoteAdapter extends RecyclerView.Adapter<VoteAdapter.VoteViewHolder
             this.tv_votesummary = itemView.findViewById(R.id.tv_votesummary);
             this.tv_num = itemView.findViewById(R.id.tv_num);
             this.checkbox_vote = itemView.findViewById(R.id.checkbox_vote);
+            if(voteResult == true) {
+                checkbox_vote.setVisibility(View.GONE);
+                tv_num.setVisibility(View.VISIBLE);
+            }
+            if(voteResult == false) {
+                checkbox_vote.setVisibility(View.VISIBLE);
+                tv_num.setVisibility(View.GONE);
+            }
             checkbox_vote.setButtonDrawable(R.drawable.check);
         }
     }

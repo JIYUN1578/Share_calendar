@@ -54,6 +54,7 @@ public class VoteActivity extends AppCompatActivity {
     private VoteAdapter adapter;
     private RecyclerView.LayoutManager layoutManager;
     private ArrayList<Vote> arrayList;
+    private ArrayList<Boolean> voteList;
     private TextView tv_register;
 
     @Override
@@ -165,7 +166,8 @@ public class VoteActivity extends AppCompatActivity {
         layoutManager = new LinearLayoutManager(this);
         vote_recyclerview.setLayoutManager(layoutManager);
         arrayList = new ArrayList<>();
-        adapter = new VoteAdapter(arrayList, this);
+        voteList = new ArrayList<>();
+        adapter = new VoteAdapter(arrayList, voteList, false,this);
         vote_recyclerview.setAdapter(adapter);
         btn_plus.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -182,8 +184,9 @@ public class VoteActivity extends AppCompatActivity {
                     @Override
                     public void onClick(View v) {
                         String votesummary = et_votesummary.getText().toString();
-                        Vote vote = new Vote(votesummary, 0, null);
+                        Vote vote = new Vote(votesummary, 0, null, null);
                         arrayList.add(vote);
+                        voteList.add(false);
                         adapter.notifyDataSetChanged();
                         dialog.dismiss();
                     }
@@ -201,7 +204,7 @@ public class VoteActivity extends AppCompatActivity {
                 Date date = new Date(now);
                 SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
                 String time = sdf.format(date);
-                Post post = new Post(uid, name, time, " ", et_title.getText().toString(), et_summary.getText().toString(),true,arrayList);
+                Post post = new Post(uid, name, time, " ", et_title.getText().toString(), et_summary.getText().toString(),true,arrayList,null);
                 databaseReference.child("Group").child(groupname).child("Post").child(time).setValue(post);
                 Toast.makeText(getApplicationContext(),"작성이 완료되었습니다.",Toast.LENGTH_SHORT).show();
                 finish();

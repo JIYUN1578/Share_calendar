@@ -59,11 +59,13 @@ public class NoticeActivity extends AppCompatActivity {
     private Post post;
     private Vote vote;
     private ArrayList<Vote> voteArrayList;
+    private ArrayList<Boolean> voteList;
     private ImageView iv_profile, iv_image;
     private TextView tv_name, tv_time, tv_noticetitle, tv_noticesummary;
     private RecyclerView vote_recyclerview;
     private RecyclerView.LayoutManager layoutManager;
     private VoteAdapter adapter;
+    private Button btn_vote;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -173,11 +175,62 @@ public class NoticeActivity extends AppCompatActivity {
         tv_time = (TextView)findViewById(R.id.tv_time);
         tv_noticetitle = (TextView)findViewById(R.id.tv_noticetitle);
         tv_noticesummary = (TextView)findViewById(R.id.tv_noticesummary);
+        btn_vote = (Button) findViewById(R.id.btn_vote);
         vote_recyclerview = (RecyclerView)findViewById(R.id.vote_recyclerview);
+        showNotice();
+
+        // 투표 저장 눌렀을 때
+        btn_vote.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                voteList = adapter.getCheckList();
+                databaseReference.child("Group").child(groupname).child("Post").child(time).addListenerForSingleValueEvent(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot snapshot) {
+                        ArrayList<Vote> tempList;
+                        ArrayList<String> personList, votePersonList;
+                        tempList = new ArrayList<>();
+                        votePersonList = new ArrayList<>();
+
+                        post = snapshot.getValue(Post.class);
+                        tempList = post.getVoteArrayList();
+                        if(post.getVotePersonList() != null) {
+                            votePersonList = post.getVotePersonList();
+                        }
+                        votePersonList.add(uid);
+                        for(int i=0; i<tempList.size(); i++) {
+                            if(voteList.get(i) == true) {
+                                tempList.get(i).setVoteNum(tempList.get(i).getVoteNum() + 1);
+                                personList = new ArrayList<>();
+                                if(tempList.get(i).getPersonList() == null) {
+                                    personList.add(uid);
+                                    tempList.get(i).setPersonList(personList);
+                                }
+                                else {
+                                    personList = tempList.get(i).getPersonList();
+                                    personList.add(uid);
+                                    tempList.get(i).setPersonList(personList);
+                                }
+                            }
+                        }
+                        mReference.child("Group").child(groupname).child("Post").child(time).child("voteArrayList").setValue(tempList);
+                        mReference.child("Group").child(groupname).child("Post").child(time).child("votePersonList").setValue(votePersonList);
+                        showNotice();
+                    }
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError error) {
+                    }
+                });
+            }
+        });
+    }
+
+    public void showNotice() {
         vote_recyclerview.setHasFixedSize(true);
         layoutManager = new LinearLayoutManager(this);
         vote_recyclerview.setLayoutManager(layoutManager);
         voteArrayList = new ArrayList<>();
+        voteList = new ArrayList<>();
         databaseReference.child("Group").child(groupname).child("Post").child(time).child("vote").addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
@@ -189,17 +242,48 @@ public class NoticeActivity extends AppCompatActivity {
                         @Override
                         public void onDataChange(@NonNull DataSnapshot datasnapshot) {
                             post = datasnapshot.getValue(Post.class);
-                            iv_profile.setImageResource(R.drawable.ic_baseline_person_24);
-                            tv_name.setText(post.getName());
-                            tv_time.setText(post.getTime());
-                            tv_noticetitle.setText(post.getTitle());
-                            tv_noticesummary.setText(post.getSummary());
-                            vote_recyclerview.setVisibility(View.VISIBLE);
-                            adapter = new VoteAdapter(voteArrayList, getApplicationContext());
-                            vote_recyclerview.setAdapter(adapter);
-                            for(int i=0; i<post.getVoteArrayList().size(); i++) {
-                                voteArrayList.add(post.getVoteArrayList().get(i));
-                                adapter.notifyDataSetChanged();
+                            Boolean endVote = false;
+                            if(post.getVotePersonList()!=null) {
+                                for(int i=0; i<post.getVotePersonList().size(); i++) {
+                                    Log.e("###",post.getVotePersonList().get(i));
+                                    if(post.getVotePersonList().get(i).equals(uid)) {
+                                        endVote = true;
+                                        break;
+                                    }
+                                }
+                            }
+                            if(endVote == true) {
+                                iv_profile.setImageResource(R.drawable.ic_baseline_person_24);
+                                tv_name.setText(post.getName());
+                                tv_time.setText(post.getTime());
+                                tv_noticetitle.setText(post.getTitle());
+                                tv_noticesummary.setText(post.getSummary());
+                                vote_recyclerview.setVisibility(View.VISIBLE);
+                                btn_vote.setVisibility(View.GONE);
+                                adapter = new VoteAdapter(voteArrayList, voteList, true, getApplicationContext());
+                                vote_recyclerview.setAdapter(adapter);
+                                for(int i=0; i<post.getVoteArrayList().size(); i++) {
+                                    voteArrayList.add(post.getVoteArrayList().get(i));
+                                    voteList.add(false);
+                                    adapter.notifyDataSetChanged();
+                                }
+                            }
+                            else {
+                                iv_profile.setImageResource(R.drawable.ic_baseline_person_24);
+                                tv_name.setText(post.getName());
+                                tv_time.setText(post.getTime());
+                                tv_noticetitle.setText(post.getTitle());
+                                tv_noticesummary.setText(post.getSummary());
+                                vote_recyclerview.setVisibility(View.VISIBLE);
+                                btn_vote.setVisibility(View.VISIBLE);
+                                btn_vote.setText("투표하기");
+                                adapter = new VoteAdapter(voteArrayList, voteList, false, getApplicationContext());
+                                vote_recyclerview.setAdapter(adapter);
+                                for(int i=0; i<post.getVoteArrayList().size(); i++) {
+                                    voteArrayList.add(post.getVoteArrayList().get(i));
+                                    voteList.add(false);
+                                    adapter.notifyDataSetChanged();
+                                }
                             }
                         }
                         @Override

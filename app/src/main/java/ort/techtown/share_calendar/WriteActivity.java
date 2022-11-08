@@ -203,7 +203,7 @@ public class WriteActivity extends AppCompatActivity {
                 else {
                     filename = " ";
                 }
-                Post post = new Post(uid, name, time, filename, et_title.getText().toString(), et_summary.getText().toString(),false,null);
+                Post post = new Post(uid, name, time, filename, et_title.getText().toString(), et_summary.getText().toString(),false,null,null);
                 databaseReference.child("Group").child(groupname).child("Post").child(time).setValue(post);
                 Toast.makeText(getApplicationContext(),"작성이 완료되었습니다.",Toast.LENGTH_SHORT).show();
                 finish();

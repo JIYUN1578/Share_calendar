@@ -2,10 +2,13 @@ package ort.techtown.share_calendar.Data;
 
 import android.widget.CheckBox;
 
+import java.util.ArrayList;
+
 public class Vote {
     private String voteSummary;
     private Integer voteNum;
     private CheckBox checkbox_vote;
+    private ArrayList<String> personList;
 
     public Vote() {}
 
@@ -21,9 +24,14 @@ public class Vote {
 
     public void setCheckbox_vote(CheckBox checkbox_vote) {this.checkbox_vote = checkbox_vote;}
 
-    public Vote(String voteSummary, Integer voteNum, CheckBox checkbox_vote) {
+    public ArrayList<String> getPersonList() {return personList;}
+
+    public void setPersonList(ArrayList<String> personList) {this.personList = personList;}
+
+    public Vote(String voteSummary, Integer voteNum, CheckBox checkbox_vote, ArrayList<String> personList) {
         this.voteSummary = voteSummary;
         this.voteNum = voteNum;
         this.checkbox_vote = checkbox_vote;
+        this.personList = personList;
     }
 }
