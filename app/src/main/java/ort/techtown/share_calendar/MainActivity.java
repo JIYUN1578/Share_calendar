@@ -37,6 +37,7 @@ import java.util.ArrayList;
 import ort.techtown.share_calendar.Adapter.CalendarAdapter;
 import ort.techtown.share_calendar.Adapter.TodoListAdapter;
 import ort.techtown.share_calendar.Data.BackKeyHandler;
+import ort.techtown.share_calendar.Data.CalendarColor;
 import ort.techtown.share_calendar.Data.CalendarUtil;
 import ort.techtown.share_calendar.Data.Info;
 
@@ -226,22 +227,7 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.O
         tv_monthyear.setText(monthYearFromDate(CalendarUtil.selectedDate));
         // 어레이들 가져오기, localdates == 해당 년월,
         ArrayList<LocalDate> localDates = daysInMonthArray(CalendarUtil.selectedDate);
-
-        // 어뎁터 데이터 적용
-        CalendarAdapter adapter = new CalendarAdapter(localDates);
-        // 레이아웃 설정 열 7개
-        RecyclerView.LayoutManager manager = new GridLayoutManager(getApplicationContext(),7);
-        // 레이아웃 적용
-        recyclerView.setLayoutManager(manager);
-        // 어뎁터 적용
-        recyclerView.setAdapter(adapter);
-        adapter.setOnItemClickListener(new CalendarAdapter.OnItemClickListener() {
-            @Override
-            public void onItemClick(View v, int position) {
-                setMonthview();
-                setTodoList(uid);
-            }
-        });
+        setCalendarColor(CalendarUtil.selectedDate, localDates);
     }
 
     private void setTodoList(String uid) {
@@ -289,7 +275,7 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.O
         return localDate.format(formatter);
     }
 
-    private ArrayList<LocalDate>  daysInMonthArray(LocalDate localDate){
+    private ArrayList<LocalDate> daysInMonthArray(LocalDate localDate){
         ArrayList<LocalDate> localDates = new ArrayList<>();
         YearMonth yearMonth = YearMonth.from(localDate);
         // 해당 월 마지막 날짜 가져오기
@@ -319,9 +305,78 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.O
                         i - dayOfweek));
             }
         }
+        Log.d("local1",String.valueOf(localDates.size()));
         return localDates;
     }
 
+    private void setCalendarColor(LocalDate localDate, ArrayList<LocalDate> localDates){
+        ArrayList<CalendarColor> calendarColors = new ArrayList<>();
+        YearMonth yearMonth = YearMonth.from(localDate);
+        boolean iscolor;
+        // 해당 월 마지막 날짜 가져오기
+        int lastday = yearMonth.lengthOfMonth();
+        // 해당월의 첫번째 날짜 가져오기
+        LocalDate firstday = CalendarUtil.selectedDate.withDayOfMonth(1);
+        // 첫번째 날 요일 가져오기
+        int dayOfweek = firstday.getDayOfWeek().getValue();
+        // 날짜 생성
+        for(int i = 1 ; i <= 42 ; i++){
+            ArrayList<String> colors = new ArrayList<>();
+            FirebaseDatabase database = FirebaseDatabase.getInstance();
+            DatabaseReference reference;
+            iscolor = false;
+            LocalDate localDate1;
+            if(i <=dayOfweek){
+                LocalDate premonthDate = CalendarUtil.selectedDate.minusMonths(1);
+                int lastdayOfpremonth = premonthDate.lengthOfMonth();
+                localDate1 = LocalDate.of(premonthDate.getYear(), premonthDate.getMonth(),
+                        lastdayOfpremonth - dayOfweek + i );
+            }
+            else if(i> lastday + dayOfweek){
+                LocalDate nextmonthDate = CalendarUtil.selectedDate.plusMonths(1);
+
+                localDate1 = LocalDate.of(nextmonthDate.getYear(), nextmonthDate.getMonth(),
+                        i - lastday-dayOfweek );
+            }else{
+                localDate1 = LocalDate.of(CalendarUtil.selectedDate.getYear(),
+                        CalendarUtil.selectedDate.getMonth(),
+                        i - dayOfweek);
+            }
+            final int position = i-1;
+            Log.d("colors4",String.valueOf(position));
+            reference = database.getReference("User").child(uid).child("Calender").child(localDate1.toString());
+            Query myTopPostsQuery = reference.orderByChild("start");
+
+            myTopPostsQuery.addValueEventListener(new ValueEventListener() {
+                @Override
+                public void onDataChange(DataSnapshot dataSnapshot) {
+                    for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
+                        colors.add(snapshot.getValue(Info.class).getColor());
+                    }
+                    CalendarColor calendarColor = new CalendarColor(colors, true);
+                    calendarColors.add(calendarColor);
+                    // 어뎁터 데이터 적용
+                    CalendarAdapter adapter = new CalendarAdapter(localDates, calendarColors);
+                    // 레이아웃 설정 열 7개
+                    RecyclerView.LayoutManager manager = new GridLayoutManager(getApplicationContext(),7);
+                    // 레이아웃 적용
+                    recyclerView.setLayoutManager(manager);
+                    // 어뎁터 적용
+                    recyclerView.setAdapter(adapter);
+                    adapter.setOnItemClickListener(new CalendarAdapter.OnItemClickListener() {
+                        @Override
+                        public void onItemClick(View v, int position) {
+                            setMonthview();
+                            setTodoList(uid);
+                        }
+                    });
+                }
+                @Override
+                public void onCancelled(DatabaseError databaseError) {
+                }
+            });
+        }
+    }
 
     // drawerLayout 리스너
     DrawerLayout.DrawerListener listener = new DrawerLayout.DrawerListener() {

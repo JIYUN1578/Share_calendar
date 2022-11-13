@@ -1,6 +1,7 @@
 package ort.techtown.share_calendar.Adapter;
 import android.graphics.Color;
 import android.graphics.drawable.GradientDrawable;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,19 +13,30 @@ import androidx.recyclerview.widget.RecyclerView;
 import java.time.LocalDate;
 import java.util.ArrayList;
 
+import ort.techtown.share_calendar.Data.CalendarColor;
 import ort.techtown.share_calendar.Data.CalendarUtil;
 import ort.techtown.share_calendar.Data.Info;
 import ort.techtown.share_calendar.R;
 
 public class CalendarAdapter extends RecyclerView.Adapter<CalendarAdapter.CalendarViewHolder>{
 
-    ArrayList<LocalDate>  localDates;
-    //ArrayList<Info> infos;
+    ArrayList<LocalDate> localDates;
+    ArrayList<CalendarColor> cc;
+
+    ArrayList<String> color = new ArrayList<>();
+
     String TAG = "CalendarAdapter";
 
     public CalendarAdapter(ArrayList<LocalDate> datList) {
         this.localDates = datList;
-        //this.infos = infos;
+        cc = new ArrayList<>();
+        for(int i = 0 ; i < 42 ; i ++){
+            this.cc.add(new CalendarColor(new ArrayList<>(), false));
+        }
+    }
+    public CalendarAdapter(ArrayList<LocalDate> datList, ArrayList<CalendarColor> cc) {
+        this.localDates = datList;
+        this.cc = cc;
     }
 
     @NonNull
@@ -33,7 +45,6 @@ public class CalendarAdapter extends RecyclerView.Adapter<CalendarAdapter.Calend
         LayoutInflater inflater = LayoutInflater.from(parent.getContext());
 
         View view = inflater.inflate(R.layout.calendar_cell, parent,false);
-
         return new CalendarViewHolder(view);
     }
 
@@ -90,48 +101,42 @@ public class CalendarAdapter extends RecyclerView.Adapter<CalendarAdapter.Calend
                 }
             }
         });
+            if(position < cc.size()){
+                switch (cc.get(position).getColors().size()){
+                    case 0:
+                        holder.v1.setVisibility(View.GONE);
+                    case 1:
+                        holder.v2.setVisibility(View.GONE);
+                    case 2:
+                        holder.v3.setVisibility(View.GONE);
+                    default:
+                        break;}
+                        GradientDrawable background;
 
-//        if(localDate.toString().equals("2022-11-03")){
-//            GradientDrawable background = new GradientDrawable();
-//            holder.v1.setVisibility(View.GONE);
-//            background = (GradientDrawable) holder.v2.getBackground();
-//                background.setColor(Color.parseColor("#FFAFB0"));
-//            background = (GradientDrawable) holder.v3.getBackground();
-//                background.setColor(Color.parseColor("#FFE4AF"));
-//        }else{
-            holder.v1.setVisibility(View.GONE);
-            holder.v2.setVisibility(View.GONE);
-            holder.v3.setVisibility(View.GONE);
-       // }
+                    for(int i = 0 ; i <cc.get(position).getColors().size() ; i++ ){
+                        switch (i){
+                            case 0:
+                                background = (GradientDrawable) holder.v1.getBackground();
+                                background.setColor(Color.parseColor(cc.get(position).getColors().get(0)));
+                                break;
+                            case 1:
+                                background = (GradientDrawable) holder.v2.getBackground();
+                                background.setColor(Color.parseColor(cc.get(position).getColors().get(1)));
+                                break;
+                            case 2:
+                                background = (GradientDrawable) holder.v3.getBackground();
+                                background.setColor(Color.parseColor(cc.get(position).getColors().get(2)));
+                                break;
+                            default:
+                                break;
+                        }
+
+            }
 
 
-//        switch (getItemCount()){
-//            case 0:
-//                holder.v3.setVisibility(View.GONE);
-//            case 1:
-//                holder.v2.setVisibility(View.GONE);
-//            case 2:
-//                holder.v3.setVisibility(View.GONE);
-//            default:
-//                break;
-//        }
-//        GradientDrawable background;
-//        switch (position){
-//            case 0:
-//                background = (GradientDrawable) holder.v1.getBackground();
-//                background.setColor(Color.parseColor(info.getColor()));
-//                break;
-//            case 1:
-//                background = (GradientDrawable) holder.v2.getBackground();
-//                background.setColor(Color.parseColor(info.getColor()));
-//                break;
-//            case 2:
-//                background = (GradientDrawable) holder.v3.getBackground();
-//                background.setColor(Color.parseColor(info.getColor()));
-//                break;
-//            default:
-//                break;
-//        }
+
+        }
+
     }
 
 
