@@ -54,31 +54,26 @@
             <androidx.constraintlayout.utils.widget.ImageFilterView
                 android:layout_width="50dp"
                 android:layout_height="50dp"
-                android:src="@drawable/bg_ab_circle"
                 android:id="@+id/color1"/>
             <androidx.constraintlayout.utils.widget.ImageFilterView
                 android:layout_width="50dp"
                 android:layout_height="50dp"
-                android:src="@drawable/bg_ab_circle2"
                 android:layout_margin="20dp"
                 android:id="@+id/color2"/>
 
             <androidx.constraintlayout.utils.widget.ImageFilterView
                 android:layout_width="50dp"
                 android:layout_height="50dp"
-                android:src="@drawable/bg_ab_circle3"
                 android:id="@+id/color3"/>
 
             <androidx.constraintlayout.utils.widget.ImageFilterView
                 android:layout_width="50dp"
                 android:layout_height="50dp"
-                android:src="@drawable/bg_ab_circle4"
                 android:layout_margin="20dp"
                 android:id="@+id/color4"/>
             <androidx.constraintlayout.utils.widget.ImageFilterView
                 android:layout_width="50dp"
                 android:layout_height="50dp"
-                android:src="@drawable/bg_ab_circle5"
                 android:id="@+id/color5"/>
         </LinearLayout>
 

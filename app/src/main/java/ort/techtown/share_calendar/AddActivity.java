@@ -96,17 +96,18 @@ public class AddActivity extends AppCompatActivity {
         color4 = (ImageView)findViewById(R.id.color4);
         color5 = (ImageView)findViewById(R.id.color5);
 
+        setcolor(0);
         color1.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                setcolor();
+                setcolor(1);
                 pColor = "#FFAFB0";
             }
         });
         color2.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                setcolor();
+                setcolor(2);
                 pColor = "#FFE4AF";
             }
         });
@@ -114,20 +115,20 @@ public class AddActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
 
-                setcolor();pColor = "#8EB695";
+                setcolor(3);pColor = "#8EB695";
             }
         });
         color4.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                setcolor();
+                setcolor(4);
                 pColor = "#C6E1FF";
             }
         });
         color5.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                setcolor();
+                setcolor(5);
                 pColor = "#E0E0E0";
             }
         });
@@ -246,8 +247,33 @@ public class AddActivity extends AppCompatActivity {
         });
     }
 
-    private void setcolor(){
-        //나중에 구현하자
+    private void setcolor(int num){
+        //모든 컬러 이미지들 선택표시 없애기
+        color1.setBackgroundResource(R.drawable.bg_ab_circle);
+        color2.setBackgroundResource(R.drawable.bg_ab_circle2);
+        color3.setBackgroundResource(R.drawable.bg_ab_circle3);
+        color4.setBackgroundResource(R.drawable.bg_ab_circle4);
+        color5.setBackgroundResource(R.drawable.bg_ab_circle5);
+        //해당 num의 컬러표시만 만들기
+        switch (num){
+            case 1:
+                color1.setBackgroundResource(R.drawable.bg_ab_circle_picked);
+                break;
+            case 2:
+                color2.setBackgroundResource(R.drawable.bg_ab_circle2_picked);
+                break;
+            case 3:
+                color3.setBackgroundResource(R.drawable.bg_ab_circle3_picked);
+                break;
+            case 4:
+                color4.setBackgroundResource(R.drawable.bg_ab_circle4_picked);
+                break;
+            case 5:
+                color5.setBackgroundResource(R.drawable.bg_ab_circle5_picked);
+                break;
+            default:
+                break;
+        }
     }
 
     private void setGroup( ) {
