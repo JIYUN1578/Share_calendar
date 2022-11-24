@@ -205,8 +205,10 @@ public class GroupActivity extends AppCompatActivity {
                     data = new GroupRecyclerView();
                     String group_name = snapshot.child("Group").child(arrayList.get(i)).child("groupname").getValue().toString();
                     String group_introduce = snapshot.child("Group").child(arrayList.get(i)).child("introduce").getValue().toString();
+                    String group_image = snapshot.child("Group").child(arrayList.get(i)).child("image_url").getValue().toString();
                     data.setGroup_name(group_name);
                     data.setGroup_introduce(group_introduce);
+                    data.setImage_url(group_image);
                     groupList.add(data);
                 }
                 adapter.notifyDataSetChanged();

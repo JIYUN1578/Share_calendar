@@ -303,7 +303,6 @@ public class NoticeActivity extends AppCompatActivity {
                             tv_noticetitle.setText(post.getTitle());
                             tv_noticesummary.setText(post.getSummary());
                             if(post.getImage_url()!=null) {
-                                Log.e("url",post.getImage_url());
                                 StorageReference pathReference = storageReference.child("post_img/"+post.getImage_url());
                                 pathReference.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
                                     @Override

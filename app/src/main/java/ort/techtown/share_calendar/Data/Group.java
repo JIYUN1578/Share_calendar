@@ -3,7 +3,7 @@ package ort.techtown.share_calendar.Data;
 import java.util.ArrayList;
 
 public class Group {
-    String groupname, introduce, hostuid, url;
+    String groupname, introduce, hostuid, image_url;
     Integer groupnum;
 
     public Group(){}
@@ -28,10 +28,15 @@ public class Group {
 
     public void setGroupnum(Integer groupnum) { this.groupnum = groupnum; }
 
-    public Group(String groupname, String introduce, String hostuid, Integer groupnum) {
+    public String getImage_url() {return image_url; }
+
+    public void setImage_url(String image_url) {this.image_url = image_url; }
+
+    public Group(String groupname, String introduce, String hostuid, Integer groupnum, String image_url) {
         this.groupname = groupname;
         this.introduce = introduce;
         this.hostuid = hostuid;
         this.groupnum = groupnum;
+        this.image_url = image_url;
     }
 }

@@ -1,11 +1,13 @@
 package ort.techtown.share_calendar;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.drawerlayout.widget.DrawerLayout;
 
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.view.MotionEvent;
 import android.view.View;
@@ -16,9 +18,16 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.bumptech.glide.Glide;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
+import com.google.firebase.storage.UploadTask;
 
 import ort.techtown.share_calendar.Data.BackKeyHandler;
 import ort.techtown.share_calendar.Data.Group;
@@ -35,9 +44,15 @@ public class MakeActivity extends AppCompatActivity {
     private TextView tv_title;
     // 그룹 생성
     private EditText et_groupname, et_introduce;
+    private ImageView iv_image;
+    private FloatingActionButton btn_camera;
+    private static final int REQUEST_CODE = 0;
+    private Uri uri;
     // 파이어베이스
     private FirebaseDatabase database = FirebaseDatabase.getInstance();
     private DatabaseReference databaseReference = database.getReference();
+    private FirebaseStorage storage = FirebaseStorage.getInstance();
+    private StorageReference storageReference = storage.getReference();
     private String uid, name;
 
     @Override
@@ -134,6 +149,20 @@ public class MakeActivity extends AppCompatActivity {
             }
         });
 
+        // 그룹 이미지
+        iv_image = (ImageView)findViewById(R.id.iv_image);
+        btn_camera = (FloatingActionButton)findViewById(R.id.btn_camera);
+        btn_camera.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                iv_image.setImageResource(0);
+                Intent intent = new Intent();
+                intent.setType("image/*");
+                intent.setAction(Intent.ACTION_GET_CONTENT);
+                startActivityForResult(intent, REQUEST_CODE);
+            }
+        });
+
         // 그룹 생성
         et_groupname = (EditText)findViewById(R.id.et_groupname);
         et_introduce = (EditText)findViewById(R.id.et_introduce);
@@ -142,11 +171,45 @@ public class MakeActivity extends AppCompatActivity {
         btn_save.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                addGroup(et_groupname.getText().toString(), et_introduce.getText().toString(), uid,1);
+                String filename;
+                if(uri!=null) {
+                    filename = uri.toString() + ".jpg";
+                    StorageReference riverRef = storageReference.child("post_img/"+filename);
+                    UploadTask uploadTask = riverRef.putFile(uri);
+                    uploadTask.addOnFailureListener(new OnFailureListener() {
+                        @Override
+                        public void onFailure(@NonNull Exception e) {
+                        }
+                    }).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                        @Override
+                        public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                        }
+                    });
+                }
+                else {
+                    filename = " ";
+                }
+                addGroup(et_groupname.getText().toString(), et_introduce.getText().toString(), uid,1, filename);
                 Toast.makeText(getApplicationContext(),"그룹이 생성되었습니다.",Toast.LENGTH_SHORT).show();
                 finish();
             }
         });
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if(requestCode == REQUEST_CODE) {
+            if(resultCode == RESULT_OK) {
+                try{
+                    uri = data.getData();
+                    Glide.with(getApplicationContext()).load(uri).into(iv_image);
+                } catch(Exception e){
+                }
+            }
+            else if(resultCode == RESULT_CANCELED){
+            }
+        }
     }
 
     // drawerLayout 리스너
@@ -166,8 +229,8 @@ public class MakeActivity extends AppCompatActivity {
     };
 
     // 그룹 데이터 저장 함수
-    public void addGroup(String groupname, String introduce, String hostuid, Integer groupnum) {
-        Group group = new Group(groupname, introduce, hostuid, groupnum);
+    public void addGroup(String groupname, String introduce, String hostuid, Integer groupnum, String image_url) {
+        Group group = new Group(groupname, introduce, hostuid, groupnum, image_url);
         databaseReference.child("Group").child(groupname).setValue(group);
         databaseReference.child("Group").child(groupname).child("Uid").push().setValue(uid);
         databaseReference.child("User").child(uid).child("Group").push().setValue(groupname);
