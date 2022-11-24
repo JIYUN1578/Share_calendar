@@ -8,6 +8,7 @@ import androidx.appcompat.widget.Toolbar;
 import androidx.drawerlayout.widget.DrawerLayout;
 
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -21,12 +22,17 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.bumptech.glide.Glide;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -47,6 +53,8 @@ public class SearchActivity extends AppCompatActivity {
     private FirebaseDatabase database = FirebaseDatabase.getInstance();
     private DatabaseReference databaseReference = database.getReference();
     private DatabaseReference mReference = database.getReference();
+    private FirebaseStorage firebaseStorage = FirebaseStorage.getInstance();
+    private StorageReference storageReference = firebaseStorage.getReference();
     // 검색 관련 기능
     private List<String> list;
     private ListView listView;
@@ -55,6 +63,7 @@ public class SearchActivity extends AppCompatActivity {
     private ArrayList<String> arraylist;
     // 그룹
     private TextView group_name, group_introduce;
+    private ImageView group_image;
     private Button btn_sign;
     private Integer group_num;
 
@@ -192,12 +201,27 @@ public class SearchActivity extends AppCompatActivity {
                 databaseReference = database.getReference();
                 group_name = (TextView)findViewById(R.id.group_name);
                 group_introduce = (TextView)findViewById(R.id.group_introduce);
+                group_image = (ImageView)findViewById(R.id.group_image);
                 btn_sign = (Button)findViewById(R.id.btn_sign);
                 databaseReference.addListenerForSingleValueEvent(new ValueEventListener() {
                     @Override
                     public void onDataChange(@NonNull DataSnapshot snapshot) {
                         group_name.setText(snapshot.child("Group").child(search_group).child("groupname").getValue().toString());
                         group_introduce.setText(snapshot.child("Group").child(search_group).child("introduce").getValue().toString());
+                        String url = snapshot.child("Group").child(search_group).child("image_url").getValue().toString();
+                        if(url!=null) {
+                            StorageReference pathReference = storageReference.child("post_img/"+url);
+                            pathReference.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+                                @Override
+                                public void onSuccess(Uri uri) {
+                                    Glide.with(SearchActivity.this).load(uri).centerCrop().into(group_image);
+                                }
+                            }).addOnFailureListener(new OnFailureListener() {
+                                @Override
+                                public void onFailure(@NonNull Exception e) {
+                                }
+                            });
+                        }
                     }
 
                     @Override
