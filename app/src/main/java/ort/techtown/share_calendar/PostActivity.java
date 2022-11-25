@@ -223,10 +223,8 @@ public class PostActivity extends AppCompatActivity {
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 String name = snapshot.child("Group").child(groupname).child("groupname").getValue().toString();
                 String introduce = snapshot.child("Group").child(groupname).child("introduce").getValue().toString();
-                String url = snapshot.child("Group").child(groupname).child("image_url").getValue().toString();
-                group_name.setText(name);
-                group_introduce.setText(introduce);
-                if(url!=null) {
+                if(!snapshot.child("Group").child(groupname).child("image_url").getValue().toString().equals(" ")) {
+                    String url = snapshot.child("Group").child(groupname).child("image_url").getValue().toString();
                     StorageReference pathReference = storageReference.child("post_img/"+url);
                     pathReference.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
                         @Override
@@ -239,6 +237,11 @@ public class PostActivity extends AppCompatActivity {
                         }
                     });
                 }
+                else {
+                    group_image.setImageBitmap(null);
+                }
+                group_name.setText(name);
+                group_introduce.setText(introduce);
             }
             @Override
             public void onCancelled(@NonNull DatabaseError error) {

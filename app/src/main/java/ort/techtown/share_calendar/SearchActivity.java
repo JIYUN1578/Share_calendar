@@ -8,10 +8,14 @@ import androidx.appcompat.widget.Toolbar;
 import androidx.drawerlayout.widget.DrawerLayout;
 
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.AdapterView;
@@ -208,8 +212,9 @@ public class SearchActivity extends AppCompatActivity {
                     public void onDataChange(@NonNull DataSnapshot snapshot) {
                         group_name.setText(snapshot.child("Group").child(search_group).child("groupname").getValue().toString());
                         group_introduce.setText(snapshot.child("Group").child(search_group).child("introduce").getValue().toString());
-                        String url = snapshot.child("Group").child(search_group).child("image_url").getValue().toString();
-                        if(url!=null) {
+                        if(!snapshot.child("Group").child(search_group).child("image_url").getValue().toString().equals(" ")) {
+                            String url = snapshot.child("Group").child(search_group).child("image_url").getValue().toString();
+                            Log.e("###",url);
                             StorageReference pathReference = storageReference.child("post_img/"+url);
                             pathReference.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
                                 @Override
@@ -221,6 +226,9 @@ public class SearchActivity extends AppCompatActivity {
                                 public void onFailure(@NonNull Exception e) {
                                 }
                             });
+                        }
+                        else {
+                            group_image.setImageBitmap(null);
                         }
                     }
 

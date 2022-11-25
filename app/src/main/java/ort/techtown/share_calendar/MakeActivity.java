@@ -191,6 +191,10 @@ public class MakeActivity extends AppCompatActivity {
                 }
                 addGroup(et_groupname.getText().toString(), et_introduce.getText().toString(), uid,1, filename);
                 Toast.makeText(getApplicationContext(),"그룹이 생성되었습니다.",Toast.LENGTH_SHORT).show();
+                Intent intent = new Intent(MakeActivity.this, MainActivity.class);
+                intent.putExtra("name",name);
+                intent.putExtra("uid",uid);
+                startActivity(intent);
                 finish();
             }
         });

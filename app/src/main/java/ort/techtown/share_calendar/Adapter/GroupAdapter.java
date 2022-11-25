@@ -60,7 +60,7 @@ public class GroupAdapter extends RecyclerView.Adapter<GroupAdapter.GroupViewHol
     public void onBindViewHolder(@NonNull GroupViewHolder holder, int position) {
         holder.group_name.setText(arrayList.get(position).getGroup_name());
         holder.group_introduce.setText(arrayList.get(position).getGroup_introduce());
-        if(arrayList.get(position).getImage_url() != null) {
+        if(!arrayList.get(position).getImage_url().equals(" ")) {
             StorageReference pathReference = storageReference.child("post_img/"+arrayList.get(position).getImage_url());
             pathReference.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
                 @Override
@@ -72,6 +72,9 @@ public class GroupAdapter extends RecyclerView.Adapter<GroupAdapter.GroupViewHol
                 public void onFailure(@NonNull Exception e) {
                 }
             });
+        }
+        else {
+            holder.group_image.setImageBitmap(null);
         }
     }
 
