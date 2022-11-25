@@ -67,7 +67,7 @@ public class AddActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add);
-        pColor = "0";
+        pColor = "#FFAFB0";
         Intent intent = getIntent();
         uid = intent.getStringExtra("uid");
         name = intent.getStringExtra("name");

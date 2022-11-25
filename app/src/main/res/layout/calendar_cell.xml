@@ -37,7 +37,7 @@
             android:layout_height="5dp"
             android:layout_gravity="center"
             android:layout_margin="5dp"
-            android:background="@drawable/bg_round" />
+            android:background="@drawable/bg_round_colorbar" />
         <View
             android:layout_gravity="center"
             android:layout_margin="5dp"

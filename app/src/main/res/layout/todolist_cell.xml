@@ -24,7 +24,7 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <View
-        android:background="@drawable/bg_round"
+        android:background="@drawable/bg_round_colorbar"
         android:id="@+id/colorbar"
         android:layout_width="8dp"
         android:layout_height="50dp"
