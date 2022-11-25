@@ -47,7 +47,7 @@ public class MakeActivity extends AppCompatActivity {
     private ImageView iv_image;
     private FloatingActionButton btn_camera;
     private static final int REQUEST_CODE = 0;
-    private Uri uri;
+    private Uri uri, tmp_uri;
     // 프로필 사진 변경
     private static final int TMP_REQUEST_CODE = 1;
     // 파이어베이스
@@ -232,12 +232,12 @@ public class MakeActivity extends AppCompatActivity {
         else if(requestCode == TMP_REQUEST_CODE) {
             if(resultCode == RESULT_OK) {
                 try{
-                    uri = data.getData();
+                    tmp_uri = data.getData();
                     String filename;
-                    if(uri!=null) {
-                        filename = uri.toString() + ".jpg";
+                    if(tmp_uri!=null) {
+                        filename = tmp_uri.toString() + ".jpg";
                         StorageReference riverRef = storageReference.child("post_img/"+filename);
-                        UploadTask uploadTask = riverRef.putFile(uri);
+                        UploadTask uploadTask = riverRef.putFile(tmp_uri);
                         uploadTask.addOnFailureListener(new OnFailureListener() {
                             @Override
                             public void onFailure(@NonNull Exception e) {
