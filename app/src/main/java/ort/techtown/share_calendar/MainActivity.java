@@ -77,6 +77,7 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.O
         name = intent.getStringExtra("name");
         uid = intent.getStringExtra("uid");
 
+        CalendarUtil.UID = uid;
         // 이름 저장
         databaseReference.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override

@@ -6,4 +6,5 @@ public class CalendarUtil {
 
     public static LocalDate selectedDate;
     public static LocalDate today;
+    public static String UID;
 }

@@ -229,13 +229,13 @@ public class AddActivity extends AppCompatActivity {
         btn_addInfo.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                String nnow =  DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss").format(LocalDateTime.now());
                 Info newInfo = new Info(false,
                         tv_addStartDay.getText()+" "+tv_addStartTime.getText(),
                         tv_addEndDay.getText()+" "+tv_addEndTime.getText().toString(),
                         edt_toDo.getText().toString(),edt_toDo.getText().toString()
-                         ,pColor);
+                         ,pColor , nnow);
                 //upload
-                String nnow =  DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss").format(LocalDateTime.now());
                 databaseReference.child("User").child(uid).child("Calender").child(tv_addStartDay.getText().toString())
                                 .child(nnow).setValue(newInfo);
                 makeprivacy(nnow);

@@ -7,9 +7,11 @@ public class Info {
     String title;
     String info;
     String color;
+    String path;
 
-    public Info(boolean isDone, String start, String end, String title, String info, String color) {
+    public Info(boolean isDone, String start, String end, String title, String info, String color, String path) {
         this.isDone = isDone;
+        this.path = path;
         this.start = start;
         this.end = end;
         this.title = title;
@@ -17,6 +19,7 @@ public class Info {
         this.color = color;
     }
     public Info() {
+        this.path = "!!";
         this.isDone = false;
         this.start = "!!";
         this.end = "!!";
@@ -24,6 +27,15 @@ public class Info {
         this.info = "!!";
         this.color = "!!";
     }
+
+    public String getPath() {
+        return path;
+    }
+
+    public void setPath(String path) {
+        this.path = path;
+    }
+
     public boolean isDone() {
         return isDone;
     }
