@@ -1,6 +1,7 @@
 package ort.techtown.share_calendar;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.drawerlayout.widget.DrawerLayout;
@@ -18,6 +19,7 @@ import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.google.android.gms.tasks.OnFailureListener;
@@ -31,6 +33,7 @@ import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
+import com.google.firebase.storage.UploadTask;
 
 import java.time.LocalDate;
 import java.time.YearMonth;
@@ -48,7 +51,7 @@ public class PostActivity extends AppCompatActivity {
     private BackKeyHandler backKeyHandler = new BackKeyHandler(this);
     // drawerLayout
     private DrawerLayout drawerLayout;
-    private Button btn_logout, btn_calendar, btn_search, btn_make, btn_group, btn_close;
+    private Button btn_logout, btn_calendar, btn_search, btn_make, btn_group, btn_close, btn_profile;
     private View drawerView;
     private ImageView menu_open;
     private TextView tv_title;
@@ -66,6 +69,9 @@ public class PostActivity extends AppCompatActivity {
     private String groupname, uid, name, tmp_name, tmp_uid;
     private TextView group_name, group_introduce;
     private ImageView group_image;
+    // 프로필 사진 변경
+    private static final int REQUEST_CODE = 0;
+    private Uri uri;
     // 게시판 이동
     private TextView tv_postmove;
 
@@ -197,6 +203,17 @@ public class PostActivity extends AppCompatActivity {
                 finish();
             }
         });
+        // 마이프로필 버튼
+        btn_profile = (Button)findViewById(R.id.btn_profile);
+        btn_profile.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent();
+                intent.setType("image/*");
+                intent.setAction(Intent.ACTION_GET_CONTENT);
+                startActivityForResult(intent, REQUEST_CODE);
+            }
+        });
         // 로그아웃 버튼
         btn_logout = (Button)findViewById(R.id.btn_logout);
         btn_logout.setOnClickListener(new View.OnClickListener() {
@@ -247,6 +264,38 @@ public class PostActivity extends AppCompatActivity {
             public void onCancelled(@NonNull DatabaseError error) {
             }
         });
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if(requestCode == REQUEST_CODE) {
+            if(resultCode == RESULT_OK) {
+                try{
+                    uri = data.getData();
+                    String filename;
+                    if(uri!=null) {
+                        filename = uri.toString() + ".jpg";
+                        StorageReference riverRef = storageReference.child("post_img/"+filename);
+                        UploadTask uploadTask = riverRef.putFile(uri);
+                        uploadTask.addOnFailureListener(new OnFailureListener() {
+                            @Override
+                            public void onFailure(@NonNull Exception e) {
+                            }
+                        }).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                            @Override
+                            public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                            }
+                        });
+                        databaseReference.child("User").child(uid).child("Image_url").setValue(filename);
+                        Toast.makeText(getApplicationContext(),"프로필 사진이 변경되었습니다.",Toast.LENGTH_SHORT).show();
+                    }
+                } catch(Exception e){
+                }
+            }
+            else if(resultCode == RESULT_CANCELED){
+            }
+        }
     }
 
     // 달력

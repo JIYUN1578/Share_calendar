@@ -37,7 +37,7 @@ public class MakeActivity extends AppCompatActivity {
     private BackKeyHandler backKeyHandler = new BackKeyHandler(this);
     // drawerLayout
     private DrawerLayout drawerLayout;
-    private Button btn_logout, btn_calendar, btn_search, btn_group, btn_close,btn_make;
+    private Button btn_logout, btn_calendar, btn_search, btn_group, btn_close,btn_make, btn_profile;
     private ImageButton  btn_save;
     private View drawerView;
     private ImageView menu_open;
@@ -48,9 +48,12 @@ public class MakeActivity extends AppCompatActivity {
     private FloatingActionButton btn_camera;
     private static final int REQUEST_CODE = 0;
     private Uri uri;
+    // 프로필 사진 변경
+    private static final int TMP_REQUEST_CODE = 1;
     // 파이어베이스
     private FirebaseDatabase database = FirebaseDatabase.getInstance();
     private DatabaseReference databaseReference = database.getReference();
+    private DatabaseReference mReference = database.getReference();
     private FirebaseStorage storage = FirebaseStorage.getInstance();
     private StorageReference storageReference = storage.getReference();
     private String uid, name;
@@ -131,6 +134,18 @@ public class MakeActivity extends AppCompatActivity {
             }
         });
 
+        // 마이프로필 버튼
+        btn_profile = (Button)findViewById(R.id.btn_profile);
+        btn_profile.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent();
+                intent.setType("image/*");
+                intent.setAction(Intent.ACTION_GET_CONTENT);
+                startActivityForResult(intent, TMP_REQUEST_CODE);
+            }
+        });
+
         // 로그아웃 버튼
         btn_logout = (Button)findViewById(R.id.btn_logout);
         btn_logout.setOnClickListener(new View.OnClickListener() {
@@ -208,6 +223,33 @@ public class MakeActivity extends AppCompatActivity {
                 try{
                     uri = data.getData();
                     Glide.with(getApplicationContext()).load(uri).into(iv_image);
+                } catch(Exception e){
+                }
+            }
+            else if(resultCode == RESULT_CANCELED){
+            }
+        }
+        else if(requestCode == TMP_REQUEST_CODE) {
+            if(resultCode == RESULT_OK) {
+                try{
+                    uri = data.getData();
+                    String filename;
+                    if(uri!=null) {
+                        filename = uri.toString() + ".jpg";
+                        StorageReference riverRef = storageReference.child("post_img/"+filename);
+                        UploadTask uploadTask = riverRef.putFile(uri);
+                        uploadTask.addOnFailureListener(new OnFailureListener() {
+                            @Override
+                            public void onFailure(@NonNull Exception e) {
+                            }
+                        }).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                            @Override
+                            public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                            }
+                        });
+                        mReference.child("User").child(uid).child("Image_url").setValue(filename);
+                        Toast.makeText(getApplicationContext(),"프로필 사진이 변경되었습니다.",Toast.LENGTH_SHORT).show();
+                    }
                 } catch(Exception e){
                 }
             }

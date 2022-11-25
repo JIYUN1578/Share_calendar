@@ -60,6 +60,15 @@
     <Button
         android:background="@drawable/bg_button2"
         android:layout_margin="10dp"
+        android:id="@+id/btn_profile"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="프로필사진변경"
+        app:layout_constraintBottom_toTopOf="@+id/btn_logout" />
+
+    <Button
+        android:background="@drawable/bg_button2"
+        android:layout_margin="10dp"
         android:id="@+id/btn_logout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

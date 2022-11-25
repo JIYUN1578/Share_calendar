@@ -231,6 +231,30 @@ public class NoticeActivity extends AppCompatActivity {
         vote_recyclerview.setLayoutManager(layoutManager);
         voteArrayList = new ArrayList<>();
         voteList = new ArrayList<>();
+        databaseReference.child("User").child(uid).child("Image_url").addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                if(snapshot.getValue() == null) {
+                    iv_profile.setImageResource(R.drawable.ic_baseline_person_24);
+                }
+                else {
+                    StorageReference pathReference = storageReference.child("post_img/"+snapshot.getValue());
+                    pathReference.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+                        @Override
+                        public void onSuccess(Uri uri) {
+                            Glide.with(iv_profile.getContext()).load(uri).centerCrop().into(iv_profile);
+                        }
+                    }).addOnFailureListener(new OnFailureListener() {
+                        @Override
+                        public void onFailure(@NonNull Exception e) {
+                        }
+                    });
+                }
+            }
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+            }
+        });
         databaseReference.child("Group").child(groupname).child("Post").child(time).child("vote").addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
@@ -253,7 +277,6 @@ public class NoticeActivity extends AppCompatActivity {
                                 }
                             }
                             if(endVote == true) {
-                                iv_profile.setImageResource(R.drawable.ic_baseline_person_24);
                                 tv_name.setText(post.getName());
                                 tv_time.setText(post.getTime());
                                 tv_noticetitle.setText(post.getTitle());
@@ -269,7 +292,6 @@ public class NoticeActivity extends AppCompatActivity {
                                 }
                             }
                             else {
-                                iv_profile.setImageResource(R.drawable.ic_baseline_person_24);
                                 tv_name.setText(post.getName());
                                 tv_time.setText(post.getTime());
                                 tv_noticetitle.setText(post.getTitle());
@@ -297,7 +319,6 @@ public class NoticeActivity extends AppCompatActivity {
                         @Override
                         public void onDataChange(@NonNull DataSnapshot datasnapshot) {
                             post = datasnapshot.getValue(Post.class);
-                            iv_profile.setImageResource(R.drawable.ic_baseline_person_24);
                             tv_name.setText(post.getName());
                             tv_time.setText(post.getTime());
                             tv_noticetitle.setText(post.getTitle());
