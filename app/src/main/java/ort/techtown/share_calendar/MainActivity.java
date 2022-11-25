@@ -1,6 +1,7 @@
 package ort.techtown.share_calendar;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.recyclerview.widget.GridLayoutManager;
@@ -8,6 +9,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.MotionEvent;
@@ -21,6 +23,8 @@ import androidx.appcompat.widget.Toolbar;
 
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -28,6 +32,9 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
+import com.google.firebase.storage.UploadTask;
 
 import java.time.LocalDate;
 import java.time.YearMonth;
@@ -47,17 +54,23 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.O
     private BackKeyHandler backKeyHandler = new BackKeyHandler(this);
     // drawerLayout
     private DrawerLayout drawerLayout;
-    private Button btn_logout, btn_calendar, btn_search, btn_make, btn_group, btn_close;
+    private Button btn_logout, btn_calendar, btn_search, btn_make, btn_group, btn_close, btn_profile;
     private View drawerView;
     private ImageView menu_open;
     private TextView tv_title;
     private String uid, name;
+    // 프로필 사진 변경
+    private static final int REQUEST_CODE = 0;
+    private Uri uri;
     // 달력
     TextView tv_monthyear;
     RecyclerView recyclerView, todoListRecyclerView;
     // 파이어베이스
     private FirebaseDatabase database = FirebaseDatabase.getInstance();
     private DatabaseReference databaseReference = database.getReference();
+    private DatabaseReference tmpReference = database.getReference();
+    private FirebaseStorage firebaseStorage = FirebaseStorage.getInstance();
+    private StorageReference storageReference = firebaseStorage.getReference();
     // 일정 추가 버튼
     ImageButton btn_goAddActivity;
 
@@ -166,6 +179,18 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.O
             }
         });
 
+        // 마이프로필 버튼
+        btn_profile = (Button)findViewById(R.id.btn_profile);
+        btn_profile.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent();
+                intent.setType("image/*");
+                intent.setAction(Intent.ACTION_GET_CONTENT);
+                startActivityForResult(intent, REQUEST_CODE);
+            }
+        });
+
         // 로그아웃 버튼
         btn_logout = (Button)findViewById(R.id.btn_logout);
         btn_logout.setOnClickListener(new View.OnClickListener() {
@@ -219,7 +244,38 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.O
                 overridePendingTransition(R.anim.anim_in,R.anim.anim_out);
             }
         });
+    }
 
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if(requestCode == REQUEST_CODE) {
+            if(resultCode == RESULT_OK) {
+                try{
+                    uri = data.getData();
+                    String filename;
+                    if(uri!=null) {
+                        filename = uri.toString() + ".jpg";
+                        StorageReference riverRef = storageReference.child("post_img/"+filename);
+                        UploadTask uploadTask = riverRef.putFile(uri);
+                        uploadTask.addOnFailureListener(new OnFailureListener() {
+                            @Override
+                            public void onFailure(@NonNull Exception e) {
+                            }
+                        }).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                            @Override
+                            public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                            }
+                        });
+                        tmpReference.child("User").child(uid).child("Image_url").setValue(filename);
+                        Toast.makeText(getApplicationContext(),"프로필 사진이 변경되었습니다.",Toast.LENGTH_SHORT).show();
+                    }
+                } catch(Exception e){
+                }
+            }
+            else if(resultCode == RESULT_CANCELED){
+            }
+        }
     }
 
     // 달력

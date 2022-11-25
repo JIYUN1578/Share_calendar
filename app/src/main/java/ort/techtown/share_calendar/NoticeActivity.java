@@ -1,6 +1,7 @@
 package ort.techtown.share_calendar;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.drawerlayout.widget.DrawerLayout;
@@ -17,6 +18,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.google.android.gms.tasks.OnFailureListener;
@@ -29,6 +31,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
+import com.google.firebase.storage.UploadTask;
 
 import java.util.ArrayList;
 
@@ -41,7 +44,7 @@ public class NoticeActivity extends AppCompatActivity {
 
     // drawerLayout
     private DrawerLayout drawerLayout;
-    private Button btn_logout, btn_calendar, btn_search, btn_make, btn_group, btn_close;
+    private Button btn_logout, btn_calendar, btn_search, btn_make, btn_group, btn_close, btn_profile;
     private View drawerView;
     private ImageView menu_open;
     private TextView tv_title;
@@ -49,9 +52,12 @@ public class NoticeActivity extends AppCompatActivity {
     private FirebaseDatabase database = FirebaseDatabase.getInstance();
     private DatabaseReference databaseReference = database.getReference();
     private DatabaseReference mReference = database.getReference();
-    private DatabaseReference dbReference = database.getReference();
+    private DatabaseReference tmpReference = database.getReference();
     private FirebaseStorage firebaseStorage = FirebaseStorage.getInstance();
     private StorageReference storageReference = firebaseStorage.getReference();
+    // 프로필 사진 변경
+    private static final int REQUEST_CODE = 0;
+    private Uri uri;
     // 그룹 정보
     private String groupname, uid, name, time;
     // 게시글, 투표글 관련
@@ -151,6 +157,17 @@ public class NoticeActivity extends AppCompatActivity {
                 finish();
             }
         });
+        // 마이프로필 버튼
+        btn_profile = (Button)findViewById(R.id.btn_profile);
+        btn_profile.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent();
+                intent.setType("image/*");
+                intent.setAction(Intent.ACTION_GET_CONTENT);
+                startActivityForResult(intent, REQUEST_CODE);
+            }
+        });
         // 로그아웃 버튼
         btn_logout = (Button)findViewById(R.id.btn_logout);
         btn_logout.setOnClickListener(new View.OnClickListener() {
@@ -223,6 +240,38 @@ public class NoticeActivity extends AppCompatActivity {
                 });
             }
         });
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if(requestCode == REQUEST_CODE) {
+            if(resultCode == RESULT_OK) {
+                try{
+                    uri = data.getData();
+                    String filename;
+                    if(uri!=null) {
+                        filename = uri.toString() + ".jpg";
+                        StorageReference riverRef = storageReference.child("post_img/"+filename);
+                        UploadTask uploadTask = riverRef.putFile(uri);
+                        uploadTask.addOnFailureListener(new OnFailureListener() {
+                            @Override
+                            public void onFailure(@NonNull Exception e) {
+                            }
+                        }).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                            @Override
+                            public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                            }
+                        });
+                        tmpReference.child("User").child(uid).child("Image_url").setValue(filename);
+                        Toast.makeText(getApplicationContext(),"프로필 사진이 변경되었습니다.",Toast.LENGTH_SHORT).show();
+                    }
+                } catch(Exception e){
+                }
+            }
+            else if(resultCode == RESULT_CANCELED){
+            }
+        }
     }
 
     public void showNotice() {
