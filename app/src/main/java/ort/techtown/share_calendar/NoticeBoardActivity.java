@@ -308,10 +308,12 @@ public class NoticeBoardActivity extends AppCompatActivity implements View.OnCli
             @Override
             public void onItemClick(View v, int position) {
                 String time = arrayList.get(position).getTime();
+                String host_uid = arrayList.get(position).getUid();
                 Intent intent = new Intent(NoticeBoardActivity.this, NoticeActivity.class);
                 intent.putExtra("groupname",groupname);
                 intent.putExtra("name",name);
                 intent.putExtra("uid",uid);
+                intent.putExtra("host_uid",host_uid);
                 intent.putExtra("time",time);
                 startActivity(intent);
             }

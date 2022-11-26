@@ -59,7 +59,7 @@ public class NoticeActivity extends AppCompatActivity {
     private static final int REQUEST_CODE = 0;
     private Uri uri;
     // 그룹 정보
-    private String groupname, uid, name, time;
+    private String groupname, uid, host_uid, name, time;
     // 게시글, 투표글 관련
     private Boolean isVote;
     private Post post;
@@ -80,6 +80,7 @@ public class NoticeActivity extends AppCompatActivity {
 
         groupname = getIntent().getStringExtra("groupname");
         uid = getIntent().getStringExtra("uid");
+        host_uid = getIntent().getStringExtra("host_uid");
         name = getIntent().getStringExtra("name");
         time = getIntent().getStringExtra("time");
 
@@ -281,7 +282,7 @@ public class NoticeActivity extends AppCompatActivity {
         vote_recyclerview.setLayoutManager(layoutManager);
         voteArrayList = new ArrayList<>();
         voteList = new ArrayList<>();
-        databaseReference.child("User").child(uid).child("Image_url").addListenerForSingleValueEvent(new ValueEventListener() {
+        databaseReference.child("User").child(host_uid).child("Image_url").addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 if(snapshot.getValue() == null) {
