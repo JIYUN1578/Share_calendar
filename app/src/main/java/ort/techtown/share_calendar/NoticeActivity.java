@@ -267,7 +267,6 @@ public class NoticeActivity extends AppCompatActivity {
                 String new_time = sdf.format(date);
                 Comment cmt = new Comment(name, uid, new_time, comment);
                 ArrayList<Comment> commentList = new ArrayList<>();
-                commentList.add(cmt);
                 edt_comment.setText(null);
                 databaseReference.child("Group").child(groupname).child("Post").child(time).child("commentList").addListenerForSingleValueEvent(new ValueEventListener() {
                     @Override
@@ -276,7 +275,9 @@ public class NoticeActivity extends AppCompatActivity {
                             Comment tmp_comment = dataSnapshot.getValue(Comment.class);
                             commentList.add(tmp_comment);
                         }
+                        commentList.add(cmt);
                         commentReference.child("Group").child(groupname).child("Post").child(time).child("commentList").setValue(commentList);
+                        Toast.makeText(getApplicationContext(),"댓글을 작성하였습니다.",Toast.LENGTH_SHORT).show();
                         showComment();
                     }
                     @Override
