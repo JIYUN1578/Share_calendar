@@ -355,21 +355,18 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.O
                 int lastdayOfpremonth = premonthDate.lengthOfMonth();
                 localDates.add(LocalDate.of(premonthDate.getYear(), premonthDate.getMonth(),
                        lastdayOfpremonth - dayOfweek + i ));
-                Log.d("달력 남은 날짜", premonthDate.toString() );
             }
             else if(i> lastday + dayOfweek){
                 LocalDate nextmonthDate = CalendarUtil.selectedDate.plusMonths(1);
                 localDates.add(LocalDate.of(nextmonthDate.getYear(),
                         nextmonthDate.getMonth(),
                         i - lastday-dayOfweek));
-                Log.d("달력 남은 날짜",nextmonthDate.toString() );
             }else{
                 localDates.add(LocalDate.of(CalendarUtil.selectedDate.getYear(),
                         CalendarUtil.selectedDate.getMonth(),
                         i - dayOfweek));
             }
         }
-        Log.d("local1",String.valueOf(localDates.size()));
         return localDates;
     }
 

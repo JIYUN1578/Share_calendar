@@ -59,7 +59,6 @@ public class TodoListAdapter extends RecyclerView.Adapter<TodoListAdapter.TodoLi
     }
     @Override
     public void onBindViewHolder(@NonNull TodoListViewHolder holder, int position) {
-        Log.d("datalist","222 "+String.valueOf(position));
         Info cur = datalist.get(position);
         holder.tv_title.setText(cur.getTitle().toString());
         holder.tv_startTime.setText(cur.getStart().toString().substring(11));
@@ -110,6 +109,11 @@ public class TodoListAdapter extends RecyclerView.Adapter<TodoListAdapter.TodoLi
                 gotoAddActivity.putExtra("uid",CalendarUtil.UID);
                 gotoAddActivity.putExtra("path2",cur.getPath());
                 gotoAddActivity.putExtra("path1",cur.getStart().substring(0,10));
+                gotoAddActivity.putExtra("starttime",cur.getStart().substring(11));
+                gotoAddActivity.putExtra("endtime",cur.getEnd().substring(11));
+                gotoAddActivity.putExtra("endday",cur.getEnd().substring(0,10));
+                gotoAddActivity.putExtra("title",cur.getTitle());
+                gotoAddActivity.putExtra("color",cur.getColor());
                 //해당 일정 삭제는 addActivity에서 실행 예정
                 ((MainActivity)view.getContext()).startActivity(gotoAddActivity);
                 ((MainActivity)view.getContext()).overridePendingTransition(R.anim.anim_in,R.anim.anim_out);

@@ -3,6 +3,7 @@ package ort.techtown.share_calendar;
 import static android.widget.Toast.LENGTH_SHORT;
 
 import androidx.annotation.ColorInt;
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -51,7 +52,8 @@ public class AddActivity extends AppCompatActivity {
     Button btn_addInfo;
     EditText edt_toDo;
     TextView tv_addStartDay, tv_addEndDay , tv_pageName;
-    TextView tv_addStartTime, tv_addEndTime;
+    TextView tv_addStartTime;
+    TextView tv_addEndTime;
     ImageView color1, color2, color3, color4, color5;
     RecyclerView recyclerView;
     boolean isModify;
@@ -65,7 +67,7 @@ public class AddActivity extends AppCompatActivity {
     //파이어베이스
     private FirebaseDatabase database = FirebaseDatabase.getInstance();
     private DatabaseReference databaseReference = database.getReference();
-    private String uid, name;
+    private String uid, name , curColor;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -91,12 +93,7 @@ public class AddActivity extends AppCompatActivity {
         tv_addStartTime = (TextView) findViewById(R.id.tv_addStartTime);
         tv_addEndTime = (TextView) findViewById(R.id.tv_addEndTime );
         tv_pageName = (TextView)findViewById(R.id.tv_pagename);
-        if(isModify){
-            tv_pageName.setText("일정 변경");
-            oriPath1 = intent.getStringExtra("path1");
-            oriPath2 = intent.getStringExtra("path2");
-            Log.d("path2 받기",oriPath2);
-        }
+
         tv_addStartTime.setText("08:00");
         tv_addEndTime.setText("09:00");
         tv_addStartDay.setText(CalendarUtil.selectedDate.toString());
@@ -112,8 +109,17 @@ public class AddActivity extends AppCompatActivity {
         color3 = (ImageView)findViewById(R.id.color3);
         color4 = (ImageView)findViewById(R.id.color4);
         color5 = (ImageView)findViewById(R.id.color5);
-
-        setcolor(0);
+        if(isModify){
+            tv_pageName.setText("일정 변경");
+            oriPath1 = intent.getStringExtra("path1");
+            oriPath2 = intent.getStringExtra("path2");
+            tv_addStartTime.setText(intent.getStringExtra("starttime"));
+            tv_addEndTime.setText(intent.getStringExtra("endtime"));
+            edt_toDo.setText(intent.getStringExtra("title"));
+            curColor = intent.getStringExtra("color");
+            setcolor(-1);
+        }
+        else setcolor(0);
         color1.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -260,7 +266,6 @@ public class AddActivity extends AppCompatActivity {
                                     Toast.makeText(view.getContext(),"삭제 성공", LENGTH_SHORT).show();
                                 }
                             });
-
                 }
                 String nnow =  DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss").format(LocalDateTime.now());
                 Info newInfo = new Info(false,
@@ -289,6 +294,13 @@ public class AddActivity extends AppCompatActivity {
         color5.setBackgroundResource(R.drawable.bg_ab_circle5);
         //해당 num의 컬러표시만 만들기
         switch (num){
+            case -1:
+                if (curColor.equals("#FFAFB0")) {setcolor(1);}
+                else if(curColor.equals("#FFE4AF")) {setcolor(2);}
+                else if(curColor.equals("#8EB695")) {setcolor(3);}
+                else if(curColor.equals("#C6E1FF")) {setcolor(4);}
+                else {setcolor(5);}
+                break;
             case 1:
                 color1.setBackgroundResource(R.drawable.bg_ab_circle_picked);
                 break;
@@ -309,17 +321,12 @@ public class AddActivity extends AppCompatActivity {
         }
     }
 
+    ArrayList<Grouplist> grouplist;
     private void setGroup( ) {
         // 해당 일정 가져오기
-        ArrayList<Grouplist> grouplist = new ArrayList<>();
+        grouplist = new ArrayList<>();
         FirebaseDatabase database = FirebaseDatabase.getInstance();
         DatabaseReference reference;
-
-        adapter = new GrouplistAdapter(grouplist);
-        RecyclerView.LayoutManager manager = new LinearLayoutManager(getApplicationContext());
-        // 어뎁터 적용
-        recyclerView.setLayoutManager(manager);
-        recyclerView.setAdapter(adapter);
         try{
             reference = database.getReference("User").child(uid).child("Group");
             reference.addValueEventListener(new ValueEventListener() {
@@ -329,7 +336,6 @@ public class AddActivity extends AppCompatActivity {
                         Grouplist temp = new Grouplist("temp",false);
                         temp.setGrname((String)snapshot.getValue());
                         grouplist.add(temp);
-                        Log.e("111",grouplist.toString());
                         GrouplistAdapter adapter = new GrouplistAdapter(grouplist);
                         RecyclerView.LayoutManager manager = new LinearLayoutManager(getApplicationContext());
                         // 어뎁터 적용
@@ -344,8 +350,6 @@ public class AddActivity extends AppCompatActivity {
             });
         } catch (Exception e) {
             e.printStackTrace();
-            Toast.makeText(getApplicationContext(), "지금 안돼유",Toast.LENGTH_SHORT).show();
-            Log.e("222",grouplist.toString());
         }
         // 어뎁터 데이터 적용
     }

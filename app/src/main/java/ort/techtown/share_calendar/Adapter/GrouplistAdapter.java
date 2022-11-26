@@ -38,20 +38,27 @@ public class GrouplistAdapter extends RecyclerView.Adapter<ort.techtown.share_ca
     @Override
     public void onBindViewHolder(@NonNull GrouplistAdapter.GrouplistViewHolder holder, int position) {
         String grn = datalist.get(position).getGrname();
+        if(datalist.get(position).isSeen()) {
+            Log.d("exception for privacy12",datalist.get(position).getGrname()+" "
+                    +String.valueOf(datalist.get(position).isSeen()));
+            holder.ch_isSeen.setChecked(true);
+
+        }
+        else{
+            Log.d("exception for privacy1",datalist.get(position).getGrname()+" "
+                    +String.valueOf(datalist.get(position).isSeen()));
+            holder.ch_isSeen.setChecked(false);
+        }
         holder.tv_grname.setText(grn);
         holder.itemView.findViewById(R.id.ch_isSeen).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Log.e("지금이니?",String.valueOf(holder.ch_isSeen.isChecked()));
                 datalist.get(position).setSeen(holder.ch_isSeen.isChecked());
             }
         });
     }
 
     public ArrayList<Grouplist> getDatalist(){
-        for(Grouplist gl : datalist){
-            Log.e("gl",String.valueOf(gl.isSeen()));
-        }
         return  datalist;
     }
 
