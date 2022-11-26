@@ -265,6 +265,7 @@ public class NoticeActivity extends AppCompatActivity {
                         });
                         tmpReference.child("User").child(uid).child("Image_url").setValue(filename);
                         Toast.makeText(getApplicationContext(),"프로필 사진이 변경되었습니다.",Toast.LENGTH_SHORT).show();
+                        showNotice();
                     }
                 } catch(Exception e){
                 }
