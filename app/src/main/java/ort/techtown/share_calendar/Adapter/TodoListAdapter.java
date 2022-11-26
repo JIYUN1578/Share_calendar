@@ -95,8 +95,9 @@ public class TodoListAdapter extends RecyclerView.Adapter<TodoListAdapter.TodoLi
                 Intent gotoAddActivity = new Intent(view.getContext(), AddActivity.class);
                 gotoAddActivity.putExtra("from","modify");
                 gotoAddActivity.putExtra("uid",CalendarUtil.UID);
-                gotoAddActivity.putExtra("path1",cur.getPath());
-                gotoAddActivity.putExtra("path2",cur.getStart());
+                gotoAddActivity.putExtra("path2",cur.getPath());
+                gotoAddActivity.putExtra("path1",cur.getStart().substring(0,10));
+                Log.d("path1",cur.getPath());
                 //해당 일정 삭제는 addActivity에서 실행 예정
                 ((MainActivity)view.getContext()).startActivity(gotoAddActivity);
                 ((MainActivity)view.getContext()).overridePendingTransition(R.anim.anim_in,R.anim.anim_out);

@@ -147,8 +147,7 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.O
             public void onClick(View v) {
                 Intent intent = new Intent(MainActivity.this, MakeActivity.class);
                 intent.putExtra("name",name);
-                intent.putExtra("uid",uid);
-                intent.putExtra("from","main");
+                intent.putExtra("uid",uid);;
                 startActivity(intent);
                 finish();
             }
@@ -161,7 +160,7 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.O
             public void onClick(View v) {
                 Intent intent = new Intent(MainActivity.this, SearchActivity.class);
                 intent.putExtra("name",name);
-                intent.putExtra("uid",uid);
+                intent.putExtra("uid",uid);;
                 startActivity(intent);
                 finish();
             }
@@ -174,7 +173,7 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.O
             public void onClick(View v) {
                 Intent intent = new Intent(MainActivity.this, GroupActivity.class);
                 intent.putExtra("name",name);
-                intent.putExtra("uid",uid);
+                intent.putExtra("uid",uid);;
                 startActivity(intent);
                 finish();
             }
@@ -240,7 +239,7 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.O
                 // Bundle bundle = ActivityOptions.makeSceneTransitionAnimation(MainActivity.this).toBundle();
                 intent.putExtra("name",name);
                 intent.putExtra("uid",uid);
-                intent.putExtra("from","Main");
+                intent.putExtra("from","main");
                 startActivity(intent);
                 finish();
                 overridePendingTransition(R.anim.anim_in,R.anim.anim_out);
