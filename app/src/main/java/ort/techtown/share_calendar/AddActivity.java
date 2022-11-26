@@ -1,5 +1,7 @@
 package ort.techtown.share_calendar;
 
+import static android.widget.Toast.LENGTH_SHORT;
+
 import androidx.annotation.ColorInt;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -24,6 +26,7 @@ import android.widget.TextView;
 import android.widget.TimePicker;
 import android.widget.Toast;
 
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -47,16 +50,17 @@ public class AddActivity extends AppCompatActivity {
 
     Button btn_addInfo;
     EditText edt_toDo;
-    TextView tv_addStartDay, tv_addEndDay;
+    TextView tv_addStartDay, tv_addEndDay , tv_pageName;
     TextView tv_addStartTime, tv_addEndTime;
     ImageView color1, color2, color3, color4, color5;
     RecyclerView recyclerView;
+    boolean isModify;
     int pStartHour, pStartMin, pEndHour, pEndMin;
     int pSYear, pSMonth, pSDay, pEYear, pEMonth, pEDay;
     GrouplistAdapter adapter;
     DatePickerDialog datePickerDialog;
     TimePickerDialog timePickerDialog;
-    String pColor;
+    String pColor, oriPath1, oriPath2;
 
     //파이어베이스
     private FirebaseDatabase database = FirebaseDatabase.getInstance();
@@ -67,10 +71,13 @@ public class AddActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add);
+        isModify = false;
         pColor = "#FFAFB0";
         Intent intent = getIntent();
         uid = intent.getStringExtra("uid");
-        name = intent.getStringExtra("name");
+        if(intent.getStringExtra("from") == "modify") isModify = true;
+        else{
+            name = intent.getStringExtra("name");}
         recyclerView = findViewById(R.id.group_list);
         btn_addInfo = (Button) findViewById(R.id.btn_addInfo);
         edt_toDo = (EditText) findViewById(R.id.edt_addTodo);
@@ -79,7 +86,12 @@ public class AddActivity extends AppCompatActivity {
         tv_addStartDay.setText(CalendarUtil.today.toString());
         tv_addStartTime = (TextView) findViewById(R.id.tv_addStartTime);
         tv_addEndTime = (TextView) findViewById(R.id.tv_addEndTime );
-
+        tv_pageName = (TextView)findViewById(R.id.tv_pagename);
+        if(isModify){
+            tv_pageName.setText("일정 변경");
+            oriPath1 = intent.getStringExtra("path1");
+            oriPath2 = intent.getStringExtra("patht2");
+        }
         tv_addStartTime.setText("08:00");
         tv_addEndTime.setText("09:00");
         tv_addStartDay.setText(CalendarUtil.selectedDate.toString());
@@ -229,6 +241,20 @@ public class AddActivity extends AppCompatActivity {
         btn_addInfo.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                //이게 일정 변경이라면
+                if(isModify){
+                    //원래 일정 삭제
+                    FirebaseDatabase database = FirebaseDatabase.getInstance();
+                    DatabaseReference reference = database.getReference();
+                    reference.child("User").child(CalendarUtil.UID).child("Calender").child(oriPath1.substring(0,10))
+                            .child(oriPath2).removeValue().addOnSuccessListener(new OnSuccessListener<Void>() {
+                                @Override
+                                public void onSuccess(Void unused) {
+                                    Toast.makeText(view.getContext(),"삭제 성공", LENGTH_SHORT).show();
+                                }
+                            });
+
+                }
                 String nnow =  DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss").format(LocalDateTime.now());
                 Info newInfo = new Info(false,
                         tv_addStartDay.getText()+" "+tv_addStartTime.getText(),
@@ -331,7 +357,7 @@ public class AddActivity extends AppCompatActivity {
         //super.onBackPressed();
         Intent intent = new Intent(AddActivity.this, MainActivity.class);
         intent.putExtra("uid",uid);
-        intent.putExtra("name",name);
+        if(!isModify) intent.putExtra("name",name);
         intent.putExtra("fromOther", true);
         startActivity(intent);
         finish();

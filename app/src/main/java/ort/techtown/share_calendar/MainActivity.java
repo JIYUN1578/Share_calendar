@@ -59,6 +59,7 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.O
     private ImageView menu_open;
     private TextView tv_title;
     private String uid, name;
+    boolean isModify;
     // 프로필 사진 변경
     private static final int REQUEST_CODE = 0;
     private Uri uri;
@@ -89,7 +90,6 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.O
         Intent intent = getIntent();
         name = intent.getStringExtra("name");
         uid = intent.getStringExtra("uid");
-
         CalendarUtil.UID = uid;
         // 이름 저장
         databaseReference.addListenerForSingleValueEvent(new ValueEventListener() {
@@ -148,6 +148,7 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.O
                 Intent intent = new Intent(MainActivity.this, MakeActivity.class);
                 intent.putExtra("name",name);
                 intent.putExtra("uid",uid);
+                intent.putExtra("from","main");
                 startActivity(intent);
                 finish();
             }
@@ -239,6 +240,7 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.O
                 // Bundle bundle = ActivityOptions.makeSceneTransitionAnimation(MainActivity.this).toBundle();
                 intent.putExtra("name",name);
                 intent.putExtra("uid",uid);
+                intent.putExtra("from","Main");
                 startActivity(intent);
                 finish();
                 overridePendingTransition(R.anim.anim_in,R.anim.anim_out);

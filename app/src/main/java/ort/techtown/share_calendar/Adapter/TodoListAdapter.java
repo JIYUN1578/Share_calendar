@@ -2,6 +2,7 @@ package ort.techtown.share_calendar.Adapter;
 
 import static android.widget.Toast.LENGTH_SHORT;
 
+import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.GradientDrawable;
 import android.util.Log;
@@ -16,9 +17,14 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.database.DatabaseException;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
+import java.text.DateFormat;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 
 import ort.techtown.share_calendar.AddActivity;
@@ -60,25 +66,19 @@ public class TodoListAdapter extends RecyclerView.Adapter<TodoListAdapter.TodoLi
         holder.tv_endTime.setText(cur.getEnd().toString().substring(11));
         GradientDrawable background;
         //holder.tv_startTime.setVisibility(View.GONE);
-
+        holder.modify.setVisibility(View.INVISIBLE);
+        holder.delete.setVisibility(View.INVISIBLE);
         background = (GradientDrawable) holder.colorbar.getBackground();
         background.setColor(Color.parseColor(cur.getColor()));
-
-        //롱클릭이벤트 처리하기
-        holder.itemView.setOnLongClickListener(new View.OnLongClickListener() {
+        holder.delete.setOnClickListener(new View.OnClickListener() {
             @Override
-            public boolean onLongClick(View view) {
+            public void onClick(View view) {
                 final int position = holder.getAdapterPosition();
                 final int orisize = datalist.size();
                 FirebaseDatabase database = FirebaseDatabase.getInstance();
                 DatabaseReference reference = database.getReference();
                 reference.child("User").child(CalendarUtil.UID).child("Calender").child(cur.getStart().substring(0,10))
-                        .child(cur.getPath()).removeValue().addOnSuccessListener(new OnSuccessListener<Void>() {
-                            @Override
-                            public void onSuccess(Void unused) {
-                                Toast.makeText(view.getContext(),"삭제 성공", LENGTH_SHORT).show();
-                            }
-                        });
+                        .child(cur.getPath()).removeValue();
 
                 notifyItemRemoved(position);
                 for(int i = 0 ; i < orisize ; i ++)
@@ -86,11 +86,29 @@ public class TodoListAdapter extends RecyclerView.Adapter<TodoListAdapter.TodoLi
                 notifyDataSetChanged();
                 Log.d("datalist","ori " + String.valueOf(orisize));
                 Log.d("datalist",String.valueOf(datalist.size()));
-//                for(int i = 0 ; i < orisize - datalist.size() && i < datalist.size() ; i++  ){
-//                    datalist.remove(i);
-//                    Log.d("datalist",String.valueOf(datalist.get(i).getPath()));
-//                }
+            }
+        });
 
+        holder.modify.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent gotoAddActivity = new Intent(view.getContext(), AddActivity.class);
+                gotoAddActivity.putExtra("from","modify");
+                gotoAddActivity.putExtra("uid",CalendarUtil.UID);
+                gotoAddActivity.putExtra("path1",cur.getPath());
+                gotoAddActivity.putExtra("path2",cur.getStart());
+                //해당 일정 삭제는 addActivity에서 실행 예정
+                ((MainActivity)view.getContext()).startActivity(gotoAddActivity);
+                ((MainActivity)view.getContext()).overridePendingTransition(R.anim.anim_in,R.anim.anim_out);
+                ((MainActivity)view.getContext()).finish();
+            }
+        });
+        //롱클릭이벤트 처리하기
+        holder.itemView.setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View view) {
+                holder.modify.setVisibility(View.VISIBLE);
+                holder.delete.setVisibility(View.VISIBLE);
                 return false;
             }
         });
@@ -105,7 +123,7 @@ public class TodoListAdapter extends RecyclerView.Adapter<TodoListAdapter.TodoLi
 
     public class TodoListViewHolder extends RecyclerView.ViewHolder {
 
-        TextView tv_startTime, tv_title, tv_endTime, tv_startTime2;
+        TextView tv_startTime, tv_title, tv_endTime, tv_startTime2 , modify, delete;
         View colorbar;
         public TodoListViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -115,7 +133,8 @@ public class TodoListAdapter extends RecyclerView.Adapter<TodoListAdapter.TodoLi
             tv_startTime = itemView.findViewById(R.id.tv_startTime);
             tv_startTime2 = itemView.findViewById(R.id.tv_startTime2);
             tv_title = itemView.findViewById(R.id.tv_title);
-
+            modify = itemView.findViewById(R.id.btn_modify);
+            delete = itemView.findViewById(R.id.btn_delete);
         }
     }
 }

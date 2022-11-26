@@ -17,6 +17,7 @@
         tools:layout_editor_absoluteY="54dp">
 
         <TextView
+            android:id="@+id/tv_pagename"
             android:layout_marginTop="30dp"
             android:layout_width="match_parent"
             android:layout_height="30dp"
