@@ -42,6 +42,11 @@ public class TodoListAdapter extends RecyclerView.Adapter<TodoListAdapter.TodoLi
     public TodoListAdapter(ArrayList<Info> datalist ) {
         this.datalist = datalist;
     }
+
+    public TodoListAdapter(ArrayList<Info> datalist , boolean isMyCalendar) {
+        this.datalist = datalist;
+        this.isMyCalendar = isMyCalendar;
+    }
     @NonNull
     @Override
     public TodoListViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
@@ -120,15 +125,18 @@ public class TodoListAdapter extends RecyclerView.Adapter<TodoListAdapter.TodoLi
                 ((MainActivity)view.getContext()).finish();
             }
         });
-        //롱클릭이벤트 처리하기
-        holder.itemView.setOnLongClickListener(new View.OnLongClickListener() {
-            @Override
-            public boolean onLongClick(View view) {
-                holder.modify.setVisibility(View.VISIBLE);
-                holder.delete.setVisibility(View.VISIBLE);
-                return false;
-            }
-        });
+        if(isMyCalendar){
+            //롱클릭이벤트 처리하기
+            holder.itemView.setOnLongClickListener(new View.OnLongClickListener() {
+                @Override
+                public boolean onLongClick(View view) {
+                    holder.modify.setVisibility(View.VISIBLE);
+                    holder.delete.setVisibility(View.VISIBLE);
+                    return false;
+                }
+            });
+        }
+
 
     }
 

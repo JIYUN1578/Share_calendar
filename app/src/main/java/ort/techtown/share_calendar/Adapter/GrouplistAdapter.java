@@ -59,7 +59,13 @@ public class GrouplistAdapter extends RecyclerView.Adapter<ort.techtown.share_ca
     }
 
     public ArrayList<Grouplist> getDatalist(){
-        return  datalist;
+        if(datalist != null) return datalist;
+        else {
+            ArrayList<Grouplist> temp = new ArrayList<>();
+            Grouplist grouplist = new Grouplist("기본", false)    ;
+            temp.add(grouplist);
+            return temp;
+        }
     }
 
     @Override

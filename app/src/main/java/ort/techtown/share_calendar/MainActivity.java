@@ -294,7 +294,7 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.O
         FirebaseDatabase database = FirebaseDatabase.getInstance();
         DatabaseReference reference;
 
-        TodoListAdapter adapter = new TodoListAdapter(infolist);
+        TodoListAdapter adapter = new TodoListAdapter(infolist , true);
         RecyclerView.LayoutManager manager = new LinearLayoutManager(getApplicationContext());
         // 어뎁터 적용
         todoListRecyclerView.setLayoutManager(manager);
@@ -307,7 +307,7 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.O
                 public void onDataChange(DataSnapshot dataSnapshot) {
                     for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
                         infolist.add(snapshot.getValue(Info.class));
-                        TodoListAdapter adapter = new TodoListAdapter(infolist);
+                        TodoListAdapter adapter = new TodoListAdapter(infolist, true);
                         RecyclerView.LayoutManager manager = new LinearLayoutManager(getApplicationContext());
                         // 어뎁터 적용
                         todoListRecyclerView.setLayoutManager(manager);
@@ -404,7 +404,6 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.O
                         i - dayOfweek);
             }
             final int position = i-1;
-            Log.d("colors4",String.valueOf(position));
             reference = database.getReference("User").child(uid).child("Calender").child(localDate1.toString());
             Query myTopPostsQuery = reference.orderByChild("start");
 

@@ -326,7 +326,7 @@ public class PostActivity extends AppCompatActivity {
         ArrayList<Info> infolist = new ArrayList<>();
         FirebaseDatabase database = FirebaseDatabase.getInstance();
 
-        TodoListAdapter adapter = new TodoListAdapter(infolist);
+        TodoListAdapter adapter = new TodoListAdapter(infolist, false);
         RecyclerView.LayoutManager manager = new LinearLayoutManager(getApplicationContext());
         // 어뎁터 적용
         todoListRecyclerView.setLayoutManager(manager);
@@ -355,7 +355,7 @@ public class PostActivity extends AppCompatActivity {
                             public void onDataChange(DataSnapshot dataSnapshot) {
                                 for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
                                     infolist.add(snapshot.getValue(Info.class));
-                                    TodoListAdapter adapter = new TodoListAdapter(infolist);
+                                    TodoListAdapter adapter = new TodoListAdapter(infolist, false);
                                     RecyclerView.LayoutManager manager = new LinearLayoutManager(getApplicationContext());
                                     // 어뎁터 적용
                                     todoListRecyclerView.setLayoutManager(manager);

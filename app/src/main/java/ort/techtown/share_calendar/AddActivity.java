@@ -185,8 +185,8 @@ public class AddActivity extends AppCompatActivity {
                 timePickerDialog.show();
             }
         });
-
-        setGroup();
+        if(isModify) setGroupForModify();
+        else setGroup();
         tv_addEndTime.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -267,6 +267,7 @@ public class AddActivity extends AppCompatActivity {
                                 }
                             });
                 }
+                //새로운 일정 추가
                 String nnow =  DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss").format(LocalDateTime.now());
                 Info newInfo = new Info(false,
                         tv_addStartDay.getText()+" "+tv_addStartTime.getText(),
@@ -321,10 +322,9 @@ public class AddActivity extends AppCompatActivity {
         }
     }
 
-    ArrayList<Grouplist> grouplist;
     private void setGroup( ) {
         // 해당 일정 가져오기
-        grouplist = new ArrayList<>();
+        ArrayList<Grouplist> grouplist = new ArrayList<>();
         FirebaseDatabase database = FirebaseDatabase.getInstance();
         DatabaseReference reference;
         try{
@@ -335,8 +335,9 @@ public class AddActivity extends AppCompatActivity {
                     for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
                         Grouplist temp = new Grouplist("temp",false);
                         temp.setGrname((String)snapshot.getValue());
+                        temp.setSeen(false);
                         grouplist.add(temp);
-                        GrouplistAdapter adapter = new GrouplistAdapter(grouplist);
+                        adapter = new GrouplistAdapter(grouplist);
                         RecyclerView.LayoutManager manager = new LinearLayoutManager(getApplicationContext());
                         // 어뎁터 적용
                         recyclerView.setLayoutManager(manager);
@@ -354,6 +355,70 @@ public class AddActivity extends AppCompatActivity {
         // 어뎁터 데이터 적용
     }
 
+    private void setGroupForModify() {
+        // 해당 일정 가져오기
+        ArrayList<Grouplist> grouplist;
+        grouplist = new ArrayList<>();
+        FirebaseDatabase database = FirebaseDatabase.getInstance();
+        DatabaseReference reference;
+        try{
+            reference = database.getReference("User").child(uid).child("Group");
+            reference.addValueEventListener(new ValueEventListener() {
+                @Override
+                public void onDataChange(DataSnapshot dataSnapshot) {
+                    for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
+                        Grouplist temp = new Grouplist("temp",false);
+                        String gName = (String)snapshot.getValue();
+                        temp.setGrname(gName);
+                        if(isModify){try {
+                            databaseReference.child("User").child(uid).child("Calender").child(oriPath1.substring(0,10))
+                                    .child(oriPath2).child("isSeen").child(gName).addListenerForSingleValueEvent(new ValueEventListener() {
+                                        @Override
+                                        public void onDataChange(@NonNull DataSnapshot snapshot) {
+                                            if(snapshot.getValue(boolean.class)) {
+                                                Log.d("exception for privacy",gName+" "+"true");
+                                                temp.setSeen(true);
+
+                                                grouplist.add(temp);
+                                                GrouplistAdapter adapter = new GrouplistAdapter(grouplist);
+                                                RecyclerView.LayoutManager manager = new LinearLayoutManager(getApplicationContext());
+                                                // 어뎁터 적용
+                                                recyclerView.setLayoutManager(manager);
+                                                recyclerView.setAdapter(adapter);
+                                            }
+                                            else{
+                                                temp.setSeen(false);
+
+                                                grouplist.add(temp);
+                                                GrouplistAdapter adapter = new GrouplistAdapter(grouplist);
+                                                RecyclerView.LayoutManager manager = new LinearLayoutManager(getApplicationContext());
+                                                // 어뎁터 적용
+                                                recyclerView.setLayoutManager(manager);
+                                                recyclerView.setAdapter(adapter);
+                                            }
+                                        }
+
+                                        @Override
+                                        public void onCancelled(@NonNull DatabaseError error) {
+
+                                        }
+                                    });
+                        }catch (Exception e){
+                            Log.d("exception for privacy","유감");
+                        }}
+                        Log.d("exception for privacy3",gName);
+                    }
+                }
+                @Override
+                public void onCancelled(DatabaseError databaseError) {
+
+                }
+            });
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        // 어뎁터 데이터 적용
+    }
     public void makeprivacy(String nnow){ //체크박스 넣자
         ArrayList<Grouplist> grouplist ;
         grouplist = adapter.getDatalist();
