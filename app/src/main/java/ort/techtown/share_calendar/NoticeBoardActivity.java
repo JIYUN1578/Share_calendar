@@ -199,29 +199,7 @@ public class NoticeBoardActivity extends AppCompatActivity implements View.OnCli
         });
 
         // 게시물 받아오기
-        recyclerView = findViewById(R.id.post_recyclerView);
-        recyclerView.setHasFixedSize(true);
-        layoutManager = new LinearLayoutManager(this);
-        recyclerView.setLayoutManager(layoutManager);
-        arrayList = new ArrayList<>();
-
-        databaseReference = database.getReference("Group/"+groupname+"/Post/");
-        databaseReference.addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot snapshot) {
-                arrayList.clear();
-                for(DataSnapshot dataSnapshot:snapshot.getChildren()) {
-                    Post post = dataSnapshot.getValue(Post.class);
-                    arrayList.add(post);
-                }
-                adapter.notifyDataSetChanged();
-                recyclerView.setAdapter(adapter);
-            }
-            @Override
-            public void onCancelled(@NonNull DatabaseError error) {
-            }
-        });
-        adapter = new PostAdapter(arrayList, this);
+        showPost();
 
         // 게시판 작성
         fab_open = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.fab_open);
@@ -248,6 +226,33 @@ public class NoticeBoardActivity extends AppCompatActivity implements View.OnCli
                 startActivity(intent);
             }
         });
+    }
+
+    // 게시물 받아오기
+    public void showPost() {
+        recyclerView = findViewById(R.id.post_recyclerView);
+        recyclerView.setHasFixedSize(true);
+        layoutManager = new LinearLayoutManager(this);
+        recyclerView.setLayoutManager(layoutManager);
+        arrayList = new ArrayList<>();
+
+        databaseReference = database.getReference("Group/"+groupname+"/Post/");
+        databaseReference.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                arrayList.clear();
+                for(DataSnapshot dataSnapshot:snapshot.getChildren()) {
+                    Post post = dataSnapshot.getValue(Post.class);
+                    arrayList.add(post);
+                }
+                adapter.notifyDataSetChanged();
+                recyclerView.setAdapter(adapter);
+            }
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+            }
+        });
+        adapter = new PostAdapter(arrayList, this);
     }
 
     @Override

@@ -20,7 +20,9 @@ public class BackKeyHandler {
             return;
         }
         if (System.currentTimeMillis() <= backKeyPressedTime + 2000) {
-            activity.finish();
+            activity.finishAffinity();
+            System.runFinalization();
+            System.exit(0);
             toast.cancel();
         }
     }
