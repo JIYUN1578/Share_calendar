@@ -273,7 +273,7 @@ public class AddActivity extends AppCompatActivity {
                         tv_addStartDay.getText()+" "+tv_addStartTime.getText(),
                         tv_addEndDay.getText()+" "+tv_addEndTime.getText().toString(),
                         edt_toDo.getText().toString(),edt_toDo.getText().toString()
-                         ,pColor , nnow);
+                         ,pColor , nnow, name);
                 //upload
                 databaseReference.child("User").child(uid).child("Calender").child(tv_addStartDay.getText().toString())
                                 .child(nnow).setValue(newInfo);
@@ -380,7 +380,7 @@ public class AddActivity extends AppCompatActivity {
                                                 temp.setSeen(true);
 
                                                 grouplist.add(temp);
-                                                GrouplistAdapter adapter = new GrouplistAdapter(grouplist);
+                                                adapter = new GrouplistAdapter(grouplist);
                                                 RecyclerView.LayoutManager manager = new LinearLayoutManager(getApplicationContext());
                                                 // 어뎁터 적용
                                                 recyclerView.setLayoutManager(manager);
@@ -390,7 +390,7 @@ public class AddActivity extends AppCompatActivity {
                                                 temp.setSeen(false);
 
                                                 grouplist.add(temp);
-                                                GrouplistAdapter adapter = new GrouplistAdapter(grouplist);
+                                                adapter = new GrouplistAdapter(grouplist);
                                                 RecyclerView.LayoutManager manager = new LinearLayoutManager(getApplicationContext());
                                                 // 어뎁터 적용
                                                 recyclerView.setLayoutManager(manager);

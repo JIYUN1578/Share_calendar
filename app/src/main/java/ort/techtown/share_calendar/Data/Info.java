@@ -8,7 +8,26 @@ public class Info {
     String info;
     String color;
     String path;
+    String name;
 
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public Info(boolean isDone, String start, String end, String title, String info, String color, String path, String name) {
+        this.isDone = isDone;
+        this.path = path;
+        this.start = start;
+        this.end = end;
+        this.title = title;
+        this.info = info;
+        this.name = name;
+        this.color = color;
+    }
     public Info(boolean isDone, String start, String end, String title, String info, String color, String path) {
         this.isDone = isDone;
         this.path = path;

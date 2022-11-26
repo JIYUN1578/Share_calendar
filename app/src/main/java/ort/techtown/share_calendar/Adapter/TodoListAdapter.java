@@ -37,6 +37,7 @@ public class TodoListAdapter extends RecyclerView.Adapter<TodoListAdapter.TodoLi
 
     ArrayList<Info> datalist;
     boolean isMyCalendar;
+    String groupName;
     private TodoListAdapter.OnItemClickListener mListener = null;
 
     public TodoListAdapter(ArrayList<Info> datalist ) {
@@ -46,12 +47,19 @@ public class TodoListAdapter extends RecyclerView.Adapter<TodoListAdapter.TodoLi
     public TodoListAdapter(ArrayList<Info> datalist , boolean isMyCalendar) {
         this.datalist = datalist;
         this.isMyCalendar = isMyCalendar;
+        this.groupName = "";
     }
+
+    public TodoListAdapter(ArrayList<Info> datalist , boolean isMyCalendar, String groupName) {
+        this.datalist = datalist;
+        this.isMyCalendar = isMyCalendar;
+        this.groupName = groupName;
+    }
+
     @NonNull
     @Override
     public TodoListViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         LayoutInflater inflater = LayoutInflater.from(parent.getContext());
-        isMyCalendar = false;
         View view = inflater.inflate(R.layout.todolist_cell, parent,false);
 
         return new TodoListViewHolder(view);
@@ -70,6 +78,7 @@ public class TodoListAdapter extends RecyclerView.Adapter<TodoListAdapter.TodoLi
         holder.tv_startTime2.setText(cur.getStart().toString().substring(11) );
         holder.tv_endTime.setText(cur.getEnd().toString().substring(11));
         GradientDrawable background;
+
         //holder.tv_startTime.setVisibility(View.GONE);
         holder.modify.setVisibility(View.INVISIBLE);
         holder.delete.setVisibility(View.INVISIBLE);
@@ -135,6 +144,13 @@ public class TodoListAdapter extends RecyclerView.Adapter<TodoListAdapter.TodoLi
                     return false;
                 }
             });
+        }
+        else{
+            holder.tv_startTime.setText(cur.getName());
+            //비공개면 안보이게 하기
+            if(!groupName.equals("")){ // 그룹페이지면
+                
+            }
         }
 
 
