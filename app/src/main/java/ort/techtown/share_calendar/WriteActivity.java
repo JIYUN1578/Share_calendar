@@ -30,8 +30,10 @@ import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 
+import ort.techtown.share_calendar.Data.Comment;
 import ort.techtown.share_calendar.Data.Post;
 
 public class WriteActivity extends AppCompatActivity {
@@ -216,7 +218,7 @@ public class WriteActivity extends AppCompatActivity {
                 else {
                     filename = " ";
                 }
-                Post post = new Post(uid, name, time, filename, et_title.getText().toString(), et_summary.getText().toString(),false,null,null);
+                Post post = new Post(uid, name, time, filename, et_title.getText().toString(), et_summary.getText().toString(),false,null,null,null);
                 databaseReference.child("Group").child(groupname).child("Post").child(time).setValue(post);
                 Toast.makeText(getApplicationContext(),"작성이 완료되었습니다.",Toast.LENGTH_SHORT).show();
                 Intent intent = new Intent();

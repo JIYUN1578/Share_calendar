@@ -36,6 +36,7 @@ import java.util.ArrayList;
 import java.util.Date;
 
 import ort.techtown.share_calendar.Adapter.VoteAdapter;
+import ort.techtown.share_calendar.Data.Comment;
 import ort.techtown.share_calendar.Data.Post;
 import ort.techtown.share_calendar.Data.Vote;
 
@@ -226,7 +227,7 @@ public class VoteActivity extends AppCompatActivity {
                 Date date = new Date(now);
                 SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
                 String time = sdf.format(date);
-                Post post = new Post(uid, name, time, " ", et_title.getText().toString(), et_summary.getText().toString(),true,arrayList,null);
+                Post post = new Post(uid, name, time, " ", et_title.getText().toString(), et_summary.getText().toString(),true,arrayList,null,null);
                 databaseReference.child("Group").child(groupname).child("Post").child(time).setValue(post);
                 Toast.makeText(getApplicationContext(),"작성이 완료되었습니다.",Toast.LENGTH_SHORT).show();
                 Intent intent = new Intent();

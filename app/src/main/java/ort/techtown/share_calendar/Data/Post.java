@@ -7,6 +7,7 @@ public class Post {
     private Boolean isVote;
     private ArrayList<Vote> voteArrayList;
     private ArrayList<String> votePersonList;
+    private ArrayList<Comment> commentList;
 
     public Post() {}
 
@@ -46,7 +47,11 @@ public class Post {
 
     public void setVotePersonList(ArrayList<String> votePersonList) {this.votePersonList = votePersonList;}
 
-    public Post(String uid, String name, String time, String image_url, String title, String summary, Boolean isVote, ArrayList<Vote> voteArrayList, ArrayList<String> votePersonList) {
+    public ArrayList<Comment> getCommentList() {return commentList;}
+
+    public void setCommentList(ArrayList<Comment> commentList) {this.commentList = commentList;}
+
+    public Post(String uid, String name, String time, String image_url, String title, String summary, Boolean isVote, ArrayList<Vote> voteArrayList, ArrayList<String> votePersonList, ArrayList<Comment> commentList) {
         this.uid = uid;
         this.name = name;
         this.time = time;
@@ -56,5 +61,6 @@ public class Post {
         this.isVote = isVote;
         this.voteArrayList = voteArrayList;
         this.votePersonList = votePersonList;
+        this.commentList = commentList;
     }
 }

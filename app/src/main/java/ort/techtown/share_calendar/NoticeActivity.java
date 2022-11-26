@@ -16,6 +16,7 @@ import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -33,10 +34,15 @@ import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 
+import java.lang.reflect.Array;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 
+import ort.techtown.share_calendar.Adapter.CommentAdapter;
 import ort.techtown.share_calendar.Adapter.PostAdapter;
 import ort.techtown.share_calendar.Adapter.VoteAdapter;
+import ort.techtown.share_calendar.Data.Comment;
 import ort.techtown.share_calendar.Data.Post;
 import ort.techtown.share_calendar.Data.Vote;
 
@@ -53,6 +59,7 @@ public class NoticeActivity extends AppCompatActivity {
     private DatabaseReference databaseReference = database.getReference();
     private DatabaseReference mReference = database.getReference();
     private DatabaseReference tmpReference = database.getReference();
+    private DatabaseReference commentReference = database.getReference();
     private FirebaseStorage firebaseStorage = FirebaseStorage.getInstance();
     private StorageReference storageReference = firebaseStorage.getReference();
     // 프로필 사진 변경
@@ -72,6 +79,10 @@ public class NoticeActivity extends AppCompatActivity {
     private RecyclerView.LayoutManager layoutManager;
     private VoteAdapter adapter;
     private Button btn_vote;
+    // 댓글 관련
+    private Button btn_comment_save;
+    private EditText edt_comment;
+    private CommentAdapter commentadapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -196,6 +207,7 @@ public class NoticeActivity extends AppCompatActivity {
         btn_vote = (Button) findViewById(R.id.btn_vote);
         vote_recyclerview = (RecyclerView)findViewById(R.id.vote_recyclerview);
         showNotice();
+        showComment();
 
         // 투표 저장 눌렀을 때
         btn_vote.setOnClickListener(new View.OnClickListener() {
@@ -241,6 +253,38 @@ public class NoticeActivity extends AppCompatActivity {
                 });
             }
         });
+
+        // 댓글 달기
+        edt_comment = (EditText)findViewById(R.id.edt_comment);
+        btn_comment_save = (Button)findViewById(R.id.btn_comment_save);
+        btn_comment_save.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String comment = edt_comment.getText().toString();
+                Long now = System.currentTimeMillis();
+                Date date = new Date(now);
+                SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
+                String new_time = sdf.format(date);
+                Comment cmt = new Comment(name, uid, new_time, comment);
+                ArrayList<Comment> commentList = new ArrayList<>();
+                commentList.add(cmt);
+                edt_comment.setText(null);
+                databaseReference.child("Group").child(groupname).child("Post").child(time).child("commentList").addListenerForSingleValueEvent(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot snapshot) {
+                        for(DataSnapshot dataSnapshot:snapshot.getChildren()) {
+                            Comment tmp_comment = dataSnapshot.getValue(Comment.class);
+                            commentList.add(tmp_comment);
+                        }
+                        commentReference.child("Group").child(groupname).child("Post").child(time).child("commentList").setValue(commentList);
+                        showComment();
+                    }
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError error) {
+                    }
+                });
+            }
+        });
     }
 
     @Override
@@ -274,6 +318,30 @@ public class NoticeActivity extends AppCompatActivity {
             else if(resultCode == RESULT_CANCELED){
             }
         }
+    }
+
+    public void showComment() {
+        RecyclerView comment_recyclerview = findViewById(R.id.comment_recyclerview);
+        comment_recyclerview.setHasFixedSize(true);
+        layoutManager = new LinearLayoutManager(this);
+        comment_recyclerview.setLayoutManager(layoutManager);
+        ArrayList<Comment> commentList = new ArrayList<>();
+        commentReference.child("Group").child(groupname).child("Post").child(time).child("commentList").addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                commentList.clear();
+                for(DataSnapshot dataSnapshot:snapshot.getChildren()) {
+                    Comment tmp_comment = dataSnapshot.getValue(Comment.class);
+                    commentList.add(tmp_comment);
+                }
+                commentadapter.notifyDataSetChanged();
+                comment_recyclerview.setAdapter(commentadapter);
+            }
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+            }
+        });
+        commentadapter = new CommentAdapter(commentList, this);
     }
 
     public void showNotice() {
