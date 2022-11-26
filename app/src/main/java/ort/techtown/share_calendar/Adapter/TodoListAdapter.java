@@ -37,6 +37,7 @@ public class TodoListAdapter extends RecyclerView.Adapter<TodoListAdapter.TodoLi
 
     ArrayList<Info> datalist;
     boolean isMyCalendar;
+    private TodoListAdapter.OnItemClickListener mListener = null;
 
     public TodoListAdapter(ArrayList<Info> datalist ) {
         this.datalist = datalist;
@@ -46,16 +47,16 @@ public class TodoListAdapter extends RecyclerView.Adapter<TodoListAdapter.TodoLi
     public TodoListViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         LayoutInflater inflater = LayoutInflater.from(parent.getContext());
         isMyCalendar = false;
-        Log.d("datalist","*************************111 " +String.valueOf(datalist.size()));
         View view = inflater.inflate(R.layout.todolist_cell, parent,false);
 
         return new TodoListViewHolder(view);
     }
-
-    public void setMyCalendar(boolean nnow){
-        isMyCalendar = nnow;
+    public interface OnItemClickListener{
+        void onItemClick(View v, int position); //뷰와 포지션값
     }
-
+    public void setOnItemClickListener(TodoListAdapter.OnItemClickListener listener) {
+        this.mListener = listener;
+    }
     @Override
     public void onBindViewHolder(@NonNull TodoListViewHolder holder, int position) {
         Log.d("datalist","222 "+String.valueOf(position));
@@ -80,12 +81,26 @@ public class TodoListAdapter extends RecyclerView.Adapter<TodoListAdapter.TodoLi
                 reference.child("User").child(CalendarUtil.UID).child("Calender").child(cur.getStart().substring(0,10))
                         .child(cur.getPath()).removeValue();
 
+                Toast.makeText(view.getContext(),"kk",LENGTH_SHORT).show();
                 notifyItemRemoved(position);
                 for(int i = 0 ; i < orisize ; i ++)
                     datalist.remove(0);
                 notifyDataSetChanged();
-                Log.d("datalist","ori " + String.valueOf(orisize));
-                Log.d("datalist",String.valueOf(datalist.size()));
+                if (position!=RecyclerView.NO_POSITION){
+                    if (mListener!=null){
+                        Toast.makeText(view.getContext(),"gg",LENGTH_SHORT).show();
+                        mListener.onItemClick (view,position);
+                    }
+                    else{
+
+                        Toast.makeText(view.getContext(),"mlistener is null",LENGTH_SHORT).show();
+                    }
+                }
+                else{
+
+                    Toast.makeText(view.getContext(),"no position",LENGTH_SHORT).show();
+                }
+
             }
         });
 
@@ -97,7 +112,6 @@ public class TodoListAdapter extends RecyclerView.Adapter<TodoListAdapter.TodoLi
                 gotoAddActivity.putExtra("uid",CalendarUtil.UID);
                 gotoAddActivity.putExtra("path2",cur.getPath());
                 gotoAddActivity.putExtra("path1",cur.getStart().substring(0,10));
-                Log.d("path1",cur.getPath());
                 //해당 일정 삭제는 addActivity에서 실행 예정
                 ((MainActivity)view.getContext()).startActivity(gotoAddActivity);
                 ((MainActivity)view.getContext()).overridePendingTransition(R.anim.anim_in,R.anim.anim_out);

@@ -307,12 +307,21 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.O
                 public void onDataChange(DataSnapshot dataSnapshot) {
                     for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
                         infolist.add(snapshot.getValue(Info.class));
-                        Log.e("111",infolist.toString());
                         TodoListAdapter adapter = new TodoListAdapter(infolist);
                         RecyclerView.LayoutManager manager = new LinearLayoutManager(getApplicationContext());
                         // 어뎁터 적용
                         todoListRecyclerView.setLayoutManager(manager);
                         todoListRecyclerView.setAdapter(adapter);
+
+                        adapter.setOnItemClickListener(new TodoListAdapter.OnItemClickListener() {
+                            @Override
+                            public void onItemClick(View v, int position) {
+
+                                Toast.makeText(getApplicationContext(),"삭제 버튼 눌린 후 업데이트",Toast.LENGTH_SHORT).show();
+                                setTodoList(uid);
+                                setMonthview();
+                            }
+                        });
                     }
                 }
                 @Override
@@ -322,8 +331,6 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.O
             });
         } catch (Exception e) {
             e.printStackTrace();
-            Toast.makeText(getApplicationContext(), "지금 안돼유",Toast.LENGTH_SHORT).show();
-            Log.e("222",infolist.toString());
         }
         // 어뎁터 데이터 적용
     }
