@@ -212,20 +212,70 @@ public class NoticeBoardActivity extends AppCompatActivity implements View.OnCli
         btn_write.setOnClickListener(this);
         btn_vote.setOnClickListener(this);
         btn_notice.setOnClickListener(this);
+    }
 
-        // 게시글 클릭 리스너
-        adapter.setOnItemClickListener(new PostAdapter.OnItemClickListener() {
-            @Override
-            public void onItemClick(View v, int position) {
-                String time = arrayList.get(position).getTime();
-                Intent intent = new Intent(NoticeBoardActivity.this, NoticeActivity.class);
-                intent.putExtra("groupname",groupname);
-                intent.putExtra("name",name);
-                intent.putExtra("uid",uid);
-                intent.putExtra("time",time);
-                startActivity(intent);
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if(requestCode == REQUEST_CODE) {
+            if(resultCode == RESULT_OK) {
+                try{
+                    uri = data.getData();
+                    String filename;
+                    if(uri!=null) {
+                        filename = uri.toString() + ".jpg";
+                        StorageReference riverRef = storageReference.child("post_img/"+filename);
+                        UploadTask uploadTask = riverRef.putFile(uri);
+                        uploadTask.addOnFailureListener(new OnFailureListener() {
+                            @Override
+                            public void onFailure(@NonNull Exception e) {
+                            }
+                        }).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                            @Override
+                            public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                            }
+                        });
+                        tmpReference.child("User").child(uid).child("Image_url").setValue(filename);
+                        Toast.makeText(getApplicationContext(),"프로필 사진이 변경되었습니다.",Toast.LENGTH_SHORT).show();
+                        showPost();
+                    }
+                } catch(Exception e){
+                }
             }
-        });
+            else if(resultCode == RESULT_CANCELED){
+            }
+        }
+        else if(requestCode == 3 && resultCode == 3) {
+            Log.e("###","여기들어오나?");
+            showPost();
+        }
+    }
+
+    // 플로팅버튼 클릭 리스너
+    @Override
+    public void onClick(View v) {
+        int id = v.getId();
+        switch (id) {
+            case R.id.btn_write:
+                anim();
+                break;
+            case R.id.btn_vote:
+                anim();
+                Intent intent1 = new Intent(NoticeBoardActivity.this, VoteActivity.class);
+                intent1.putExtra("groupname",groupname);
+                intent1.putExtra("name",name);
+                intent1.putExtra("uid",uid);
+                startActivityForResult(intent1, 3);
+                break;
+            case R.id.btn_notice:
+                anim();
+                Intent intent2 = new Intent(NoticeBoardActivity.this, WriteActivity.class);
+                intent2.putExtra("groupname",groupname);
+                intent2.putExtra("name",name);
+                intent2.putExtra("uid",uid);
+                startActivityForResult(intent2, 3);
+                break;
+        }
     }
 
     // 게시물 받아오기
@@ -253,65 +303,19 @@ public class NoticeBoardActivity extends AppCompatActivity implements View.OnCli
             }
         });
         adapter = new PostAdapter(arrayList, this);
-    }
-
-    @Override
-    public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        if(requestCode == REQUEST_CODE) {
-            if(resultCode == RESULT_OK) {
-                try{
-                    uri = data.getData();
-                    String filename;
-                    if(uri!=null) {
-                        filename = uri.toString() + ".jpg";
-                        StorageReference riverRef = storageReference.child("post_img/"+filename);
-                        UploadTask uploadTask = riverRef.putFile(uri);
-                        uploadTask.addOnFailureListener(new OnFailureListener() {
-                            @Override
-                            public void onFailure(@NonNull Exception e) {
-                            }
-                        }).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
-                            @Override
-                            public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-                            }
-                        });
-                        tmpReference.child("User").child(uid).child("Image_url").setValue(filename);
-                        Toast.makeText(getApplicationContext(),"프로필 사진이 변경되었습니다.",Toast.LENGTH_SHORT).show();
-                    }
-                } catch(Exception e){
-                }
+        // 게시글 클릭 리스너
+        adapter.setOnItemClickListener(new PostAdapter.OnItemClickListener() {
+            @Override
+            public void onItemClick(View v, int position) {
+                String time = arrayList.get(position).getTime();
+                Intent intent = new Intent(NoticeBoardActivity.this, NoticeActivity.class);
+                intent.putExtra("groupname",groupname);
+                intent.putExtra("name",name);
+                intent.putExtra("uid",uid);
+                intent.putExtra("time",time);
+                startActivity(intent);
             }
-            else if(resultCode == RESULT_CANCELED){
-            }
-        }
-    }
-
-    // 플로팅버튼 클릭 리스너
-    @Override
-    public void onClick(View v) {
-        int id = v.getId();
-        switch (id) {
-            case R.id.btn_write:
-                anim();
-                break;
-            case R.id.btn_vote:
-                anim();
-                Intent intent1 = new Intent(NoticeBoardActivity.this, VoteActivity.class);
-                intent1.putExtra("groupname",groupname);
-                intent1.putExtra("name",name);
-                intent1.putExtra("uid",uid);
-                startActivity(intent1);
-                break;
-            case R.id.btn_notice:
-                anim();
-                Intent intent2 = new Intent(NoticeBoardActivity.this, WriteActivity.class);
-                intent2.putExtra("groupname",groupname);
-                intent2.putExtra("name",name);
-                intent2.putExtra("uid",uid);
-                startActivity(intent2);
-                break;
-        }
+        });
     }
 
     // 플로팅버튼 애니메이션
