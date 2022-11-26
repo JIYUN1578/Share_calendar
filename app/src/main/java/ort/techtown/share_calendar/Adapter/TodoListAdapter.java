@@ -81,14 +81,12 @@ public class TodoListAdapter extends RecyclerView.Adapter<TodoListAdapter.TodoLi
                 reference.child("User").child(CalendarUtil.UID).child("Calender").child(cur.getStart().substring(0,10))
                         .child(cur.getPath()).removeValue();
 
-                Toast.makeText(view.getContext(),"kk",LENGTH_SHORT).show();
                 notifyItemRemoved(position);
                 for(int i = 0 ; i < orisize ; i ++)
                     datalist.remove(0);
                 notifyDataSetChanged();
                 if (position!=RecyclerView.NO_POSITION){
                     if (mListener!=null){
-                        Toast.makeText(view.getContext(),"gg",LENGTH_SHORT).show();
                         mListener.onItemClick (view,position);
                     }
                     else{

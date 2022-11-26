@@ -317,7 +317,6 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.O
                             @Override
                             public void onItemClick(View v, int position) {
 
-                                Toast.makeText(getApplicationContext(),"삭제 버튼 눌린 후 업데이트",Toast.LENGTH_SHORT).show();
                                 setTodoList(uid);
                                 setMonthview();
                             }
