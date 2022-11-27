@@ -89,7 +89,7 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.O
 
         Intent intent = getIntent();
         name = intent.getStringExtra("name");
-        CalendarUtil.setName(name);
+        CalendarUtil.setUserName(name);
         uid = intent.getStringExtra("uid");
         CalendarUtil.UID = uid;
         // 이름 저장

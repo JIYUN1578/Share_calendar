@@ -128,6 +128,7 @@ public class TodoListAdapter extends RecyclerView.Adapter<TodoListAdapter.TodoLi
                 gotoAddActivity.putExtra("endday",cur.getEnd().substring(0,10));
                 gotoAddActivity.putExtra("title",cur.getTitle());
                 gotoAddActivity.putExtra("color",cur.getColor());
+                gotoAddActivity.putExtra("name",CalendarUtil.getUserName());
                 //해당 일정 삭제는 addActivity에서 실행 예정
                 ((MainActivity)view.getContext()).startActivity(gotoAddActivity);
                 ((MainActivity)view.getContext()).overridePendingTransition(R.anim.anim_in,R.anim.anim_out);

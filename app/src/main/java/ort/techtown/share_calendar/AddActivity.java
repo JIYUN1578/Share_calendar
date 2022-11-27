@@ -80,8 +80,7 @@ public class AddActivity extends AppCompatActivity {
         uid = intent.getStringExtra("uid");
 
         if(intent.getStringExtra("from").toString().equals("modify")) {isModify = true;}
-        else{
-            name = intent.getStringExtra("name");}
+        name = intent.getStringExtra("name");
 
 
         recyclerView = findViewById(R.id.group_list);
@@ -253,32 +252,28 @@ public class AddActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 //이게 일정 변경이라면
-                if(isModify){
-                    //원래 일정 삭제
-                    FirebaseDatabase database = FirebaseDatabase.getInstance();
-                    DatabaseReference reference = database.getReference();
-                    reference.child("User").child(CalendarUtil.UID).child("Calender").child(oriPath1.substring(0,10))
-                            .child(oriPath2).removeValue();
-                }
                 //새로운 일정 추가
                 String nnow =  DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss").format(LocalDateTime.now());
                 Info newInfo = new Info(false,
                         tv_addStartDay.getText()+" "+tv_addStartTime.getText(),
                         tv_addEndDay.getText()+" "+tv_addEndTime.getText().toString(),
                         edt_toDo.getText().toString(),edt_toDo.getText().toString()
-                         ,pColor , nnow, CalendarUtil.getName());
+                         ,pColor , nnow, name);
                 //upload
+                if(isModify){
+                    //원래 일정 삭제
+                    FirebaseDatabase mdatabase = FirebaseDatabase.getInstance();
+                    DatabaseReference mreference = mdatabase.getReference();
+                    mreference.child("User").child(CalendarUtil.UID).child("Calender").child(oriPath1.substring(0,10))
+                            .child(oriPath2).removeValue();
+                }
                 databaseReference.child("User").child(uid).child("Calender").child(tv_addStartDay.getText().toString())
-                                .child(nnow).setValue(newInfo).addOnSuccessListener(new OnSuccessListener<Void>() {
-                            @Override
-                            public void onSuccess(Void unused) {
-                                Log.d("name issue when success", newInfo.getName());
-                            }
-                        });
-                if(!isEmpty) makeprivacy(nnow);
+                                .child(nnow).setValue(newInfo);
+                if(!isEmpty) {
+                    makeprivacy(nnow);
+                }
                 CalendarUtil.selectedDate = LocalDate.parse(tv_addStartDay.getText(),
                         DateTimeFormatter.ofPattern("yyyy-MM-dd"));
-                Log.d("selected date: ",CalendarUtil.selectedDate.toString());
                 onBackPressed();
             }
         });
