@@ -28,15 +28,6 @@ public class Info {
         this.name = name;
         this.color = color;
     }
-    public Info(boolean isDone, String start, String end, String title, String info, String color, String path) {
-        this.isDone = isDone;
-        this.path = path;
-        this.start = start;
-        this.end = end;
-        this.title = title;
-        this.info = info;
-        this.color = color;
-    }
     public Info() {
         this.path = "!!";
         this.isDone = false;

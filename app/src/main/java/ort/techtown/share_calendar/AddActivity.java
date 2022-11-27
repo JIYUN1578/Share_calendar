@@ -257,14 +257,8 @@ public class AddActivity extends AppCompatActivity {
                     //원래 일정 삭제
                     FirebaseDatabase database = FirebaseDatabase.getInstance();
                     DatabaseReference reference = database.getReference();
-                    Toast.makeText(getApplicationContext(),"dmddmd", LENGTH_SHORT).show();
-                    Log.d("path 확인",oriPath1.substring(0,10)+" "+oriPath2);
                     reference.child("User").child(CalendarUtil.UID).child("Calender").child(oriPath1.substring(0,10))
-                            .child(oriPath2).removeValue().addOnSuccessListener(new OnSuccessListener<Void>() {
-                                @Override
-                                public void onSuccess(Void unused) {
-                                }
-                            });
+                            .child(oriPath2).removeValue();
                 }
                 //새로운 일정 추가
                 String nnow =  DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss").format(LocalDateTime.now());
@@ -272,10 +266,15 @@ public class AddActivity extends AppCompatActivity {
                         tv_addStartDay.getText()+" "+tv_addStartTime.getText(),
                         tv_addEndDay.getText()+" "+tv_addEndTime.getText().toString(),
                         edt_toDo.getText().toString(),edt_toDo.getText().toString()
-                         ,pColor , nnow, name);
+                         ,pColor , nnow, CalendarUtil.getName());
                 //upload
                 databaseReference.child("User").child(uid).child("Calender").child(tv_addStartDay.getText().toString())
-                                .child(nnow).setValue(newInfo);
+                                .child(nnow).setValue(newInfo).addOnSuccessListener(new OnSuccessListener<Void>() {
+                            @Override
+                            public void onSuccess(Void unused) {
+                                Log.d("name issue when success", newInfo.getName());
+                            }
+                        });
                 if(!isEmpty) makeprivacy(nnow);
                 CalendarUtil.selectedDate = LocalDate.parse(tv_addStartDay.getText(),
                         DateTimeFormatter.ofPattern("yyyy-MM-dd"));
@@ -295,11 +294,16 @@ public class AddActivity extends AppCompatActivity {
         //해당 num의 컬러표시만 만들기
         switch (num){
             case -1:
-                if (curColor.equals("#FFAFB0")) {setcolor(1);}
-                else if(curColor.equals("#FFE4AF")) {setcolor(2);}
-                else if(curColor.equals("#8EB695")) {setcolor(3);}
-                else if(curColor.equals("#C6E1FF")) {setcolor(4);}
-                else {setcolor(5);}
+                if (curColor.equals("#FFAFB0")) {setcolor(1);
+                pColor = "#FFAFB0";}
+                else if(curColor.equals("#FFE4AF")) {setcolor(2);
+                    pColor = "#FFE4AF";}
+                else if(curColor.equals("#8EB695")) {setcolor(3);
+                    pColor = "#8EB695";}
+                else if(curColor.equals("#C6E1FF")) {setcolor(4);
+                    pColor = "#C6E1FF";}
+                else {setcolor(5);
+                    pColor = "#E0E0E0";}
                 break;
             case 1:
                 color1.setBackgroundResource(R.drawable.bg_ab_circle_picked);
@@ -370,11 +374,23 @@ public class AddActivity extends AppCompatActivity {
                         Grouplist temp = new Grouplist("temp",false);
                         String gName = (String)snapshot.getValue();
                         temp.setGrname(gName);
-                        if(isModify){try {
-                            databaseReference.child("User").child(uid).child("Calender").child(oriPath1.substring(0,10))
+                        isEmpty = false;
+                        if(isModify){
+                            try {
+                                databaseReference.child("User").child(uid).child("Calender").child(oriPath1.substring(0,10))
                                     .child(oriPath2).child("isSeen").child(gName).addListenerForSingleValueEvent(new ValueEventListener() {
                                         @Override
                                         public void onDataChange(@NonNull DataSnapshot snapshot) {
+                                            if(snapshot.getValue() == null) {
+                                                temp.setSeen(false);
+                                                grouplist.add(temp);
+                                                adapter = new GrouplistAdapter(grouplist);
+                                                RecyclerView.LayoutManager manager = new LinearLayoutManager(getApplicationContext());
+                                                // 어뎁터 적용
+                                                recyclerView.setLayoutManager(manager);
+                                                recyclerView.setAdapter(adapter);
+                                                return;
+                                            }
                                             if(snapshot.getValue(boolean.class)) {
                                                 Log.d("exception for privacy",gName+" "+"true");
                                                 temp.setSeen(true);
@@ -403,9 +419,10 @@ public class AddActivity extends AppCompatActivity {
 
                                         }
                                     });
-                        }catch (Exception e){
-                            Log.d("exception for privacy","유감");
-                        }}
+                           }catch (Exception e){
+                             Log.d("exception for privacy","유감");
+                          }
+                        }
                         Log.d("exception for privacy3",gName);
                     }
                 }
