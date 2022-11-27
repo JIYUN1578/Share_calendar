@@ -29,6 +29,7 @@ import java.util.ArrayList;
 
 import ort.techtown.share_calendar.AddActivity;
 import ort.techtown.share_calendar.Data.CalendarUtil;
+import ort.techtown.share_calendar.Data.Grouplist;
 import ort.techtown.share_calendar.Data.Info;
 import ort.techtown.share_calendar.MainActivity;
 import ort.techtown.share_calendar.R;
@@ -36,6 +37,7 @@ import ort.techtown.share_calendar.R;
 public class TodoListAdapter extends RecyclerView.Adapter<TodoListAdapter.TodoListViewHolder> {
 
     ArrayList<Info> datalist;
+    ArrayList<String> seenList;
     boolean isMyCalendar;
     String groupName;
     private TodoListAdapter.OnItemClickListener mListener = null;
@@ -50,10 +52,11 @@ public class TodoListAdapter extends RecyclerView.Adapter<TodoListAdapter.TodoLi
         this.groupName = "";
     }
 
-    public TodoListAdapter(ArrayList<Info> datalist , boolean isMyCalendar, String groupName) {
+    public TodoListAdapter(ArrayList<Info> datalist , boolean isMyCalendar, String groupName, ArrayList<String> seenList) {
         this.datalist = datalist;
         this.isMyCalendar = isMyCalendar;
         this.groupName = groupName;
+        this.seenList = seenList;
     }
 
     @NonNull
@@ -93,7 +96,6 @@ public class TodoListAdapter extends RecyclerView.Adapter<TodoListAdapter.TodoLi
                 DatabaseReference reference = database.getReference();
                 reference.child("User").child(CalendarUtil.UID).child("Calender").child(cur.getStart().substring(0,10))
                         .child(cur.getPath()).removeValue();
-
                 notifyItemRemoved(position);
                 for(int i = 0 ; i < orisize ; i ++)
                     datalist.remove(0);
@@ -103,15 +105,10 @@ public class TodoListAdapter extends RecyclerView.Adapter<TodoListAdapter.TodoLi
                         mListener.onItemClick (view,position);
                     }
                     else{
-
-                        Toast.makeText(view.getContext(),"mlistener is null",LENGTH_SHORT).show();
                     }
                 }
                 else{
-
-                    Toast.makeText(view.getContext(),"no position",LENGTH_SHORT).show();
                 }
-
             }
         });
 
@@ -135,6 +132,7 @@ public class TodoListAdapter extends RecyclerView.Adapter<TodoListAdapter.TodoLi
                 ((MainActivity)view.getContext()).finish();
             }
         });
+        // 마이캘린더일 경우
         if(isMyCalendar){
             //롱클릭이벤트 처리하기
             holder.itemView.setOnLongClickListener(new View.OnLongClickListener() {
@@ -146,15 +144,14 @@ public class TodoListAdapter extends RecyclerView.Adapter<TodoListAdapter.TodoLi
                 }
             });
         }
+        // 공유캘린더일 경우
         else{
             holder.tv_startTime.setText(cur.getName());
-            //비공개면 안보이게 하기
-            if(!groupName.equals("")){ // 그룹페이지면
-                
+            // 비공개 처리
+            if(seenList.get(position).equals("false")) {
+                holder.tv_title.setText("비공개");
             }
         }
-
-
     }
 
 

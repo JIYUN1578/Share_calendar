@@ -60,6 +60,7 @@ public class PostActivity extends AppCompatActivity {
     private DatabaseReference databaseReference = database.getReference();
     private DatabaseReference mReference = database.getReference();
     private DatabaseReference reference = database.getReference();
+    private DatabaseReference seenReference = database.getReference();
     private FirebaseStorage firebaseStorage = FirebaseStorage.getInstance();
     private StorageReference storageReference = firebaseStorage.getReference();
     // 달력
@@ -324,9 +325,10 @@ public class PostActivity extends AppCompatActivity {
     private void setTodoList(String uid) {
         // 해당 일정 가져오기
         ArrayList<Info> infolist = new ArrayList<>();
+        ArrayList<String> seenList = new ArrayList<>();
         FirebaseDatabase database = FirebaseDatabase.getInstance();
 
-        TodoListAdapter adapter = new TodoListAdapter(infolist, false, groupname);
+        TodoListAdapter adapter = new TodoListAdapter(infolist, false, groupname, seenList);
         RecyclerView.LayoutManager manager = new LinearLayoutManager(getApplicationContext());
         // 어뎁터 적용
         todoListRecyclerView.setLayoutManager(manager);
@@ -355,11 +357,30 @@ public class PostActivity extends AppCompatActivity {
                             public void onDataChange(DataSnapshot dataSnapshot) {
                                 for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
                                     infolist.add(snapshot.getValue(Info.class));
-                                    TodoListAdapter adapter = new TodoListAdapter(infolist, false, groupname);
-                                    RecyclerView.LayoutManager manager = new LinearLayoutManager(getApplicationContext());
-                                    // 어뎁터 적용
-                                    todoListRecyclerView.setLayoutManager(manager);
-                                    todoListRecyclerView.setAdapter(adapter);
+                                    seenReference = database.getReference("User").child(uid).child("Calender").child(CalendarUtil.selectedDate.toString())
+                                            .child(snapshot.getKey()).child("isSeen").child(groupname);
+                                    seenReference.addListenerForSingleValueEvent(new ValueEventListener() {
+                                        @Override
+                                        public void onDataChange(@NonNull DataSnapshot snapshot) {
+                                            if(snapshot.getValue() == null) {
+                                                seenList.add("false");
+                                            }
+                                            else if(snapshot.getValue().toString().equals("false")) {
+                                                seenList.add("false");
+                                            }
+                                            else {
+                                                seenList.add("true");
+                                            }
+                                            TodoListAdapter adapter = new TodoListAdapter(infolist, false, groupname, seenList);
+                                            RecyclerView.LayoutManager manager = new LinearLayoutManager(getApplicationContext());
+                                            // 어뎁터 적용
+                                            todoListRecyclerView.setLayoutManager(manager);
+                                            todoListRecyclerView.setAdapter(adapter);
+                                        }
+                                        @Override
+                                        public void onCancelled(@NonNull DatabaseError error) {
+                                        }
+                                    });
                                 }
                             }
                             @Override

@@ -445,7 +445,7 @@ public class AddActivity extends AppCompatActivity {
         //super.onBackPressed();
         Intent intent = new Intent(AddActivity.this, MainActivity.class);
         intent.putExtra("uid",uid);
-        if(!isModify) intent.putExtra("name",name);
+        intent.putExtra("name",name);
         intent.putExtra("fromOther", true);
         startActivity(intent);
         finish();
