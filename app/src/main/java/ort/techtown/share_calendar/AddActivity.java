@@ -56,7 +56,7 @@ public class AddActivity extends AppCompatActivity {
     TextView tv_addEndTime;
     ImageView color1, color2, color3, color4, color5;
     RecyclerView recyclerView;
-    boolean isModify;
+    boolean isModify, isEmpty;
     int pStartHour, pStartMin, pEndHour, pEndMin;
     int pSYear, pSMonth, pSDay, pEYear, pEMonth, pEDay;
     GrouplistAdapter adapter;
@@ -75,7 +75,7 @@ public class AddActivity extends AppCompatActivity {
         setContentView(R.layout.activity_add);
         isModify = false;
         pColor = "#FFAFB0";
-
+        isEmpty = true;
         Intent intent = getIntent();
         uid = intent.getStringExtra("uid");
 
@@ -263,7 +263,6 @@ public class AddActivity extends AppCompatActivity {
                             .child(oriPath2).removeValue().addOnSuccessListener(new OnSuccessListener<Void>() {
                                 @Override
                                 public void onSuccess(Void unused) {
-                                    Toast.makeText(view.getContext(),"삭제 성공", LENGTH_SHORT).show();
                                 }
                             });
                 }
@@ -277,7 +276,7 @@ public class AddActivity extends AppCompatActivity {
                 //upload
                 databaseReference.child("User").child(uid).child("Calender").child(tv_addStartDay.getText().toString())
                                 .child(nnow).setValue(newInfo);
-                makeprivacy(nnow);
+                if(!isEmpty) makeprivacy(nnow);
                 CalendarUtil.selectedDate = LocalDate.parse(tv_addStartDay.getText(),
                         DateTimeFormatter.ofPattern("yyyy-MM-dd"));
                 Log.d("selected date: ",CalendarUtil.selectedDate.toString());
@@ -342,6 +341,7 @@ public class AddActivity extends AppCompatActivity {
                         // 어뎁터 적용
                         recyclerView.setLayoutManager(manager);
                         recyclerView.setAdapter(adapter);
+                        isEmpty =false;
                     }
                 }
                 @Override

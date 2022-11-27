@@ -26,7 +26,9 @@ public class GrouplistAdapter extends RecyclerView.Adapter<ort.techtown.share_ca
     public GrouplistAdapter(ArrayList<Grouplist> grouplist) {
         datalist = grouplist;
     }
-
+    public GrouplistAdapter() {
+        datalist = null;
+    }
     @NonNull
     @Override
     public GrouplistViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
