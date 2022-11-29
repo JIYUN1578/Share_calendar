@@ -2,7 +2,7 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:background="@color/paper"
+    android:background="@color/skyblue"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".AddActivity">
@@ -17,6 +17,7 @@
         tools:layout_editor_absoluteY="54dp">
 
         <TextView
+            android:fontFamily="@font/dalseohealingmedium"
             android:id="@+id/tv_pagename"
             android:layout_marginTop="30dp"
             android:layout_width="match_parent"
@@ -183,6 +184,7 @@
             android:layout_marginBottom="10dp"
             android:background="@drawable/bg_button3"
             android:text="저장"
+            style="@style/Widget.AppCompat.Button.Borderless"
             android:layout_gravity="center"
             android:id="@+id/btn_addInfo"
             android:layout_width="wrap_content"

@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/drawer_layout"
-    android:background="@drawable/main_gradation"
+    android:background="@color/skyblue"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".MainActivity">
@@ -16,7 +16,6 @@
         <include layout="@layout/toolbar" />
 
        <LinearLayout
-           android:layout_marginTop="10dp"
            android:background="@drawable/bg_calendar"
            android:layout_gravity="center"
            android:layout_width="390dp"
@@ -38,6 +37,7 @@
                    android:background="@color/white"
                    android:src="@drawable/arrow_square_left"  />
                <TextView
+                   android:fontFamily="@font/dalseohealingbold"
                    android:layout_marginLeft="3dp"
                    android:layout_marginRight="3dp"
                    android:id="@+id/tv_month_year"
