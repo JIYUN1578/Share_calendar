@@ -15,27 +15,35 @@
         <include layout="@layout/toolbar" />
 
         <LinearLayout
+            android:layout_marginTop="10dp"
             android:layout_width="match_parent"
             android:layout_height="70dp"
             android:padding="5dp"
             android:layout_gravity="center"
             android:orientation="horizontal">
+
             <ImageView
+                android:layout_width="25dp"
+                android:layout_height="25dp"
                 android:layout_marginLeft="5dp"
                 android:layout_marginTop="7dp"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:src="@drawable/search_normal"/>
+                android:src="@drawable/search_normal" />
             <EditText
                 android:layout_marginLeft="5dp"
                 android:layout_marginRight="5dp"
                 android:id="@+id/editSearch"
+                android:background="@drawable/bg_round"
                 android:layout_width="match_parent"
-                android:layout_height="55dp"
-                android:hint="검색어를 입력하세요."/>
+                android:paddingLeft="5dp"
+                android:layout_height="40dp"
+                android:hint="   그룹명을 입력하세요."/>
         </LinearLayout>
 
         <ListView
+            android:padding="15dp"
+            android:layout_marginLeft="15dp"
+            android:layout_marginRight="15dp"
+            android:background="@drawable/bg_round"
             android:id="@+id/listView"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
@@ -51,7 +59,6 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_weight="10"
-                android:layout_marginTop="50sp"
                 android:orientation="horizontal" >
 
                 <ImageView
@@ -61,7 +68,7 @@
                     android:layout_gravity="center_vertical"
                     android:layout_marginRight="10sp"
                     android:layout_marginLeft="15sp"
-                    android:background="@drawable/bg_round" />
+                    android:background="@drawable/image_round" />
 
                 <LinearLayout
                     android:layout_width="match_parent"

@@ -225,6 +225,7 @@ public class SearchActivity extends AppCompatActivity {
                 group_name = (TextView)findViewById(R.id.group_name);
                 group_introduce = (TextView)findViewById(R.id.group_introduce);
                 group_image = (ImageView)findViewById(R.id.group_image);
+                group_image.setClipToOutline(true);
                 btn_sign = (Button)findViewById(R.id.btn_sign);
                 databaseReference.addListenerForSingleValueEvent(new ValueEventListener() {
                     @Override
