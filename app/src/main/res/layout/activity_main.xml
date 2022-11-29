@@ -39,7 +39,7 @@
                    android:background="@color/white"
                    android:src="@drawable/arrow_square_left"  />
                <TextView
-                   android:fontFamily="@font/dalseohealingbold"
+                   android:fontFamily="@font/dalseohealingmedium"
                    android:layout_marginLeft="3dp"
                    android:layout_marginRight="3dp"
                    android:id="@+id/tv_month_year"
@@ -136,8 +136,6 @@
                android:layout_height="301dp" />
 
        </LinearLayout>
-
-
 
         <LinearLayout
             android:layout_width="match_parent"
