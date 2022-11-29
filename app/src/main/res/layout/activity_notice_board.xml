@@ -42,7 +42,7 @@
                 android:visibility="invisible"
                 app:backgroundTint="@color/white"
                 app:elevation="6dp"
-                app:tint="@color/pink500"
+                app:tint="@color/darkSkyblue"
                 app:pressedTranslationZ="12dp" />
 
 
@@ -58,7 +58,7 @@
                 android:visibility="invisible"
                 app:backgroundTint="@color/white"
                 app:elevation="6dp"
-                app:tint="@color/pink500"
+                app:tint="@color/darkSkyblue"
                 app:pressedTranslationZ="12dp" />
 
             <com.google.android.material.floatingactionbutton.FloatingActionButton
@@ -67,10 +67,10 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="bottom|right"
                 android:layout_margin="16dp"
+                android:contentDescription="fab_content_desc"
                 android:src="@drawable/ic_baseline_create_24"
                 app:backgroundTint="@color/white"
-                app:tint="@color/pink500"
-                android:contentDescription="fab_content_desc" />
+                app:tint="@color/darkSkyblue"/>
 
         </androidx.coordinatorlayout.widget.CoordinatorLayout>
 

@@ -17,7 +17,6 @@
         tools:layout_editor_absoluteY="54dp">
 
         <TextView
-            android:fontFamily="@font/dalseohealingmedium"
             android:id="@+id/tv_pagename"
             android:layout_marginTop="30dp"
             android:layout_width="match_parent"
@@ -37,7 +36,7 @@
                 android:id="@+id/edt_addTodo"
                 android:layout_width="280dp"
                 android:layout_height="wrap_content"
-                android:hint="일정" />
+                android:hint="일정을 입력하세요" />
 
         </LinearLayout>
 

@@ -44,7 +44,7 @@ public class VoteActivity extends AppCompatActivity {
 
     // drawerLayout
     private DrawerLayout drawerLayout;
-    private Button btn_logout, btn_calendar, btn_search, btn_make, btn_group, btn_close, btn_profile;
+    private Button btn_logout, btn_calendar, btn_search, btn_make, btn_group, btn_close, btn_profile, btn_post;
     private View drawerView;
     private ImageView menu_open;
     private TextView tv_title;
@@ -218,9 +218,8 @@ public class VoteActivity extends AppCompatActivity {
             }
         });
         // 투표 저장하기
-        tv_register = (TextView)findViewById(R.id.tv_postmove);
-        tv_register.setText("완료");
-        tv_register.setOnClickListener(new View.OnClickListener() {
+        btn_post = (Button) findViewById(R.id.btn_post);
+        btn_post.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Long now = System.currentTimeMillis();
@@ -235,6 +234,7 @@ public class VoteActivity extends AppCompatActivity {
                 finish();
             }
         });
+
     }
 
     @Override

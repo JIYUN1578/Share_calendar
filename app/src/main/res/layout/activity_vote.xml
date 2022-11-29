@@ -20,54 +20,103 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_marginTop="10dp">
-
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical">
 
-                <EditText
-                    android:layout_marginTop="10dp"
-                    android:layout_gravity="center_horizontal"
-                    android:background="@drawable/bg_round"
-                    android:id="@+id/et_title"
-                    android:layout_width="380dp"
+                <TextView
+                    android:layout_marginLeft="10dp"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textSize="20dp"
+                    android:text="투표 게시글 작성"/>
+
+                <LinearLayout
+                    android:padding="5dp"
+                    android:layout_width="match_parent"
                     android:layout_height="40dp"
-                    android:ems="10"
-                    android:hint="  제목을 입력하세요" />
+                    android:orientation="horizontal">
 
-                <EditText
-                    android:layout_marginTop="10dp"
-                    android:layout_gravity="center_horizontal"
-                    android:id="@+id/et_summary"
-                    android:layout_width="380dp"
-                    android:layout_height="70dp"
-                    android:background="@drawable/bg_round"
-                    android:ems="10"
-                    android:hint="  내용을 입력하세요"
-                    android:maxLines="5"
-                    android:scrollbars="vertical" />
+                    <TextView
+                        android:layout_weight="1"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="start|center_vertical"
+                        android:layout_marginLeft="10dp"
+                        android:text="제목"
+                        android:textSize="20dp" />
 
-                <androidx.recyclerview.widget.RecyclerView
-                    android:padding="10dp"
-                    android:layout_marginTop="25dp"
-                    android:layout_gravity="center_horizontal"
-                    android:id="@+id/vote_recyclerview"
-                    android:background="@drawable/bg_round"
-                    android:layout_width="380dp"
-                    android:layout_height="200dp"
-                    android:layout_marginBottom="5dp">
+                    <EditText
+                        android:layout_weight="6"
+                        android:background="@drawable/bg_round"
+                        android:layout_gravity="start|center_vertical"
+                        android:id="@+id/et_title"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:layout_marginRight="5dp"
+                        android:ems="10"
+                        android:hint="  제목을 입력하세요" />
+                </LinearLayout>
 
-                </androidx.recyclerview.widget.RecyclerView>
+                <LinearLayout
+                    android:padding="5dp"
+                    android:layout_width="match_parent"
+                    android:layout_height="130dp"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:layout_weight="1"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="start"
+                        android:layout_marginLeft="10dp"
+                        android:text="내용"
+                        android:textSize="20dp" />
+
+                    <EditText
+                        android:layout_marginRight="5dp"
+                        android:layout_weight="6"
+                        android:layout_gravity="start|center_vertical"
+                        android:layout_width="wrap_content"
+                        android:layout_height="120dp"
+                        android:background="@drawable/bg_round"
+                        android:ems="10"
+                        android:hint="  내용을 입력하세요"
+                        android:maxLines="5"
+                        android:scrollbars="vertical" />
+                </LinearLayout>
 
                 <Button
-                    android:layout_marginTop="10dp"
+                    android:layout_marginTop="5dp"
                     android:id="@+id/btn_plus"
                     android:background="@drawable/bg_button3"
                     android:layout_width="wrap_content"
                     android:layout_height="35dp"
                     android:layout_gravity="center_horizontal"
-                    android:text="추가" />
+                    android:text="투표 항목 추가" />
+
+                <androidx.recyclerview.widget.RecyclerView
+                    android:padding="10dp"
+                    android:layout_marginTop="3dp"
+                    android:layout_gravity="center_horizontal"
+                    android:id="@+id/vote_recyclerview"
+                    android:background="@drawable/bg_round"
+                    android:layout_width="380dp"
+                    android:layout_height="250dp"
+                    android:layout_marginBottom="5dp">
+
+                </androidx.recyclerview.widget.RecyclerView>
+
+
+                <Button
+                    android:layout_marginTop="5dp"
+                    android:id="@+id/btn_post"
+                    android:background="@drawable/bg_button3"
+                    android:layout_width="wrap_content"
+                    android:layout_height="35dp"
+                    android:layout_gravity="center_horizontal"
+                    android:text="게시하기" />
 
             </LinearLayout>
         </ScrollView>

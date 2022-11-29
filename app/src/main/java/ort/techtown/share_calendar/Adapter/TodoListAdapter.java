@@ -7,8 +7,11 @@ import android.graphics.Color;
 import android.graphics.drawable.GradientDrawable;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
+import android.widget.PopupMenu;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -87,71 +90,78 @@ public class TodoListAdapter extends RecyclerView.Adapter<TodoListAdapter.TodoLi
         holder.delete.setVisibility(View.INVISIBLE);
         background = (GradientDrawable) holder.colorbar.getBackground();
         background.setColor(Color.parseColor(cur.getColor()));
-        holder.delete.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                final int position = holder.getAdapterPosition();
-                final int orisize = datalist.size();
-                FirebaseDatabase database = FirebaseDatabase.getInstance();
-                DatabaseReference reference = database.getReference();
-                reference.child("User").child(CalendarUtil.UID).child("Calender").child(cur.getStart().substring(0,10))
-                        .child(cur.getPath()).removeValue();
-                notifyItemRemoved(position);
-                for(int i = 0 ; i < orisize ; i ++)
-                    datalist.remove(0);
-                notifyDataSetChanged();
-                if (position!=RecyclerView.NO_POSITION){
-                    if (mListener!=null){
-                        mListener.onItemClick (view,position);
-                    }
-                    else{
-                    }
-                }
-                else{
-                }
-            }
-        });
 
-        holder.modify.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent gotoAddActivity = new Intent(view.getContext(), AddActivity.class);
-                gotoAddActivity.putExtra("from","modify");
-                gotoAddActivity.putExtra("uid",CalendarUtil.UID);
-                gotoAddActivity.putExtra("path2",cur.getPath());
-                gotoAddActivity.putExtra("path1",cur.getStart().substring(0,10));
-                gotoAddActivity.putExtra("starttime",cur.getStart().substring(11));
-                gotoAddActivity.putExtra("endtime",cur.getEnd().substring(11));
-                gotoAddActivity.putExtra("endday",cur.getEnd().substring(0,10));
-                gotoAddActivity.putExtra("title",cur.getTitle());
-                gotoAddActivity.putExtra("color",cur.getColor());
-                gotoAddActivity.putExtra("name",CalendarUtil.getUserName());
-                //해당 일정 삭제는 addActivity에서 실행 예정
-                ((MainActivity)view.getContext()).startActivity(gotoAddActivity);
-                ((MainActivity)view.getContext()).overridePendingTransition(R.anim.anim_in,R.anim.anim_out);
-                ((MainActivity)view.getContext()).finish();
-            }
-        });
+
+
         // 마이캘린더일 경우
         if(isMyCalendar){
-            //롱클릭이벤트 처리하기
-            holder.itemView.setOnLongClickListener(new View.OnLongClickListener() {
+            holder.iv_menu.setOnClickListener(new View.OnClickListener() {
                 @Override
-                public boolean onLongClick(View view) {
-                    holder.modify.setVisibility(View.VISIBLE);
-                    holder.delete.setVisibility(View.VISIBLE);
-                    return false;
+                public void onClick(View view) {
+                    final int pos = holder.getAbsoluteAdapterPosition();
+                    Log.d("context menu", String.valueOf(pos));
+                    PopupMenu popupMenu = new PopupMenu(view.getContext(), view);
+                    popupMenu.inflate(R.menu.grouplist_menu);
+                    popupMenu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
+                        @Override
+                        public boolean onMenuItemClick(MenuItem menuItem) {
+                            switch (menuItem.getItemId()){
+                                case R.id.btn_delete:
+                                    final int orisize = datalist.size();
+                                    FirebaseDatabase database = FirebaseDatabase.getInstance();
+                                    DatabaseReference reference = database.getReference();
+                                    reference.child("User").child(CalendarUtil.UID).child("Calender").child(cur.getStart().substring(0,10))
+                                            .child(cur.getPath()).removeValue();
+                                    notifyItemRemoved(position);
+                                    for(int i = 0 ; i < orisize ; i ++)
+                                        datalist.remove(0);
+                                    notifyDataSetChanged();
+                                    if (position!=RecyclerView.NO_POSITION){
+                                        if (mListener!=null){
+                                            mListener.onItemClick (view,position);
+                                        }
+                                        else{
+                                        }
+                                    }
+                                    else{
+                                    }
+                                    break;
+                                case R.id.btn_modify:
+                                    Intent gotoAddActivity = new Intent(view.getContext(), AddActivity.class);
+                                    gotoAddActivity.putExtra("from","modify");
+                                    gotoAddActivity.putExtra("uid",CalendarUtil.UID);
+                                    gotoAddActivity.putExtra("path2",cur.getPath());
+                                    gotoAddActivity.putExtra("path1",cur.getStart().substring(0,10));
+                                    gotoAddActivity.putExtra("starttime",cur.getStart().substring(11));
+                                    gotoAddActivity.putExtra("endtime",cur.getEnd().substring(11));
+                                    gotoAddActivity.putExtra("endday",cur.getEnd().substring(0,10));
+                                    gotoAddActivity.putExtra("title",cur.getTitle());
+                                    gotoAddActivity.putExtra("color",cur.getColor());
+                                    gotoAddActivity.putExtra("name",CalendarUtil.getUserName());
+                                    //해당 일정 삭제는 addActivity에서 실행 예정
+                                    ((MainActivity)view.getContext()).startActivity(gotoAddActivity);
+                                    ((MainActivity)view.getContext()).overridePendingTransition(R.anim.anim_in,R.anim.anim_out);
+                                    ((MainActivity)view.getContext()).finish();
+                                    break;
+                            }
+                            return false;
+                        }
+                    });
+                    popupMenu.show();
                 }
             });
         }
         // 공유캘린더일 경우
         else{
+            holder.iv_menu.setVisibility(View.GONE);
             holder.tv_startTime.setText(cur.getName());
             // 비공개 처리
             if(seenList.get(position).equals("false")) {
                 holder.tv_title.setText("비공개");
             }
         }
+
+
     }
 
 
@@ -163,12 +173,14 @@ public class TodoListAdapter extends RecyclerView.Adapter<TodoListAdapter.TodoLi
     public class TodoListViewHolder extends RecyclerView.ViewHolder {
 
         TextView tv_startTime, tv_title, tv_endTime, tv_startTime2 , modify, delete;
+        ImageView iv_menu;
         View colorbar;
         public TodoListViewHolder(@NonNull View itemView) {
             super(itemView);
             Log.d("datalist","333 " +String.valueOf(datalist.size()));
             colorbar = itemView.findViewById(R.id.colorbar);
             tv_endTime = itemView.findViewById(R.id.tv_endTime);
+            iv_menu = itemView.findViewById(R.id.iv_menu);
             tv_startTime = itemView.findViewById(R.id.tv_startTime);
             tv_startTime2 = itemView.findViewById(R.id.tv_startTime2);
             tv_title = itemView.findViewById(R.id.tv_title);

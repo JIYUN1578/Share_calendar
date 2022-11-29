@@ -20,30 +20,49 @@
             android:layout_height="0dp"
             android:layout_weight="10"
             android:orientation="vertical">
+            <TextView
+                android:layout_weight="0.1"
+                android:layout_marginTop="10dp"
+                android:layout_marginLeft="15dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textSize="20dp"
+                android:text="제목"/>
 
             <EditText
-                android:layout_marginTop="15dp"
+                android:layout_weight="0.1"
+                android:layout_marginTop="5dp"
                 android:id="@+id/et_title"
                 android:layout_width="380dp"
-                android:layout_height="40dp"
+                android:layout_height="wrap_content"
                 android:layout_gravity="center_horizontal"
                 android:ems="10"
                 android:background="@drawable/bg_round"
                 android:hint="  제목을 입력하세요" />
 
+            <TextView
+                android:layout_weight="0.1"
+                android:layout_marginTop="10dp"
+                android:layout_marginLeft="15dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textSize="20dp"
+                android:text="내용"/>
             <EditText
+                android:layout_weight="6"
                 android:background="@drawable/bg_round"
                 android:layout_gravity="center_horizontal"
-                android:layout_marginTop="15dp"
+                android:layout_marginTop="5dp"
                 android:id="@+id/et_summary"
                 android:layout_width="380dp"
-                android:layout_height="500dp"
+                android:layout_height="wrap_content"
                 android:ems="10"
-                android:maxLines="5"
+                android:maxLines="10"
                 android:scrollbars="vertical"
                 android:hint="  내용을 입력하세요" />
 
             <ImageView
+                android:layout_weight="6"
                 android:id="@+id/iv_image"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -66,7 +85,7 @@
                 android:src="@drawable/ic_baseline_camera_alt_24"
                 app:backgroundTint="@color/white"
                 app:fabCustomSize="50dp"
-                app:tint="@color/pink500"
+                app:tint="@color/darkSkyblue"
                 android:contentDescription="fab_content_desc"
                 android:layout_gravity="bottom|right"
                 android:layout_margin="16dp" />
