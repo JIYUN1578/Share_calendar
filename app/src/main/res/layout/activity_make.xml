@@ -16,6 +16,7 @@
         <include layout="@layout/toolbar" />
 
         <LinearLayout
+            android:padding="10dp"
             android:layout_marginTop="15dp"
             android:layout_marginLeft="5dp"
             android:layout_marginRight="5dp"
@@ -24,7 +25,7 @@
             android:layout_height="wrap_content"
             android:orientation="vertical">
             <LinearLayout
-                android:layout_marginTop="20dp"
+                android:layout_marginTop="10dp"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal">
@@ -40,13 +41,13 @@
                     android:id="@+id/et_groupname"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_weight="2"
+                    android:layout_weight="5"
                     android:textSize="20dp"
                     android:hint="그룹명을 적어주세요" />
             </LinearLayout>
 
             <LinearLayout
-                android:layout_marginTop="30dp"
+                android:layout_marginTop="10dp"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal">
@@ -62,26 +63,55 @@
                     android:id="@+id/et_introduce"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_weight="2"
+                    android:layout_weight="5"
                     android:textSize="20dp"
                     android:hint="그룹을 소개해주세요" />
             </LinearLayout>
 
             <ImageView
+                android:visibility="gone"
+                android:layout_marginTop="5dp"
+                android:layout_gravity="center_horizontal"
                 android:id="@+id/iv_image"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_width="wrap_content"
+                android:layout_height="350dp"
                 tools:srcCompat="@tools:sample/avatars" />
 
-            <ImageButton
-                android:layout_marginTop="20dp"
-                android:src="@drawable/add_square"
-                android:id="@+id/btn_save"
-                android:layout_width="wrap_content"
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:background="#00000000"
-                android:text="생성" />
+                android:orientation="horizontal">
+
+                <ImageButton
+                    android:id="@+id/btn_save"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:background="#00000000"
+                    android:src="@drawable/add_square"
+                    android:text="생성"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <com.google.android.material.floatingactionbutton.FloatingActionButton
+                    android:id="@+id/btn_camera"
+                    android:layout_width="50dp"
+                    android:layout_height="50dp"
+                    android:layout_gravity="bottom|right"
+                    android:layout_margin="16dp"
+                    android:layout_marginEnd="16dp"
+                    android:contentDescription="fab_content_desc"
+                    android:src="@drawable/ic_baseline_image_search_24"
+                    app:backgroundTint="@color/white"
+                    app:fabCustomSize="50dp"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:tint="@color/semiBlack" />
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
 
         </LinearLayout>
 
@@ -91,18 +121,6 @@
             android:layout_height="0dp"
             android:layout_weight="2"
             android:orientation="horizontal">
-
-            <com.google.android.material.floatingactionbutton.FloatingActionButton
-                android:id="@+id/btn_camera"
-                android:layout_width="50dp"
-                android:layout_height="50dp"
-                android:src="@drawable/ic_baseline_camera_alt_24"
-                app:backgroundTint="@color/white"
-                app:fabCustomSize="50dp"
-                app:tint="@color/pink500"
-                android:contentDescription="fab_content_desc"
-                android:layout_gravity="bottom|right"
-                android:layout_margin="16dp" />
 
         </androidx.coordinatorlayout.widget.CoordinatorLayout>
 

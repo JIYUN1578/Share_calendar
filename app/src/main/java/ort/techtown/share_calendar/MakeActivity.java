@@ -222,6 +222,7 @@ public class MakeActivity extends AppCompatActivity {
             if(resultCode == RESULT_OK) {
                 try{
                     uri = data.getData();
+                    iv_image.setVisibility(View.VISIBLE);
                     Glide.with(getApplicationContext()).load(uri).into(iv_image);
                 } catch(Exception e){
                 }
