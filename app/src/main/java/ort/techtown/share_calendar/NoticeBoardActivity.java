@@ -48,7 +48,7 @@ public class NoticeBoardActivity extends AppCompatActivity implements View.OnCli
     private DrawerLayout drawerLayout;
     private Button btn_logout, btn_calendar, btn_search, btn_make, btn_group, btn_close, btn_profile;
     private View drawerView;
-    private ImageView menu_open;
+    private ImageView menu_open, iv_calendarmove;
     private TextView tv_title;
     // 파이어베이스
     private FirebaseDatabase database = FirebaseDatabase.getInstance();
@@ -82,9 +82,9 @@ public class NoticeBoardActivity extends AppCompatActivity implements View.OnCli
         name = getIntent().getStringExtra("name");
 
         // 툴바 그룹캘린더 이동
-        tv_postmove = findViewById(R.id.tv_postmove);
-        tv_postmove.setText("그룹캘린더 이동");
-        tv_postmove.setOnClickListener(new View.OnClickListener() {
+        iv_calendarmove = findViewById(R.id.iv_postmove);
+        iv_calendarmove.setBackgroundResource(R.drawable.calendar);
+        iv_calendarmove.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(NoticeBoardActivity.this,PostActivity.class);

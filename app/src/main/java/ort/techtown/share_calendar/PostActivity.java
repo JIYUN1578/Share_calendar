@@ -1,5 +1,7 @@
 package ort.techtown.share_calendar;
 
+import static ort.techtown.share_calendar.R.drawable.post_con;
+
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
@@ -69,7 +71,7 @@ public class PostActivity extends AppCompatActivity {
     // 그룹 정보
     private String groupname, uid, name, tmp_name, tmp_uid;
     private TextView group_name, group_introduce;
-    private ImageView group_image;
+    private ImageView group_image, iv_postmove;
     // 프로필 사진 변경
     private static final int REQUEST_CODE = 0;
     private Uri uri;
@@ -85,12 +87,12 @@ public class PostActivity extends AppCompatActivity {
         uid = getIntent().getStringExtra("uid");
         name = getIntent().getStringExtra("name");
 
-        // 툴바 게시판 이동
-        tv_postmove = findViewById(R.id.tv_postmove);
-        tv_postmove.setText("게시판 이동");
-        tv_postmove.setOnClickListener(new View.OnClickListener() {
+        iv_postmove = findViewById(R.id.iv_postmove);
+        iv_postmove.setVisibility(View.VISIBLE);
+        iv_postmove.setBackgroundResource(post_con);
+        iv_postmove.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View v) {
+            public void onClick(View view) {
                 Intent intent = new Intent(PostActivity.this,NoticeBoardActivity.class);
                 intent.putExtra("name",name);
                 intent.putExtra("groupname",groupname);
@@ -236,6 +238,7 @@ public class PostActivity extends AppCompatActivity {
         group_name = (TextView)findViewById(R.id.group_name);
         group_introduce = (TextView)findViewById(R.id.group_introduce);
         group_image = (ImageView)findViewById(R.id.group_image);
+        group_image.setClipToOutline(true);
         databaseReference.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {

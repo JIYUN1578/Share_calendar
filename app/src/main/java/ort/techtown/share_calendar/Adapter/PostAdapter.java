@@ -93,6 +93,7 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.PostViewHolder
         }
         holder.tv_name.setText(arrayList.get(position).getName());
         holder.tv_posttitle.setText(arrayList.get(position).getTitle());
+        holder.iv_image.setClipToOutline(true);
         holder.tv_postsummary.setText(arrayList.get(position).getSummary());
     }
 
