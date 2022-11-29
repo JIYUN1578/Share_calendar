@@ -23,8 +23,9 @@
 
             <ImageView
                 android:id="@+id/group_image"
-                android:layout_width="100sp"
-                android:layout_height="100sp"
+                android:adjustViewBounds="true"
+                android:layout_width="100dp"
+                android:layout_height="100dp"
                 android:background="@drawable/image_round"
                 android:layout_gravity="center_vertical"
                 android:layout_marginLeft="10sp"
@@ -48,7 +49,7 @@
                     android:layout_weight="1" />
 
                 <TextView
-                    android:layout_marginTop="10dp"
+                    android:layout_marginTop="5dp"
                     android:layout_marginLeft="2dp"
                     android:id="@+id/group_introduce"
                     android:layout_width="match_parent"
@@ -62,8 +63,10 @@
             android:layout_marginTop="10dp"
             android:background="@drawable/bg_calendar"
             android:layout_gravity="center"
-            android:layout_width="390dp"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
             android:orientation="vertical">
 
             <LinearLayout
