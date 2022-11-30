@@ -113,6 +113,7 @@
                 <Button
                     android:layout_marginTop="5dp"
                     android:id="@+id/btn_post"
+                    android:visibility="gone"
                     android:background="@drawable/bg_button3"
                     android:layout_width="wrap_content"
                     android:layout_height="35dp"
