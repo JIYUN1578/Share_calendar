@@ -78,7 +78,9 @@ public class CommentAdapter extends RecyclerView.Adapter<CommentAdapter.CommentV
             }
         });
         holder.tv_name.setText(arrayList.get(position).getComment_name());
-        holder.tv_time.setText(arrayList.get(position).getComment_time());
+        String curtime = arrayList.get(position).getComment_time().substring(5,7) +"/"+
+                arrayList.get(position).getComment_time().substring(8,16);
+        holder.tv_time.setText(curtime);
         holder.tv_comment.setText(arrayList.get(position).getComment_summary());
     }
 

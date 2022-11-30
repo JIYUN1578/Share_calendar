@@ -13,6 +13,7 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Button;
@@ -99,6 +100,7 @@ public class NoticeActivity extends AppCompatActivity {
         Toolbar toolbar = (Toolbar)findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         getSupportActionBar().setTitle("");
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         tv_title = (TextView)findViewById(R.id.tv_title);
         tv_title.setText(groupname);
 
@@ -107,12 +109,13 @@ public class NoticeActivity extends AppCompatActivity {
         drawerView = (View)findViewById(R.id.drawer);
         // drawerLayout 열기 버튼
         menu_open = (ImageView)findViewById(R.id.menu_open);
-        menu_open.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                drawerLayout.openDrawer(drawerView);
-            }
-        });
+        menu_open.setVisibility(View.GONE);
+//        menu_open.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                drawerLayout.openDrawer(drawerView);
+//            }
+//        });
         // drawLayout 닫기 버튼
         btn_close = (Button)findViewById(R.id.btn_close);
         btn_close.setOnClickListener(new View.OnClickListener() {
@@ -286,6 +289,17 @@ public class NoticeActivity extends AppCompatActivity {
                 });
             }
         });
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        switch (item.getItemId()){
+            case android.R.id.home: //toolbar의 back키 눌렀을 때 동작
+                finish();
+                return true;
+
+        }
+        return super.onOptionsItemSelected(item);
     }
 
     @Override

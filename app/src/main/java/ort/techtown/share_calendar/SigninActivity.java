@@ -79,6 +79,7 @@ public class SigninActivity extends AppCompatActivity implements GoogleApiClient
                 revokeAccess();
             }
         });
+        btn_withdraw.setVisibility(View.GONE);
     }
 
     @Override

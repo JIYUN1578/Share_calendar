@@ -16,21 +16,23 @@
         <include layout="@layout/toolbar2" />
 
         <ScrollView
-            android:background="@color/gray"
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            android:layout_weight="1" >
+            android:layout_weight="1"
+            android:background="@color/white">
 
             <LinearLayout
-                android:orientation="vertical"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:background="@color/white">
+                android:orientation="vertical">
+
                 <LinearLayout
-                    android:background="@drawable/bg_round"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:orientation="vertical">
+                    android:background="@drawable/bg_half_round"
+                    android:elevation="5dp"
+                    android:orientation="vertical"
+                    android:paddingLeft="15dp">
 
                     <LinearLayout
                         android:layout_width="match_parent"
@@ -47,45 +49,45 @@
                         <LinearLayout
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:layout_marginLeft="10dp"
                             android:layout_gravity="center_vertical"
+                            android:layout_marginLeft="10dp"
                             android:orientation="vertical">
 
                             <TextView
-                                android:text="이름"
                                 android:id="@+id/tv_name"
-                                android:textSize="15dp"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
-                                android:layout_marginBottom="5dp"/>
+                                android:layout_marginBottom="1dp"
+                                android:text="이름"
+                                android:textSize="15dp" />
 
                             <TextView
-                                android:text="시간"
-                                android:textSize="13dp"
                                 android:id="@+id/tv_time"
                                 android:layout_width="match_parent"
-                                android:layout_height="wrap_content" />
+                                android:layout_height="wrap_content"
+                                android:text="시간"
+                                android:textSize="12dp" />
                         </LinearLayout>
                     </LinearLayout>
 
                     <TextView
                         android:id="@+id/tv_noticetitle"
-                        android:text="제목"
-                        android:textSize="23dp"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        android:layout_marginLeft="10dp"
                         android:layout_marginTop="10dp"
-                        android:layout_marginLeft="10dp" />
+                        android:text="제목"
+                        android:textSize="18dp" />
 
                     <TextView
-                        android:text="내용"
-                        android:textSize="20dp"
                         android:id="@+id/tv_noticesummary"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginLeft="10dp"
                         android:layout_marginTop="5dp"
-                        android:layout_marginBottom="20dp"/>
+                        android:layout_marginBottom="20dp"
+                        android:text="내용"
+                        android:textSize="15dp" />
 
                     <ImageView
                         android:id="@+id/iv_image"
@@ -97,31 +99,34 @@
                         tools:srcCompat="@tools:sample/avatars" />
 
                     <androidx.recyclerview.widget.RecyclerView
+                        android:background="@drawable/bg_vote"
+                        android:padding="5dp"
                         android:id="@+id/vote_recyclerview"
-                        android:layout_marginLeft="10dp"
-                        android:layout_marginRight="10dp"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:layout_marginLeft="10dp"
                         android:layout_marginTop="5dp"
+                        android:layout_marginRight="10dp"
                         android:layout_marginBottom="20dp"
-                        android:layout_gravity="center_horizontal"
-                        android:visibility="gone"/>
+                        android:visibility="gone" />
 
                     <Button
+                        android:background="@drawable/image_round"
                         android:id="@+id/btn_vote"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:layout_gravity="center_horizontal"
                         android:layout_marginTop="5dp"
                         android:layout_marginBottom="20dp"
-                        android:layout_gravity="center_horizontal"
                         android:visibility="gone" />
                 </LinearLayout>
 
                 <androidx.recyclerview.widget.RecyclerView
-                    android:background="@color/semi_gray"
                     android:id="@+id/comment_recyclerview"
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent" />
+                    android:layout_height="match_parent"
+                    android:background="@drawable/bg_half_round" />
             </LinearLayout>
 
 
@@ -142,6 +147,7 @@
                 android:hint="댓글을 입력하세요." />
 
             <Button
+                android:background="@drawable/bg_button3"
                 android:id="@+id/btn_comment_save"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
