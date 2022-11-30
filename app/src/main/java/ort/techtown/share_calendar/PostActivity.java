@@ -423,14 +423,12 @@ public class PostActivity extends AppCompatActivity {
                 int lastdayOfpremonth = premonthDate.lengthOfMonth();
                 daylist.add(LocalDate.of(premonthDate.getYear(), premonthDate.getMonth(),
                         lastdayOfpremonth - dayOfweek + i ));
-                Log.d("달력 남은 날짜", premonthDate.toString() );
             }
             else if(i> lastday + dayOfweek){
                 LocalDate nextmonthDate = CalendarUtil.selectedDate.plusMonths(1);
                 daylist.add(LocalDate.of(nextmonthDate.getYear(),
                         nextmonthDate.getMonth(),
                         i - lastday-dayOfweek));
-                Log.d("달력 남은 날짜",nextmonthDate.toString() );
             }else{
                 daylist.add(LocalDate.of(CalendarUtil.selectedDate.getYear(),
                         CalendarUtil.selectedDate.getMonth(),

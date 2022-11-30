@@ -45,10 +45,6 @@ public class TodoListAdapter extends RecyclerView.Adapter<TodoListAdapter.TodoLi
     String groupName;
     private TodoListAdapter.OnItemClickListener mListener = null;
 
-    public TodoListAdapter(ArrayList<Info> datalist ) {
-        this.datalist = datalist;
-    }
-
     public TodoListAdapter(ArrayList<Info> datalist , boolean isMyCalendar) {
         this.datalist = datalist;
         this.isMyCalendar = isMyCalendar;
@@ -91,15 +87,12 @@ public class TodoListAdapter extends RecyclerView.Adapter<TodoListAdapter.TodoLi
         background = (GradientDrawable) holder.colorbar.getBackground();
         background.setColor(Color.parseColor(cur.getColor()));
 
-
-
         // 마이캘린더일 경우
         if(isMyCalendar){
             holder.iv_menu.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
                     final int pos = holder.getAbsoluteAdapterPosition();
-                    Log.d("context menu", String.valueOf(pos));
                     PopupMenu popupMenu = new PopupMenu(view.getContext(), view);
                     popupMenu.inflate(R.menu.grouplist_menu);
                     popupMenu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
@@ -160,8 +153,6 @@ public class TodoListAdapter extends RecyclerView.Adapter<TodoListAdapter.TodoLi
                 holder.tv_title.setText("비공개");
             }
         }
-
-
     }
 
 
