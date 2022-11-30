@@ -219,7 +219,9 @@ public class VoteActivity extends AppCompatActivity {
         });
         // 투표 저장하기
         btn_post = (Button) findViewById(R.id.btn_post);
-        btn_post.setOnClickListener(new View.OnClickListener() {
+        tv_register = (TextView)findViewById(R.id.tv_postmove);
+        tv_register.setText("완료");
+        tv_register.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Long now = System.currentTimeMillis();

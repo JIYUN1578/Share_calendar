@@ -92,6 +92,7 @@ public class NoticeBoardActivity extends AppCompatActivity implements View.OnCli
                 intent.putExtra("groupname",groupname);
                 intent.putExtra("uid",uid);
                 startActivity(intent);
+                overridePendingTransition(R.anim.anim_left_in,R.anim.anim_left_out);
                 finish();
             }
         });
@@ -355,6 +356,13 @@ public class NoticeBoardActivity extends AppCompatActivity implements View.OnCli
 
     @Override
     public void onBackPressed() {
-        backKeyHandler.onBackPressed();
+
+        Intent intent = new Intent(NoticeBoardActivity.this,PostActivity.class);
+        intent.putExtra("name",name);
+        intent.putExtra("groupname",groupname);
+        intent.putExtra("uid",uid);
+        startActivity(intent);
+        overridePendingTransition(R.anim.anim_left_in,R.anim.anim_left_out);
+        finish();
     }
 }

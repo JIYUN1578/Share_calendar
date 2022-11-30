@@ -98,6 +98,7 @@ public class PostActivity extends AppCompatActivity {
                 intent.putExtra("groupname",groupname);
                 intent.putExtra("uid",uid);
                 startActivity(intent);
+                overridePendingTransition(R.anim.anim_in,R.anim.anim_out);
                 finish();
             }
         });
@@ -457,6 +458,7 @@ public class PostActivity extends AppCompatActivity {
 
     @Override
     public void onBackPressed() {
+
         backKeyHandler.onBackPressed();
     }
 }

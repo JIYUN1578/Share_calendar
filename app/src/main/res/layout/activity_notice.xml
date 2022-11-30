@@ -13,102 +13,118 @@
         android:layout_height="match_parent"
         android:orientation="vertical">
 
-        <include layout="@layout/toolbar" />
+        <include layout="@layout/toolbar2" />
 
         <ScrollView
+            android:background="@color/gray"
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_weight="1" >
 
             <LinearLayout
+                android:orientation="vertical"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="vertical">
-
+                android:layout_height="match_parent"
+                android:background="@color/white">
                 <LinearLayout
+                    android:background="@drawable/bg_round"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="10dp"
-                    android:layout_marginLeft="10dp"
-                    android:orientation="horizontal">
-
-                    <ImageView
-                        android:id="@+id/iv_profile"
-                        android:layout_width="80dp"
-                        android:layout_height="80dp"
-                        tools:srcCompat="@tools:sample/avatars" />
+                    android:orientation="vertical">
 
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginLeft="10dp"
-                        android:layout_gravity="center_vertical"
-                        android:orientation="vertical">
+                        android:orientation="horizontal">
 
-                        <TextView
-                            android:id="@+id/tv_name"
+                        <ImageView
+                            android:id="@+id/iv_profile"
+                            android:layout_width="35dp"
+                            android:layout_height="35dp"
+                            android:background="@drawable/image_round"
+                            tools:srcCompat="@tools:sample/avatars" />
+
+                        <LinearLayout
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:layout_marginBottom="5dp"/>
+                            android:layout_marginLeft="10dp"
+                            android:layout_gravity="center_vertical"
+                            android:orientation="vertical">
 
-                        <TextView
-                            android:id="@+id/tv_time"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content" />
+                            <TextView
+                                android:text="이름"
+                                android:id="@+id/tv_name"
+                                android:textSize="15dp"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_marginBottom="5dp"/>
+
+                            <TextView
+                                android:text="시간"
+                                android:textSize="13dp"
+                                android:id="@+id/tv_time"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content" />
+                        </LinearLayout>
                     </LinearLayout>
+
+                    <TextView
+                        android:id="@+id/tv_noticetitle"
+                        android:text="제목"
+                        android:textSize="23dp"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="10dp"
+                        android:layout_marginLeft="10dp" />
+
+                    <TextView
+                        android:text="내용"
+                        android:textSize="20dp"
+                        android:id="@+id/tv_noticesummary"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="10dp"
+                        android:layout_marginTop="5dp"
+                        android:layout_marginBottom="20dp"/>
+
+                    <ImageView
+                        android:id="@+id/iv_image"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_horizontal"
+                        android:layout_marginBottom="20dp"
+                        android:visibility="gone"
+                        tools:srcCompat="@tools:sample/avatars" />
+
+                    <androidx.recyclerview.widget.RecyclerView
+                        android:id="@+id/vote_recyclerview"
+                        android:layout_marginLeft="10dp"
+                        android:layout_marginRight="10dp"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="5dp"
+                        android:layout_marginBottom="20dp"
+                        android:layout_gravity="center_horizontal"
+                        android:visibility="gone"/>
+
+                    <Button
+                        android:id="@+id/btn_vote"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="5dp"
+                        android:layout_marginBottom="20dp"
+                        android:layout_gravity="center_horizontal"
+                        android:visibility="gone" />
                 </LinearLayout>
 
-                <TextView
-                    android:id="@+id/tv_noticetitle"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="10dp"
-                    android:layout_marginLeft="10dp" />
-
-                <TextView
-                    android:id="@+id/tv_noticesummary"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="10dp"
-                    android:layout_marginTop="5dp"
-                    android:layout_marginBottom="20dp"/>
-
-                <ImageView
-                    android:id="@+id/iv_image"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center_horizontal"
-                    android:layout_marginBottom="20dp"
-                    android:visibility="gone"
-                    tools:srcCompat="@tools:sample/avatars" />
-
                 <androidx.recyclerview.widget.RecyclerView
-                    android:id="@+id/vote_recyclerview"
-                    android:layout_marginLeft="10dp"
-                    android:layout_marginRight="10dp"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="5dp"
-                    android:layout_marginBottom="20dp"
-                    android:layout_gravity="center_horizontal"
-                    android:visibility="gone"/>
-
-                <Button
-                    android:id="@+id/btn_vote"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="5dp"
-                    android:layout_marginBottom="20dp"
-                    android:layout_gravity="center_horizontal"
-                    android:visibility="gone" />
-
-                <androidx.recyclerview.widget.RecyclerView
+                    android:background="@color/semi_gray"
                     android:id="@+id/comment_recyclerview"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent" />
-
-
             </LinearLayout>
+
+
         </ScrollView>
 
         <LinearLayout
