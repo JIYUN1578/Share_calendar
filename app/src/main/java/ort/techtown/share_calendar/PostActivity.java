@@ -41,6 +41,7 @@ import java.time.LocalDate;
 import java.time.YearMonth;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.List;
 
 import ort.techtown.share_calendar.Adapter.CalendarAdapter;
 import ort.techtown.share_calendar.Adapter.TodoListAdapter;
@@ -69,7 +70,8 @@ public class PostActivity extends AppCompatActivity {
     TextView tv_monthyear;
     RecyclerView recyclerView, todoListRecyclerView;
     // 그룹 정보
-    private String groupname, uid, name, tmp_name, tmp_uid;
+    private String groupname, uid, name, tmp_uid;
+    private Integer cnt, tmp_cnt;
     private TextView group_name, group_introduce;
     private ImageView group_image, iv_postmove;
     // 프로필 사진 변경
@@ -331,6 +333,8 @@ public class PostActivity extends AppCompatActivity {
         ArrayList<Info> infolist = new ArrayList<>();
         ArrayList<String> seenList = new ArrayList<>();
         FirebaseDatabase database = FirebaseDatabase.getInstance();
+        cnt = 0;
+        List<String> uidList = new ArrayList<>();
 
         TodoListAdapter adapter = new TodoListAdapter(infolist, false, groupname, seenList);
         RecyclerView.LayoutManager manager = new LinearLayoutManager(getApplicationContext());
@@ -344,56 +348,48 @@ public class PostActivity extends AppCompatActivity {
             public void onDataChange(@NonNull DataSnapshot uid_snapshot) {
                 for(DataSnapshot Uid_Snapshot : uid_snapshot.getChildren()) {
                     tmp_uid = Uid_Snapshot.getValue().toString();
-                    databaseReference.addListenerForSingleValueEvent(new ValueEventListener() {
+                    uidList.add(tmp_uid);
+                    reference = database.getReference("User").child(tmp_uid).child("Calender").child(CalendarUtil.selectedDate.toString());
+                    Query myTopPostsQuery = reference.orderByChild("start");
+                    myTopPostsQuery.addValueEventListener(new ValueEventListener() {
                         @Override
-                        public void onDataChange(@NonNull DataSnapshot name_snapshot) {
-                            tmp_name = name_snapshot.child("User").child(tmp_uid).child("Name").getValue().toString();
+                        public void onDataChange(DataSnapshot dataSnapshot) {
+                            cnt++;
+                            for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
+                                infolist.add(snapshot.getValue(Info.class));
+                                seenReference = database.getReference("User").child(uidList.get(cnt - 1)).child("Calender").child(CalendarUtil.selectedDate.toString())
+                                        .child(snapshot.getKey()).child("isSeen").child(groupname);
+                                seenReference.addListenerForSingleValueEvent(new ValueEventListener() {
+                                    @Override
+                                    public void onDataChange(@NonNull DataSnapshot seen_snapshot) {
+                                        if(seen_snapshot.getValue() == null) {
+                                            Log.e("111",Integer.toString(seenList.size()));
+                                            seenList.add("false");
+                                        }
+                                        else if(seen_snapshot.getValue().toString().equals("false")) {
+                                            Log.e("222",Integer.toString(seenList.size()));
+                                            seenList.add("false");
+                                        }
+                                        else {
+                                            Log.e("333",Integer.toString(seenList.size()));
+                                            seenList.add("true");
+                                        }
+                                        TodoListAdapter adapter = new TodoListAdapter(infolist, false, groupname, seenList);
+                                        RecyclerView.LayoutManager manager = new LinearLayoutManager(getApplicationContext());
+                                        // 어뎁터 적용
+                                        todoListRecyclerView.setLayoutManager(manager);
+                                        todoListRecyclerView.setAdapter(adapter);
+                                    }
+                                    @Override
+                                    public void onCancelled(@NonNull DatabaseError error) {
+                                    }
+                                });
+                            }
                         }
                         @Override
-                        public void onCancelled(@NonNull DatabaseError error) {
+                        public void onCancelled(DatabaseError databaseError) {
                         }
                     });
-                    try{
-                        reference = database.getReference("User").child(tmp_uid).child("Calender").child(CalendarUtil.selectedDate.toString());
-                        Query myTopPostsQuery = reference.orderByChild("start");
-                        myTopPostsQuery.addValueEventListener(new ValueEventListener() {
-                            @Override
-                            public void onDataChange(DataSnapshot dataSnapshot) {
-                                for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
-                                    infolist.add(snapshot.getValue(Info.class));
-                                    seenReference = database.getReference("User").child(uid).child("Calender").child(CalendarUtil.selectedDate.toString())
-                                            .child(snapshot.getKey()).child("isSeen").child(groupname);
-                                    seenReference.addListenerForSingleValueEvent(new ValueEventListener() {
-                                        @Override
-                                        public void onDataChange(@NonNull DataSnapshot snapshot) {
-                                            if(snapshot.getValue() == null) {
-                                                seenList.add("false");
-                                            }
-                                            else if(snapshot.getValue().toString().equals("false")) {
-                                                seenList.add("false");
-                                            }
-                                            else {
-                                                seenList.add("true");
-                                            }
-                                            TodoListAdapter adapter = new TodoListAdapter(infolist, false, groupname, seenList);
-                                            RecyclerView.LayoutManager manager = new LinearLayoutManager(getApplicationContext());
-                                            // 어뎁터 적용
-                                            todoListRecyclerView.setLayoutManager(manager);
-                                            todoListRecyclerView.setAdapter(adapter);
-                                        }
-                                        @Override
-                                        public void onCancelled(@NonNull DatabaseError error) {
-                                        }
-                                    });
-                                }
-                            }
-                            @Override
-                            public void onCancelled(DatabaseError databaseError) {
-                            }
-                        });
-                    } catch (Exception e) {
-                        e.printStackTrace();
-                    }
                 }
             }
             @Override

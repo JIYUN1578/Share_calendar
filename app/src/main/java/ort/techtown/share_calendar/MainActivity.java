@@ -109,7 +109,6 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.O
         boolean fromOther = false;
         fromOther = intent.getBooleanExtra("fromOther", false);
         if(!fromOther) CalendarUtil.selectedDate = LocalDate.now();
-        Log.d("selected date: ",CalendarUtil.selectedDate.toString());
         setTodoList(uid);
 
         // 툴바
