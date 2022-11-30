@@ -5,14 +5,9 @@
 
     <!--regular-->
     <font
-        android:font="@font/dalseohealingmedium"
+        android:font="@font/bmjua_ttf"
         android:fontStyle="normal"
         android:fontWeight="400" />
 
-    <!--bold-->
-    <font
-        android:font="@font/dalseohealingbold"
-        android:fontStyle="normal"
-        android:fontWeight="700" />
 
 </font-family>

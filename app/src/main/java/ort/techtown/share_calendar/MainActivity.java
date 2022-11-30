@@ -282,6 +282,10 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.O
     // 달력
     private void setMonthview() {
         // 년월 텍스트뷰 셋팅
+        if(CalendarUtil.selectedDate == null){
+            CalendarUtil.selectedDate = LocalDate.now();
+            Log.e("selected", CalendarUtil.selectedDate.toString());
+        }
         tv_monthyear.setText(monthYearFromDate(CalendarUtil.selectedDate));
         // 어레이들 가져오기, localdates == 해당 년월,
         ArrayList<LocalDate> localDates = daysInMonthArray(CalendarUtil.selectedDate);

@@ -363,22 +363,21 @@ public class PostActivity extends AppCompatActivity {
                                     @Override
                                     public void onDataChange(@NonNull DataSnapshot seen_snapshot) {
                                         if(seen_snapshot.getValue() == null) {
-                                            Log.e("111",Integer.toString(seenList.size()));
                                             seenList.add("false");
                                         }
                                         else if(seen_snapshot.getValue().toString().equals("false")) {
-                                            Log.e("222",Integer.toString(seenList.size()));
                                             seenList.add("false");
                                         }
                                         else {
-                                            Log.e("333",Integer.toString(seenList.size()));
                                             seenList.add("true");
                                         }
-                                        TodoListAdapter adapter = new TodoListAdapter(infolist, false, groupname, seenList);
-                                        RecyclerView.LayoutManager manager = new LinearLayoutManager(getApplicationContext());
-                                        // 어뎁터 적용
-                                        todoListRecyclerView.setLayoutManager(manager);
-                                        todoListRecyclerView.setAdapter(adapter);
+                                        if(infolist.size() == seenList.size()){
+                                            TodoListAdapter adapter = new TodoListAdapter(infolist, false, groupname, seenList);
+                                            RecyclerView.LayoutManager manager = new LinearLayoutManager(getApplicationContext());
+                                            // 어뎁터 적용
+                                            todoListRecyclerView.setLayoutManager(manager);
+                                            todoListRecyclerView.setAdapter(adapter);
+                                        }
                                     }
                                     @Override
                                     public void onCancelled(@NonNull DatabaseError error) {

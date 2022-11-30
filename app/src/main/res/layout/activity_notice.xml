@@ -147,10 +147,11 @@
                 android:hint="댓글을 입력하세요." />
 
             <Button
+                android:fontFamily="@font/dalseohealingmedium"
                 android:background="@drawable/bg_button3"
                 android:id="@+id/btn_comment_save"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_height="30dp"
                 android:text="입력" />
         </LinearLayout>
 

@@ -25,6 +25,7 @@
         android:layout_marginLeft="30dp"/>
 
     <TextView
+        android:fontFamily="@font/dalseohealingbold"
         android:id="@+id/tv_postmove"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"

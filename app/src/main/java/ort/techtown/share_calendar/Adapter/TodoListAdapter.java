@@ -149,8 +149,6 @@ public class TodoListAdapter extends RecyclerView.Adapter<TodoListAdapter.TodoLi
             holder.iv_menu.setVisibility(View.GONE);
             holder.tv_startTime.setText(cur.getName());
             // 비공개 처리
-            Log.e("position",Integer.toString(position));
-            Log.e("seenList",seenList.get(position));
             if(seenList.get(position).toString().equals("false")) {
                 holder.tv_title.setText("비공개");
             }

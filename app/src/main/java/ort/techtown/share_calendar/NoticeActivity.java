@@ -412,7 +412,9 @@ public class NoticeActivity extends AppCompatActivity {
                             }
                             if(endVote == true) {
                                 tv_name.setText(post.getName());
-                                tv_time.setText(post.getTime());
+                                String curtime = post.getTime().substring(5,7) +"/"+
+                                        post.getTime().substring(8,16);
+                                tv_time.setText(curtime);
                                 tv_noticetitle.setText(post.getTitle());
                                 tv_noticesummary.setText(post.getSummary());
                                 vote_recyclerview.setVisibility(View.VISIBLE);

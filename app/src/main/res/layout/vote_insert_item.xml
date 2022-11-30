@@ -25,8 +25,9 @@
         android:background="@drawable/bg_button3"
         android:id="@+id/btn_save"
         android:layout_width="wrap_content"
-        android:layout_height="35dp"
+        android:layout_height="20dp"
         android:layout_weight="1"
+        android:fontFamily="@font/dalseohealingmedium"
         android:layout_gravity="center_horizontal"
         android:text="저장" />
 </LinearLayout>
